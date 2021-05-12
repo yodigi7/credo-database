@@ -1,0 +1,265 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-person-heading" data-cy="PersonCreateUpdateHeading">Create or edit a Person</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prefix">Prefix</label>
+          <input type="text" class="form-control" name="prefix" id="field_prefix" data-cy="prefix" formControlName="prefix" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_preferredName">Preferred Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="preferredName"
+            id="field_preferredName"
+            data-cy="preferredName"
+            formControlName="preferredName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_firstName">First Name</label>
+          <input type="text" class="form-control" name="firstName" id="field_firstName" data-cy="firstName" formControlName="firstName" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_middleName">Middle Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="middleName"
+            id="field_middleName"
+            data-cy="middleName"
+            formControlName="middleName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastName">Last Name</label>
+          <input type="text" class="form-control" name="lastName" id="field_lastName" data-cy="lastName" formControlName="lastName" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_suffix">Suffix</label>
+          <input type="text" class="form-control" name="suffix" id="field_suffix" data-cy="suffix" formControlName="suffix" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_nameTag">Name Tag</label>
+          <input type="text" class="form-control" name="nameTag" id="field_nameTag" data-cy="nameTag" formControlName="nameTag" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_currentMember">Current Member</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="currentMember"
+            id="field_currentMember"
+            data-cy="currentMember"
+            formControlName="currentMember"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_membershipStartDate">Membership Start Date</label>
+          <div class="input-group">
+            <input
+              id="field_membershipStartDate"
+              data-cy="membershipStartDate"
+              type="text"
+              class="form-control"
+              name="membershipStartDate"
+              ngbDatepicker
+              #membershipStartDateDp="ngbDatepicker"
+              formControlName="membershipStartDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="membershipStartDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_membershipExpirationDate">Membership Expiration Date</label>
+          <div class="input-group">
+            <input
+              id="field_membershipExpirationDate"
+              data-cy="membershipExpirationDate"
+              type="text"
+              class="form-control"
+              name="membershipExpirationDate"
+              ngbDatepicker
+              #membershipExpirationDateDp="ngbDatepicker"
+              formControlName="membershipExpirationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="membershipExpirationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_isHeadOfHouse">Is Head Of House</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isHeadOfHouse"
+            id="field_isHeadOfHouse"
+            data-cy="isHeadOfHouse"
+            formControlName="isHeadOfHouse"
+          />
+          <div
+            *ngIf="
+              editForm.get('isHeadOfHouse')!.invalid && (editForm.get('isHeadOfHouse')!.dirty || editForm.get('isHeadOfHouse')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('isHeadOfHouse')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_isDeceased">Is Deceased</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="isDeceased"
+            id="field_isDeceased"
+            data-cy="isDeceased"
+            formControlName="isDeceased"
+          />
+          <div *ngIf="editForm.get('isDeceased')!.invalid && (editForm.get('isDeceased')!.dirty || editForm.get('isDeceased')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('isDeceased')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_spouse">Spouse</label>
+          <select class="form-control" id="field_spouse" data-cy="spouse" name="spouse" formControlName="spouse">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="personOption.id === editForm.get('spouse')!.value?.id ? editForm.get('spouse')!.value : personOption"
+              *ngFor="let personOption of spousesCollection; trackBy: trackPersonById"
+            >
+              {{ personOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_membershipLevel">Membership Level</label>
+          <select
+            class="form-control"
+            id="field_membershipLevel"
+            data-cy="membershipLevel"
+            name="membershipLevel"
+            formControlName="membershipLevel"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                membershipLevelOption.id === editForm.get('membershipLevel')!.value?.id
+                  ? editForm.get('membershipLevel')!.value
+                  : membershipLevelOption
+              "
+              *ngFor="let membershipLevelOption of membershipLevelsSharedCollection; trackBy: trackMembershipLevelById"
+            >
+              {{ membershipLevelOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_headOfHouse">Head Of House</label>
+          <select class="form-control" id="field_headOfHouse" data-cy="headOfHouse" name="headOfHouse" formControlName="headOfHouse">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="personOption.id === editForm.get('headOfHouse')!.value?.id ? editForm.get('headOfHouse')!.value : personOption"
+              *ngFor="let personOption of peopleSharedCollection; trackBy: trackPersonById"
+            >
+              {{ personOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_parish">Parish</label>
+          <select class="form-control" id="field_parish" data-cy="parish" name="parish" formControlName="parish">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="parishOption.id === editForm.get('parish')!.value?.id ? editForm.get('parish')!.value : parishOption"
+              *ngFor="let parishOption of parishesSharedCollection; trackBy: trackParishById"
+            >
+              {{ parishOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_relationship">Relationship</label>
+          <select class="form-control" id="field_relationship" data-cy="relationship" name="relationship" formControlName="relationship">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                relationshipOption.id === editForm.get('relationship')!.value?.id ? editForm.get('relationship')!.value : relationshipOption
+              "
+              *ngFor="let relationshipOption of relationshipsSharedCollection; trackBy: trackRelationshipById"
+            >
+              {{ relationshipOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_organizations">Organizations</label>
+          <select
+            class="form-control"
+            id="field_organizations"
+            data-cy="organizations"
+            multiple
+            name="organizations"
+            formControlName="organizations"
+          >
+            <option
+              [ngValue]="getSelectedOrganization(organizationOption, editForm.get('organizations')!.value)"
+              *ngFor="let organizationOption of organizationsSharedCollection; trackBy: trackOrganizationById"
+            >
+              {{ organizationOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

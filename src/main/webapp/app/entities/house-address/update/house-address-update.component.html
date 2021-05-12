@@ -1,0 +1,111 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-house-address-heading" data-cy="HouseAddressCreateUpdateHeading">Create or edit a House Address</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_streetAddress">Street Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="streetAddress"
+            id="field_streetAddress"
+            data-cy="streetAddress"
+            formControlName="streetAddress"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_city">City</label>
+          <input type="text" class="form-control" name="city" id="field_city" data-cy="city" formControlName="city" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_state">State</label>
+          <input type="text" class="form-control" name="state" id="field_state" data-cy="state" formControlName="state" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_zipcode">Zipcode</label>
+          <input type="text" class="form-control" name="zipcode" id="field_zipcode" data-cy="zipcode" formControlName="zipcode" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_type">Type</label>
+          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mailNewsletterSubscription">Mail Newsletter Subscription</label>
+          <select
+            class="form-control"
+            name="mailNewsletterSubscription"
+            formControlName="mailNewsletterSubscription"
+            id="field_mailNewsletterSubscription"
+            data-cy="mailNewsletterSubscription"
+          >
+            <option [ngValue]="null"></option>
+            <option value="YES">Y</option>
+            <option value="NO">N</option>
+            <option value="EMPTY">EMPTY</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mailEventNotificationSubscription">Mail Event Notification Subscription</label>
+          <select
+            class="form-control"
+            name="mailEventNotificationSubscription"
+            formControlName="mailEventNotificationSubscription"
+            id="field_mailEventNotificationSubscription"
+            data-cy="mailEventNotificationSubscription"
+          >
+            <option [ngValue]="null"></option>
+            <option value="YES">Y</option>
+            <option value="NO">N</option>
+            <option value="EMPTY">EMPTY</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_houseDetails">House Details</label>
+          <select class="form-control" id="field_houseDetails" data-cy="houseDetails" name="houseDetails" formControlName="houseDetails">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                houseDetailsOption.id === editForm.get('houseDetails')!.value?.id ? editForm.get('houseDetails')!.value : houseDetailsOption
+              "
+              *ngFor="let houseDetailsOption of houseDetailsSharedCollection; trackBy: trackHouseDetailsById"
+            >
+              {{ houseDetailsOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

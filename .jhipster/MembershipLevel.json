@@ -1,0 +1,28 @@
+{
+  "name": "MembershipLevel",
+  "fields": [
+    {
+      "fieldName": "level",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "membershipLevel",
+      "relationshipName": "people"
+    }
+  ],
+  "entityTableName": "membership_level",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042124"
+}

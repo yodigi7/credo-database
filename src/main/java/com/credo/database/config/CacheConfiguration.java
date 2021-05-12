@@ -1,5 +1,6 @@
 package com.credo.database.config;
 
+import java.time.Duration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
@@ -16,8 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.cache.PrefixedKeyGenerator;
-
-import java.time.Duration;
 
 @Configuration
 @EnableCaching
@@ -51,6 +50,44 @@ public class CacheConfiguration {
             createCache(cm, com.credo.database.domain.User.class.getName());
             createCache(cm, com.credo.database.domain.Authority.class.getName());
             createCache(cm, com.credo.database.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.credo.database.domain.Person.class.getName());
+            createCache(cm, com.credo.database.domain.Person.class.getName() + ".organizations");
+            createCache(cm, com.credo.database.domain.Person.class.getName() + ".phones");
+            createCache(cm, com.credo.database.domain.Person.class.getName() + ".payments");
+            createCache(cm, com.credo.database.domain.Person.class.getName() + ".emails");
+            createCache(cm, com.credo.database.domain.Person.class.getName() + ".personsInHouses");
+            createCache(cm, com.credo.database.domain.Person.class.getName() + ".tickets");
+            createCache(cm, com.credo.database.domain.Relationship.class.getName());
+            createCache(cm, com.credo.database.domain.Relationship.class.getName() + ".people");
+            createCache(cm, com.credo.database.domain.PersonNotes.class.getName());
+            createCache(cm, com.credo.database.domain.Organization.class.getName());
+            createCache(cm, com.credo.database.domain.Organization.class.getName() + ".addresses");
+            createCache(cm, com.credo.database.domain.Organization.class.getName() + ".phones");
+            createCache(cm, com.credo.database.domain.Organization.class.getName() + ".emails");
+            createCache(cm, com.credo.database.domain.Organization.class.getName() + ".persons");
+            createCache(cm, com.credo.database.domain.OrganizationNotes.class.getName());
+            createCache(cm, com.credo.database.domain.PersonPhone.class.getName());
+            createCache(cm, com.credo.database.domain.OrganizationPhone.class.getName());
+            createCache(cm, com.credo.database.domain.ParishPhone.class.getName());
+            createCache(cm, com.credo.database.domain.Payment.class.getName());
+            createCache(cm, com.credo.database.domain.Parish.class.getName());
+            createCache(cm, com.credo.database.domain.Parish.class.getName() + ".organizations");
+            createCache(cm, com.credo.database.domain.Parish.class.getName() + ".phones");
+            createCache(cm, com.credo.database.domain.Parish.class.getName() + ".people");
+            createCache(cm, com.credo.database.domain.Parish.class.getName() + ".emails");
+            createCache(cm, com.credo.database.domain.Event.class.getName());
+            createCache(cm, com.credo.database.domain.Ticket.class.getName());
+            createCache(cm, com.credo.database.domain.Ticket.class.getName() + ".payments");
+            createCache(cm, com.credo.database.domain.Ticket.class.getName() + ".events");
+            createCache(cm, com.credo.database.domain.PersonEmail.class.getName());
+            createCache(cm, com.credo.database.domain.OrganizationEmail.class.getName());
+            createCache(cm, com.credo.database.domain.ParishEmail.class.getName());
+            createCache(cm, com.credo.database.domain.HouseDetails.class.getName());
+            createCache(cm, com.credo.database.domain.HouseDetails.class.getName() + ".addresses");
+            createCache(cm, com.credo.database.domain.HouseAddress.class.getName());
+            createCache(cm, com.credo.database.domain.OrganizationAddress.class.getName());
+            createCache(cm, com.credo.database.domain.MembershipLevel.class.getName());
+            createCache(cm, com.credo.database.domain.MembershipLevel.class.getName() + ".people");
             // jhipster-needle-ehcache-add-entry
         };
     }

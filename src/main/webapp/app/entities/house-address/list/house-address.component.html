@@ -1,0 +1,118 @@
+<div>
+  <h2 id="page-heading" data-cy="HouseAddressHeading">
+    <span>House Addresses</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-house-address"
+        [routerLink]="['/house-address/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new House Address </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="houseAddresses?.length === 0">
+    <span>No houseAddresses found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="houseAddresses && houseAddresses.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="streetAddress"><span>Street Address</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="city"><span>City</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="state"><span>State</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="zipcode"><span>Zipcode</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="type"><span>Type</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="mailNewsletterSubscription">
+            <span>Mail Newsletter Subscription</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="mailEventNotificationSubscription">
+            <span>Mail Event Notification Subscription</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="houseDetails.id"><span>House Details</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let houseAddress of houseAddresses; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/house-address', houseAddress.id, 'view']">{{ houseAddress.id }}</a>
+          </td>
+          <td>{{ houseAddress.streetAddress }}</td>
+          <td>{{ houseAddress.city }}</td>
+          <td>{{ houseAddress.state }}</td>
+          <td>{{ houseAddress.zipcode }}</td>
+          <td>{{ houseAddress.type }}</td>
+          <td>{{ houseAddress.mailNewsletterSubscription }}</td>
+          <td>{{ houseAddress.mailEventNotificationSubscription }}</td>
+          <td>
+            <div *ngIf="houseAddress.houseDetails">
+              <a [routerLink]="['/house-details', houseAddress.houseDetails?.id, 'view']">{{ houseAddress.houseDetails?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/house-address', houseAddress.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/house-address', houseAddress.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(houseAddress)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="houseAddresses && houseAddresses.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

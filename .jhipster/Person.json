@@ -1,0 +1,149 @@
+{
+  "name": "Person",
+  "fields": [
+    {
+      "fieldName": "prefix",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "preferredName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "firstName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "middleName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "suffix",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nameTag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "currentMember",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "membershipStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "membershipExpirationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "isHeadOfHouse",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isDeceased",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "person",
+      "relationshipName": "spouse",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "membershipLevel",
+      "otherEntityRelationshipName": "people",
+      "relationshipName": "membershipLevel"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "personsInHouse",
+      "relationshipName": "headOfHouse"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "parish",
+      "otherEntityRelationshipName": "people",
+      "relationshipName": "parish"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "relationship",
+      "otherEntityRelationshipName": "people",
+      "relationshipName": "relationship"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "organization",
+      "otherEntityRelationshipName": "persons",
+      "relationshipName": "organizations",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "houseDetails",
+      "otherEntityRelationshipName": "headOfHouse",
+      "relationshipName": "houseDetails",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "personNotes",
+      "otherEntityRelationshipName": "person",
+      "relationshipName": "notes",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "personPhone",
+      "otherEntityRelationshipName": "person",
+      "relationshipName": "phones"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "person",
+      "relationshipName": "payments"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "personEmail",
+      "otherEntityRelationshipName": "person",
+      "relationshipName": "emails"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "headOfHouse",
+      "relationshipName": "personsInHouse"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ticket",
+      "otherEntityRelationshipName": "person",
+      "relationshipName": "tickets"
+    }
+  ],
+  "entityTableName": "person",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042106"
+}

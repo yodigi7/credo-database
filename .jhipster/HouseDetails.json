@@ -1,0 +1,34 @@
+{
+  "name": "HouseDetails",
+  "fields": [
+    {
+      "fieldName": "mailingLabel",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "houseDetails",
+      "relationshipName": "headOfHouse",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "houseAddress",
+      "otherEntityRelationshipName": "houseDetails",
+      "relationshipName": "addresses"
+    }
+  ],
+  "entityTableName": "house_details",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042121"
+}

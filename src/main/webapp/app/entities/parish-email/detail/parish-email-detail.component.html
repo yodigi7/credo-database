@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="parishEmail">
+      <h2 data-cy="parishEmailDetailsHeading"><span>Parish Email</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ parishEmail.id }}</span>
+        </dd>
+        <dt><span>Email</span></dt>
+        <dd>
+          <span>{{ parishEmail.email }}</span>
+        </dd>
+        <dt><span>Type</span></dt>
+        <dd>
+          <span>{{ parishEmail.type }}</span>
+        </dd>
+        <dt><span>Email Newsletter Subscription</span></dt>
+        <dd>
+          <span>{{ parishEmail.emailNewsletterSubscription }}</span>
+        </dd>
+        <dt><span>Email Event Notification Subscription</span></dt>
+        <dd>
+          <span>{{ parishEmail.emailEventNotificationSubscription }}</span>
+        </dd>
+        <dt><span>Parish</span></dt>
+        <dd>
+          <div *ngIf="parishEmail.parish">
+            <a [routerLink]="['/parish', parishEmail.parish?.id, 'view']">{{ parishEmail.parish?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/parish-email', parishEmail.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

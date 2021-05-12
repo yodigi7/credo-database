@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="personEmail">
+      <h2 data-cy="personEmailDetailsHeading"><span>Person Email</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ personEmail.id }}</span>
+        </dd>
+        <dt><span>Email</span></dt>
+        <dd>
+          <span>{{ personEmail.email }}</span>
+        </dd>
+        <dt><span>Type</span></dt>
+        <dd>
+          <span>{{ personEmail.type }}</span>
+        </dd>
+        <dt><span>Email Newsletter Subscription</span></dt>
+        <dd>
+          <span>{{ personEmail.emailNewsletterSubscription }}</span>
+        </dd>
+        <dt><span>Email Event Notification Subscription</span></dt>
+        <dd>
+          <span>{{ personEmail.emailEventNotificationSubscription }}</span>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+          <div *ngIf="personEmail.person">
+            <a [routerLink]="['/person', personEmail.person?.id, 'view']">{{ personEmail.person?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/person-email', personEmail.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

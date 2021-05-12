@@ -1,0 +1,53 @@
+{
+  "name": "HouseAddress",
+  "fields": [
+    {
+      "fieldName": "streetAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "city",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "state",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "zipcode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mailNewsletterSubscription",
+      "fieldType": "YesNoEmpty",
+      "fieldValues": "YES (Y),NO (N),EMPTY"
+    },
+    {
+      "fieldName": "mailEventNotificationSubscription",
+      "fieldType": "YesNoEmpty",
+      "fieldValues": "YES (Y),NO (N),EMPTY"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "houseDetails",
+      "otherEntityRelationshipName": "addresses",
+      "relationshipName": "houseDetails"
+    }
+  ],
+  "entityTableName": "house_address",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042122"
+}

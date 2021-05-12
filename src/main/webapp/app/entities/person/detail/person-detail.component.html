@@ -1,0 +1,113 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="person">
+      <h2 data-cy="personDetailsHeading"><span>Person</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ person.id }}</span>
+        </dd>
+        <dt><span>Prefix</span></dt>
+        <dd>
+          <span>{{ person.prefix }}</span>
+        </dd>
+        <dt><span>Preferred Name</span></dt>
+        <dd>
+          <span>{{ person.preferredName }}</span>
+        </dd>
+        <dt><span>First Name</span></dt>
+        <dd>
+          <span>{{ person.firstName }}</span>
+        </dd>
+        <dt><span>Middle Name</span></dt>
+        <dd>
+          <span>{{ person.middleName }}</span>
+        </dd>
+        <dt><span>Last Name</span></dt>
+        <dd>
+          <span>{{ person.lastName }}</span>
+        </dd>
+        <dt><span>Suffix</span></dt>
+        <dd>
+          <span>{{ person.suffix }}</span>
+        </dd>
+        <dt><span>Name Tag</span></dt>
+        <dd>
+          <span>{{ person.nameTag }}</span>
+        </dd>
+        <dt><span>Current Member</span></dt>
+        <dd>
+          <span>{{ person.currentMember }}</span>
+        </dd>
+        <dt><span>Membership Start Date</span></dt>
+        <dd>
+          <span>{{ person.membershipStartDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Membership Expiration Date</span></dt>
+        <dd>
+          <span>{{ person.membershipExpirationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Is Head Of House</span></dt>
+        <dd>
+          <span>{{ person.isHeadOfHouse }}</span>
+        </dd>
+        <dt><span>Is Deceased</span></dt>
+        <dd>
+          <span>{{ person.isDeceased }}</span>
+        </dd>
+        <dt><span>Spouse</span></dt>
+        <dd>
+          <div *ngIf="person.spouse">
+            <a [routerLink]="['/person', person.spouse?.id, 'view']">{{ person.spouse?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Membership Level</span></dt>
+        <dd>
+          <div *ngIf="person.membershipLevel">
+            <a [routerLink]="['/membership-level', person.membershipLevel?.id, 'view']">{{ person.membershipLevel?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Head Of House</span></dt>
+        <dd>
+          <div *ngIf="person.headOfHouse">
+            <a [routerLink]="['/person', person.headOfHouse?.id, 'view']">{{ person.headOfHouse?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Parish</span></dt>
+        <dd>
+          <div *ngIf="person.parish">
+            <a [routerLink]="['/parish', person.parish?.id, 'view']">{{ person.parish?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Relationship</span></dt>
+        <dd>
+          <div *ngIf="person.relationship">
+            <a [routerLink]="['/relationship', person.relationship?.id, 'view']">{{ person.relationship?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Organizations</span></dt>
+        <dd>
+          <span *ngFor="let organizations of person.organizations; let last = last">
+            <a [routerLink]="['/organization', organizations?.id, 'view']">{{ organizations.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/person', person.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

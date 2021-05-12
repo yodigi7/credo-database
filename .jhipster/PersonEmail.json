@@ -1,0 +1,42 @@
+{
+  "name": "PersonEmail",
+  "fields": [
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "emailNewsletterSubscription",
+      "fieldType": "YesNoEmpty",
+      "fieldValues": "YES (Y),NO (N),EMPTY"
+    },
+    {
+      "fieldName": "emailEventNotificationSubscription",
+      "fieldType": "YesNoEmpty",
+      "fieldValues": "YES (Y),NO (N),EMPTY"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "emails",
+      "relationshipName": "person"
+    }
+  ],
+  "entityTableName": "person_email",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042118"
+}

@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="organization">
+      <h2 data-cy="organizationDetailsHeading"><span>Organization</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ organization.id }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ organization.name }}</span>
+        </dd>
+        <dt><span>Mailing Label</span></dt>
+        <dd>
+          <span>{{ organization.mailingLabel }}</span>
+        </dd>
+        <dt><span>Parish</span></dt>
+        <dd>
+          <div *ngIf="organization.parish">
+            <a [routerLink]="['/parish', organization.parish?.id, 'view']">{{ organization.parish?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/organization', organization.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

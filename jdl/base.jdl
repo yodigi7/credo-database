@@ -1,0 +1,152 @@
+entity Person {
+    prefix String,
+    preferredName String,
+    firstName String,
+    middleName String,
+    lastName String,
+    suffix String,
+    nameTag String,
+    currentMember Boolean,
+    membershipStartDate LocalDate,
+    membershipExpirationDate LocalDate,
+    isHeadOfHouse Boolean required,
+    isDeceased Boolean required,
+}
+
+entity Relationship {
+    relationship String,
+}
+
+entity PersonNotes {
+    notes String,
+}
+
+entity Organization {
+    name String required,
+    mailingLabel String,
+}
+
+entity OrganizationNotes {
+    notes String,
+}
+
+entity PersonPhone {
+    phoneNumber String unique required minlength(7) pattern(/.*[0-9]{3}-[0-9]{4}$/) unique
+    type String,
+}
+
+entity OrganizationPhone {
+    phoneNumber String unique required minlength(7) pattern(/.*[0-9]{3}-[0-9]{4}$/) unique
+    type String,
+}
+
+entity ParishPhone {
+    phoneNumber String unique required minlength(7) pattern(/.*[0-9]{3}-[0-9]{4}$/) unique
+    type String,
+}
+
+entity Payment {
+    amount Double min(0),
+    date LocalDate,
+    notes String,
+}
+
+entity Parish {
+    name String unique required,
+}
+
+entity Event {
+    name String required,
+    date LocalDate,
+}
+
+entity Ticket {
+    count Integer min(0),
+}
+
+entity PersonEmail {
+    email String unique required,
+    type String,
+    emailNewsletterSubscription YesNoEmpty,
+    emailEventNotificationSubscription YesNoEmpty,
+}
+
+entity OrganizationEmail {
+    email String unique required,
+    type String,
+    emailNewsletterSubscription YesNoEmpty,
+    emailEventNotificationSubscription YesNoEmpty,
+}
+
+entity ParishEmail {
+    email String unique required,
+    type String,
+    emailNewsletterSubscription YesNoEmpty,
+    emailEventNotificationSubscription YesNoEmpty,
+}
+
+entity HouseDetails {
+    mailingLabel String,
+}
+
+entity HouseAddress {
+    streetAddress String,
+    city String,
+    state String,
+    zipcode String,
+    type String,
+    mailNewsletterSubscription YesNoEmpty,
+    mailEventNotificationSubscription YesNoEmpty,
+}
+
+entity OrganizationAddress {
+    streetAddress String,
+    city String,
+    state String,
+    zipcode String,
+}
+
+entity MembershipLevel {
+    level String required unique,
+}
+
+enum YesNoEmpty {
+    YES (Y),
+    NO (N),
+    EMPTY ("")
+}
+
+relationship ManyToOne {
+    Payment{tickets} to Ticket{payment},
+    OrganizationAddress{organization} to Organization{addresses},
+    Organization{parish} to Parish{organizations},
+    OrganizationPhone{organization} to Organization{phones},
+    OrganizationEmail{organization} to Organization{emails},
+    Person{membershipLevel} to MembershipLevel{people},
+    PersonPhone{person} to Person{phones},
+    ParishPhone{parish} to Parish{phones},
+    Payment{person} to Person{payments},
+    PersonEmail{person} to Person{emails},
+    Person{headOfHouse} to Person{personsInHouse},
+    Ticket{person} to Person{tickets},
+    Event{tickets} to Ticket{event},
+    Person{parish} to Parish{people},
+    Person{relationship} to Relationship{people},
+    ParishEmail{parish} to Parish{emails},
+    HouseAddress{houseDetails} to HouseDetails{addresses}
+}
+
+relationship OneToOne {
+    HouseDetails{headOfHouse} to Person{houseDetails},
+    PersonNotes{person} to Person{notes},
+    OrganizationNotes{organization} to Organization{notes},
+    Person{spouse} to Person,
+}
+
+relationship ManyToMany {
+    Person{organizations} to Organization{persons},
+}
+
+paginate all with pagination
+service all with serviceClass
+filter all

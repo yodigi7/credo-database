@@ -1,0 +1,41 @@
+{
+  "name": "Ticket",
+  "fields": [
+    {
+      "fieldName": "count",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "tickets",
+      "relationshipName": "person"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "payment",
+      "otherEntityRelationshipName": "tickets",
+      "relationshipName": "payment"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "event",
+      "otherEntityRelationshipName": "tickets",
+      "relationshipName": "event"
+    }
+  ],
+  "entityTableName": "ticket",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042117"
+}

@@ -1,0 +1,112 @@
+<div>
+  <h2 id="page-heading" data-cy="PersonEmailHeading">
+    <span>Person Emails</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-person-email"
+        [routerLink]="['/person-email/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Person Email </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="personEmails?.length === 0">
+    <span>No personEmails found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="personEmails && personEmails.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="type"><span>Type</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="emailNewsletterSubscription">
+            <span>Email Newsletter Subscription</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="emailEventNotificationSubscription">
+            <span>Email Event Notification Subscription</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="person.id"><span>Person</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let personEmail of personEmails; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/person-email', personEmail.id, 'view']">{{ personEmail.id }}</a>
+          </td>
+          <td>{{ personEmail.email }}</td>
+          <td>{{ personEmail.type }}</td>
+          <td>{{ personEmail.emailNewsletterSubscription }}</td>
+          <td>{{ personEmail.emailEventNotificationSubscription }}</td>
+          <td>
+            <div *ngIf="personEmail.person">
+              <a [routerLink]="['/person', personEmail.person?.id, 'view']">{{ personEmail.person?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/person-email', personEmail.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/person-email', personEmail.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(personEmail)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="personEmails && personEmails.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

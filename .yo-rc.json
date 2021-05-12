@@ -41,6 +41,28 @@
     "jwtSecretKey": "NmE4ODRlMzdlMmY2NmI1MWJkNGY4ZDlmNjZlOTJhMDA4NDNjNzU5MDA2MDhhYzRmOWEyZTA1MTI5NDYwNjM4Y2ZiNWI0Y2JlYWVkMDRkYzA1MzY1ODIzZGY4MDdlOGZiMjE0ZjA1YTNkMzM4MDg2ZTE1ZTAzM2I5NTc2ZmJhM2U=",
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "entities": [
+      "Person",
+      "Relationship",
+      "PersonNotes",
+      "Organization",
+      "OrganizationNotes",
+      "PersonPhone",
+      "OrganizationPhone",
+      "ParishPhone",
+      "Payment",
+      "Parish",
+      "Event",
+      "Ticket",
+      "PersonEmail",
+      "OrganizationEmail",
+      "ParishEmail",
+      "HouseDetails",
+      "HouseAddress",
+      "OrganizationAddress",
+      "MembershipLevel"
+    ],
+    "lastLiquibaseTimestamp": 1621052484000
   }
 }

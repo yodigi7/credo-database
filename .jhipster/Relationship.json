@@ -1,0 +1,27 @@
+{
+  "name": "Relationship",
+  "fields": [
+    {
+      "fieldName": "relationship",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "relationship",
+      "relationshipName": "people"
+    }
+  ],
+  "entityTableName": "relationship",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042107"
+}

@@ -1,0 +1,46 @@
+{
+  "name": "Parish",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "organization",
+      "otherEntityRelationshipName": "parish",
+      "relationshipName": "organizations"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "parishPhone",
+      "otherEntityRelationshipName": "parish",
+      "relationshipName": "phones"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "person",
+      "otherEntityRelationshipName": "parish",
+      "relationshipName": "people"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "parishEmail",
+      "otherEntityRelationshipName": "parish",
+      "relationshipName": "emails"
+    }
+  ],
+  "entityTableName": "parish",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042115"
+}

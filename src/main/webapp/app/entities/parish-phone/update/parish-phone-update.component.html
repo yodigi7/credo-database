@@ -1,0 +1,71 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-parish-phone-heading" data-cy="ParishPhoneCreateUpdateHeading">Create or edit a Parish Phone</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_phoneNumber">Phone Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="phoneNumber"
+            id="field_phoneNumber"
+            data-cy="phoneNumber"
+            formControlName="phoneNumber"
+          />
+          <div *ngIf="editForm.get('phoneNumber')!.invalid && (editForm.get('phoneNumber')!.dirty || editForm.get('phoneNumber')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('phoneNumber')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('phoneNumber')?.errors?.minlength">
+              This field is required to be at least 7 characters.
+            </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('phoneNumber')?.errors?.pattern">
+              This field should follow pattern for "Phone Number".
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_type">Type</label>
+          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_parish">Parish</label>
+          <select class="form-control" id="field_parish" data-cy="parish" name="parish" formControlName="parish">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="parishOption.id === editForm.get('parish')!.value?.id ? editForm.get('parish')!.value : parishOption"
+              *ngFor="let parishOption of parishesSharedCollection; trackBy: trackParishById"
+            >
+              {{ parishOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

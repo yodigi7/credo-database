@@ -1,0 +1,28 @@
+{
+  "name": "OrganizationNotes",
+  "fields": [
+    {
+      "fieldName": "notes",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "organization",
+      "otherEntityRelationshipName": "notes",
+      "relationshipName": "organization",
+      "ownerSide": true
+    }
+  ],
+  "entityTableName": "organization_notes",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210515042110"
+}

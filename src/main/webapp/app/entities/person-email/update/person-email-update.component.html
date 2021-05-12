@@ -1,0 +1,90 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-person-email-heading" data-cy="PersonEmailCreateUpdateHeading">Create or edit a Person Email</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+          <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('email')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_type">Type</label>
+          <input type="text" class="form-control" name="type" id="field_type" data-cy="type" formControlName="type" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_emailNewsletterSubscription">Email Newsletter Subscription</label>
+          <select
+            class="form-control"
+            name="emailNewsletterSubscription"
+            formControlName="emailNewsletterSubscription"
+            id="field_emailNewsletterSubscription"
+            data-cy="emailNewsletterSubscription"
+          >
+            <option [ngValue]="null"></option>
+            <option value="YES">Y</option>
+            <option value="NO">N</option>
+            <option value="EMPTY">EMPTY</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_emailEventNotificationSubscription">Email Event Notification Subscription</label>
+          <select
+            class="form-control"
+            name="emailEventNotificationSubscription"
+            formControlName="emailEventNotificationSubscription"
+            id="field_emailEventNotificationSubscription"
+            data-cy="emailEventNotificationSubscription"
+          >
+            <option [ngValue]="null"></option>
+            <option value="YES">Y</option>
+            <option value="NO">N</option>
+            <option value="EMPTY">EMPTY</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_person">Person</label>
+          <select class="form-control" id="field_person" data-cy="person" name="person" formControlName="person">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="personOption.id === editForm.get('person')!.value?.id ? editForm.get('person')!.value : personOption"
+              *ngFor="let personOption of peopleSharedCollection; trackBy: trackPersonById"
+            >
+              {{ personOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
