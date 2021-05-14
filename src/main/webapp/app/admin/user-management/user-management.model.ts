@@ -17,11 +17,7 @@ export class User implements IUser {
   constructor(
     public id?: number,
     public login?: string,
-    public firstName?: string | null,
-    public lastName?: string | null,
-    public email?: string,
     public activated?: boolean,
-    public langKey?: string,
     public authorities?: string[],
     public createdBy?: string,
     public createdDate?: Date,

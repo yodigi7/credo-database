@@ -23,7 +23,6 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="login"><span>Login</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="email"><span>Email</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
           <th scope="col"><span>Profiles</span></th>
           <th scope="col" jhiSortBy="createdDate"><span>Created Date</span> <fa-icon icon="sort"></fa-icon></th>
@@ -38,7 +37,6 @@
             <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
           </td>
           <td>{{ user.login }}</td>
-          <td>{{ user.email }}</td>
           <td>
             <button class="btn btn-danger btn-sm" (click)="setActive(user, true)" *ngIf="!user.activated">Deactivated</button>
             <button

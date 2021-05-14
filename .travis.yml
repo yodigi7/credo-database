@@ -1,0 +1,32 @@
+os:
+  - linux
+language: java
+node_js:
+  - 12.13.0
+jdk: openjdk11
+
+sudo: false
+cache:
+  directories:
+    - node
+    - node_modules
+    - '$HOME/.m2'
+env:
+  matrix:
+    - NODE_VERSION=12.13.0
+before_install:
+  - nvm install $NODE_VERSION
+  - node -v
+  - chmod +x mvnw
+install: npm install
+script:
+  - ./mvnw clean
+  - ./mvnw test
+  - npm test
+  - mvn spring-boot:run &
+  - bootPid=$!
+notifications:
+  webhooks:
+    on_success: change
+    on_failure: always
+    on_start: never

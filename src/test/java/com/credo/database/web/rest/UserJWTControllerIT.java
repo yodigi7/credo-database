@@ -1,14 +1,5 @@
 package com.credo.database.web.rest;
 
-import static org.hamcrest.Matchers.emptyString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.credo.database.IntegrationTest;
 import com.credo.database.domain.User;
 import com.credo.database.repository.UserRepository;
@@ -20,6 +11,15 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
@@ -42,7 +42,6 @@ class UserJWTControllerIT {
     void testAuthorize() throws Exception {
         User user = new User();
         user.setLogin("user-jwt-controller");
-        user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
 
@@ -65,7 +64,6 @@ class UserJWTControllerIT {
     void testAuthorizeWithRememberMe() throws Exception {
         User user = new User();
         user.setLogin("user-jwt-controller-remember-me");
-        user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
 

@@ -20,7 +20,7 @@ describe('Component Tests', () => {
             {
               provide: ActivatedRoute,
               useValue: {
-                data: of({ user: new User(123, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.WRITER], 'admin') }),
+                data: of({ user: new User(123, 'user', true, [Authority.WRITER], 'admin') }),
               },
             },
           ],
@@ -47,11 +47,7 @@ describe('Component Tests', () => {
           jasmine.objectContaining({
             id: 123,
             login: 'user',
-            firstName: 'first',
-            lastName: 'last',
-            email: 'first@last.com',
             activated: true,
-            langKey: 'en',
             authorities: [Authority.WRITER],
             createdBy: 'admin',
           })
