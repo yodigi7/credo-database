@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,20 +47,20 @@ public class Organization implements Serializable {
     private Parish parish;
 
     @JsonIgnoreProperties(value = { "organization" }, allowSetters = true)
-    @OneToOne(mappedBy = "organization")
+    @OneToOne(mappedBy = "organization", cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private OrganizationNotes notes;
 
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "organization" }, allowSetters = true)
     private Set<OrganizationAddress> addresses = new HashSet<>();
 
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "organization" }, allowSetters = true)
     private Set<OrganizationPhone> phones = new HashSet<>();
 
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "organization" }, allowSetters = true)
     private Set<OrganizationEmail> emails = new HashSet<>();

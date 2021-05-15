@@ -42,10 +42,10 @@
             <column name="membership_expiration_date" type="date">
                 <constraints nullable="true" />
             </column>
-            <column name="is_head_of_house" type="boolean">
+            <column name="is_head_of_house" defaultValue="false" type="boolean">
                 <constraints nullable="false" />
             </column>
-            <column name="is_deceased" type="boolean">
+            <column name="is_deceased" defaultValue="false" type="boolean">
                 <constraints nullable="false" />
             </column>
             <column name="spouse_id" type="bigint">

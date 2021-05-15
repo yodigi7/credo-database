@@ -3,41 +3,142 @@
   <div class="col-md-10">
     <h1 class="text-capitalize text-center">Create Person</h1>
     <!-- TODO: Update spacing for form -->
-    <form name="editForm" role="form" novalidate>
-      <div class="form-group">
-        <label>Prefix</label>
-        <input type="text" class="form-control" formControlName="prefix" />
+    <form name="editForm" role="form" novalidate [formGroup]="createPersonForm" (ngSubmit)="submit()">
+      <!-- Head of Household -->
+
+      <div class="row">
+        <div class="form-group col-1">
+          <input placeholder="Prefix" type="text" class="form-control" formControlName="prefix" />
+        </div>
+        <div class="form-group col">
+          <input placeholder="First Name" type="text" class="form-control" formControlName="firstName" />
+        </div>
+        <div class="form-group col">
+          <input placeholder="Middle Name" type="text" class="form-control" formControlName="middleName" />
+        </div>
+        <div class="form-group col">
+          <input placeholder="Last Name" type="text" class="form-control" formControlName="lastName" />
+        </div>
+        <div class="form-group col-1">
+          <input placeholder="Suffix" type="text" class="form-control" formControlName="suffix" />
+        </div>
+        <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
       </div>
-      <div class="form-group">
-        <label>First Name</label>
-        <input type="text" class="form-control" formControlName="firstName" />
+
+      <!-- Addresses -->
+      <div class="row">
+        <div class="form-group col">
+          <input placeholder="Street Address" type="text" class="form-control" formControlName="address" />
+        </div>
+        <div class="form-group col-2">
+          <input placeholder="City" type="text" class="form-control" formControlName="city" />
+        </div>
+        <div class="form-group col-1">
+          <input placeholder="State" type="text" class="form-control" formControlName="state" />
+        </div>
+        <div class="form-group col-2">
+          <input placeholder="Zipcode" type="text" class="form-control" formControlName="zipcode" />
+        </div>
+        <button class="btn btn-primary col-1" id="addAddress">Add Address</button>
+        <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
       </div>
-      <div class="form-group">
-        <label>Middle Name</label>
-        <input type="text" class="form-control" formControlName="middleName" />
+
+      <div class="row" style="margin-bottom: 10px">
+        <!-- Phones -->
+        <div class="col-6 row justify-content-center">
+          <div class="row col-12" style="padding: 0; margin: 0">
+            <div class="form-group col-6">
+              <input placeholder="Phone Number" type="text" class="form-control" />
+            </div>
+            <div class="form-group col-5">
+              <input placeholder="Type" type="text" class="form-control" />
+            </div>
+            <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
+          </div>
+          <button class="btn btn-secondary row">Add Phone</button>
+        </div>
+        <!-- Emails -->
+        <div class="col-6 row justify-content-center">
+          <div class="col-12 row">
+            <div class="form-group col-6">
+              <input placeholder="Email" type="text" class="form-control" />
+            </div>
+            <div class="form-group col-5">
+              <input placeholder="Type" type="text" class="form-control" />
+            </div>
+          </div>
+          <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
+          <button class="btn btn-secondary row">Add Email</button>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Last Name</label>
-        <input type="text" class="form-control" formControlName="lastName" />
+      <!-- HoH member details -->
+      <div class="row">
+        <div class="form-group col">
+          <input placeholder="Name tag" type="text" class="form-control" formControlName="nameTag" />
+        </div>
+        <div class="form-group col">
+          <input placeholder="Membership level" type="text" class="form-control" formControlName="membershipLevel" />
+        </div>
+        <div class="form-group col">
+          <input placeholder="Member since" type="text" class="form-control" formControlName="memberSince" />
+        </div>
+        <div class="form-group col">
+          <input placeholder="Membership expiration date" type="date" class="form-control" formControlName="memberExpDate" />
+        </div>
+        <div class="form-group col">
+          <label class="form-control-label">Deceased?</label>
+          <input type="checkbox" class="form-control" formControlName="deceased" />
+        </div>
       </div>
-      <div class="form-group">
-        <label>Prefix</label>
-        <input type="text" class="form-control" formControlName="prefix" />
+      <hr />
+      <!-- Spouse -->
+      <div>
+        <!-- Row 2 -->
+        <div class="row">
+          <button class="btn btn-primary">+ Add spouse</button>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Street Address</label>
-        <input type="text" class="form-control" formControlName="address" />
+      <!-- HH member -->
+      <div>
+        <!-- Row 1 -->
+        <div class="row">
+          <button class="btn btn-primary">+ Add HH member</button>
+        </div>
       </div>
-      <button class="btn btn-primary">Add Address</button>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="text" class="form-control" formControlName="phone" />
+      <!-- Notes and misc household details -->
+      <div>
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <textarea rows="5" placeholder="Notes" class="form-control" formControlName="notes"></textarea>
+            </div>
+            <div class="form-group">
+              <input placeholder="Mailing label" type="text" class="form-control" formControlName="mailingLabel" />
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="form-group col-8">
+                <input placeholder="Parish" type="text" class="form-control" formControlName="parish" />
+              </div>
+              <span class="col-4">{{ hoh.id }}</span>
+            </div>
+            <div class="row">
+              <div class="form-group col-8">
+                <input placeholder="Organizations" type="text" class="form-control" />
+              </div>
+              <button class="btn btn-secondary col">+ Add Organization</button>
+            </div>
+            <div class="row">
+              <div class="form-group col-6">
+                <label class="form-control-label">Receive mail?</label>
+                <input placeholder="Y/N" type="text" class="form-control" formControlName="receiveMail" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="text" class="form-control" formControlName="email" />
-      </div>
-      <button class="btn btn-secondary">Add Email</button>
+      <button type="submit" class="btn btn-primary" data-cy="submit">Save</button>
     </form>
   </div>
   <div class="col-md-1"></div>

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -57,12 +58,12 @@ public class Ticket implements Serializable {
     )
     private Person person;
 
-    @OneToMany(mappedBy = "tickets")
+    @OneToMany(mappedBy = "tickets", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "tickets", "person" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @OneToMany(mappedBy = "tickets")
+    @OneToMany(mappedBy = "tickets", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
     private Set<Event> events = new HashSet<>();

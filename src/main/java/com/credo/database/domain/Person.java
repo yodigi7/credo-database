@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -93,7 +94,7 @@ public class Person implements Serializable {
         },
         allowSetters = true
     )
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     @JoinColumn(unique = true)
     private Person spouse;
 
@@ -141,29 +142,29 @@ public class Person implements Serializable {
     private Set<Organization> organizations = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "headOfHouse", "addresses" }, allowSetters = true)
-    @OneToOne(mappedBy = "headOfHouse")
+    @OneToOne(mappedBy = "headOfHouse", cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private HouseDetails houseDetails;
 
     @JsonIgnoreProperties(value = { "person" }, allowSetters = true)
-    @OneToOne(mappedBy = "person")
+    @OneToOne(mappedBy = "person", cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
     private PersonNotes notes;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "person" }, allowSetters = true)
     private Set<PersonPhone> phones = new HashSet<>();
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "tickets", "person" }, allowSetters = true)
     private Set<Payment> payments = new HashSet<>();
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "person" }, allowSetters = true)
     private Set<PersonEmail> emails = new HashSet<>();
 
-    @OneToMany(mappedBy = "headOfHouse")
+    @OneToMany(mappedBy = "headOfHouse", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
@@ -185,7 +186,7 @@ public class Person implements Serializable {
     )
     private Set<Person> personsInHouses = new HashSet<>();
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "person", "payments", "events" }, allowSetters = true)
     private Set<Ticket> tickets = new HashSet<>();

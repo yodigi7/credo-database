@@ -24,7 +24,10 @@ export class HouseAddress implements IHouseAddress {
     public mailNewsletterSubscription?: YesNoEmpty | null,
     public mailEventNotificationSubscription?: YesNoEmpty | null,
     public houseDetails?: IHouseDetails | null
-  ) {}
+  ) {
+    this.mailEventNotificationSubscription = this.mailEventNotificationSubscription ?? YesNoEmpty.EMPTY;
+    this.mailNewsletterSubscription = this.mailNewsletterSubscription ?? YesNoEmpty.EMPTY;
+  }
 }
 
 export function getHouseAddressIdentifier(houseAddress: IHouseAddress): number | undefined {
