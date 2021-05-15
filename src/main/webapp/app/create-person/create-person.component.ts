@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPerson, Person } from 'app/entities/person/person.model';
-import { HouseDetails, IHouseDetails } from 'app/entities/house-details/house-details.model';
-import { EntityArrayResponseType, EntityResponseType, PersonService } from 'app/entities/person/service/person.service';
+import { HouseDetails } from 'app/entities/house-details/house-details.model';
+import { EntityArrayResponseType, PersonService } from 'app/entities/person/service/person.service';
 import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
 import { HouseAddress } from 'app/entities/house-address/house-address.model';
 import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { YesNoEmpty } from 'app/entities/enumerations/yes-no-empty.model';
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
+import { PersonPhone } from 'app/entities/person-phone/person-phone.model';
+import { PersonEmail } from 'app/entities/person-email/person-email.model';
 
 @Component({
   selector: 'jhi-create-person',
@@ -38,6 +40,8 @@ export class CreatePersonComponent {
     mailingLabel: [],
     parish: [],
     receiveMail: [],
+    hohPhones: this.fb.array([]),
+    hohEmails: this.fb.array([]),
   });
 
   constructor(
@@ -56,7 +60,18 @@ export class CreatePersonComponent {
   }
 
   async submit(): Promise<void> {
-    console.log(this.createPersonForm.get('deceased')?.value);
+    if (this.hoh.id) {
+      this.updatePerson();
+    } else {
+      await this.createPerson();
+    }
+  }
+
+  updatePerson(): void {
+    return;
+  }
+
+  async createPerson(): Promise<void> {
     this.updateHohFromForm();
     if (
       this.createPersonForm.get('address')?.value ||
@@ -96,6 +111,28 @@ export class CreatePersonComponent {
     this.hoh.notes = notes.notes ? notes : null;
     // this.hoh.parish = this.createPersonForm.get("parish")?.value;
     this.hoh.isHeadOfHouse = true;
+    this.hoh.phones = [];
+    (<FormGroup[]>(<FormArray>this.createPersonForm.get('hohPhones')).controls)
+      .filter((phoneForm: FormGroup) => phoneForm.get('number')?.value || phoneForm.get('type')?.value)
+      .forEach((phoneForm: FormGroup) => {
+        const phone = new PersonPhone();
+        phone.person = this.deepCopy(this.hoh);
+        phone.person.phones = null;
+        phone.phoneNumber = phoneForm.get('number')?.value;
+        phone.type = phoneForm.get('type')?.value;
+        this.hoh.phones?.push(phone);
+      });
+    this.hoh.emails = [];
+    (<FormGroup[]>(<FormArray>this.createPersonForm.get('hohEmails')).controls)
+      .filter((emailForm: FormGroup) => emailForm.get('email')?.value || emailForm.get('type')?.value)
+      .forEach((emailForm: FormGroup) => {
+        const email = new PersonEmail();
+        email.person = this.deepCopy(this.hoh);
+        email.person.emails = null;
+        email.email = emailForm.get('email')?.value;
+        email.type = emailForm.get('type')?.value;
+        this.hoh.emails?.push(email);
+      });
 
     if (
       this.createPersonForm.get('address')?.value ||
@@ -115,9 +152,41 @@ export class CreatePersonComponent {
       this.hoh.houseDetails.addresses[0].mailEventNotificationSubscription =
         this.createPersonForm.get('receiveMail')?.value ?? YesNoEmpty.EMPTY;
       this.hoh.houseDetails.mailingLabel = this.createPersonForm.get('mailingLabel')?.value;
-      const baseHoh = JSON.parse(JSON.stringify(this.hoh));
+      const baseHoh = <IPerson>this.deepCopy(this.hoh);
       baseHoh.houseDetails = null;
       this.hoh.houseDetails.headOfHouse = baseHoh;
     }
+  }
+
+  /* eslint-disable */
+  deepCopy(object: object): object {
+    return JSON.parse(JSON.stringify(object));
+  }
+  /* eslint-enable */
+
+  createPhoneFormGroup(): FormGroup {
+    return this.fb.group({
+      number: [],
+      type: [],
+    });
+  }
+
+  addPhoneToForm(phoneList: string): void {
+    (<FormArray>this.createPersonForm.get(phoneList)).push(this.createPhoneFormGroup());
+  }
+
+  createEmailFormGroup(): FormGroup {
+    return this.fb.group({
+      email: [],
+      type: [],
+    });
+  }
+
+  addEmailToForm(emailList: string): void {
+    (<FormArray>this.createPersonForm.get(emailList)).push(this.createEmailFormGroup());
+  }
+
+  getFormArray(formArrayName: string): FormArray {
+    return <FormArray>this.createPersonForm.get(formArrayName);
   }
 }

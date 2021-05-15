@@ -22,7 +22,7 @@
         <div class="form-group col-1">
           <input placeholder="Suffix" type="text" class="form-control" formControlName="suffix" />
         </div>
-        <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
+        <!-- <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
       </div>
 
       <!-- Addresses -->
@@ -39,26 +39,50 @@
         <div class="form-group col-2">
           <input placeholder="Zipcode" type="text" class="form-control" formControlName="zipcode" />
         </div>
-        <button class="btn btn-primary col-1" id="addAddress">Add Address</button>
-        <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
+        <button type="button" disabled class="btn btn-primary col-1" id="addAddress">Add Address</button>
+        <!-- <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
       </div>
 
       <div class="row" style="margin-bottom: 10px">
         <!-- Phones -->
-        <div class="col-6 row justify-content-center">
-          <div class="row col-12" style="padding: 0; margin: 0">
-            <div class="form-group col-6">
-              <input placeholder="Phone Number" type="text" class="form-control" />
+        <div class="col-6">
+          <div class="col-12" formArrayName="hohPhones" *ngFor="let phone of getFormArray('hohPhones').controls; let i = index">
+            <div [formGroupName]="i">
+              <div class="row col-12">
+                <div class="form-group col-6">
+                  <input placeholder="Phone Number" type="text" class="form-control" formControlName="number" />
+                </div>
+                <div class="form-group col-5">
+                  <input placeholder="Type" type="text" class="form-control" formControlName="type" />
+                </div>
+                <!-- <span class="col-1 d-flex justify-items-center"><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
+              </div>
             </div>
-            <div class="form-group col-5">
-              <input placeholder="Type" type="text" class="form-control" />
-            </div>
-            <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
           </div>
-          <button class="btn btn-secondary row">Add Phone</button>
+          <div class="col-12 text-center">
+            <button type="button" class="col-11 btn btn-secondary" (click)="addPhoneToForm('hohPhones')">Add Phone</button>
+          </div>
         </div>
         <!-- Emails -->
-        <div class="col-6 row justify-content-center">
+        <div class="col-6">
+          <div class="col-12" formArrayName="hohEmails" *ngFor="let email of getFormArray('hohEmails').controls; let i = index">
+            <div [formGroupName]="i">
+              <div class="row col-12">
+                <div class="form-group col-6">
+                  <input placeholder="Email" type="text" class="form-control" formControlName="email" />
+                </div>
+                <div class="form-group col-5">
+                  <input placeholder="Type" type="text" class="form-control" formControlName="type" />
+                </div>
+                <!-- <span class="col-1 d-flex justify-items-center"><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-12 text-center">
+            <button type="button" class="col-11 btn btn-secondary" (click)="addEmailToForm('hohEmails')">Add Email</button>
+          </div>
+        </div>
+        <!-- <div class="col-6 row justify-content-center">
           <div class="col-12 row">
             <div class="form-group col-6">
               <input placeholder="Email" type="text" class="form-control" />
@@ -68,8 +92,8 @@
             </div>
           </div>
           <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
-          <button class="btn btn-secondary row">Add Email</button>
-        </div>
+          <button type="button" class="btn btn-secondary row">Add Email</button>
+        </div> -->
       </div>
       <!-- HoH member details -->
       <div class="row">
@@ -99,12 +123,14 @@
           <!-- <input placeholder="Membership level" type="text" class="form-control" formControlName="membershipLevel" /> -->
         </div>
         <div class="form-group col">
-          <input placeholder="Member since" type="text" class="form-control" formControlName="memberSince" />
+          <label class="form-control-label">Member Since</label>
+          <input type="date" class="form-control" formControlName="memberSince" />
         </div>
         <div class="form-group col">
+          <label class="form-control-label">Member Expiration Date</label>
           <input placeholder="Membership expiration date" type="date" class="form-control" formControlName="memberExpDate" />
         </div>
-        <div class="form-group col">
+        <div class="form-group col row">
           <label class="form-control-label">Deceased?</label>
           <input type="checkbox" class="form-control" formControlName="deceased" />
         </div>
@@ -114,14 +140,14 @@
       <div>
         <!-- Row 2 -->
         <div class="row">
-          <button class="btn btn-primary">+ Add spouse</button>
+          <button type="button" disabled class="btn btn-primary">+ Add spouse</button>
         </div>
       </div>
       <!-- HH member -->
       <div>
         <!-- Row 1 -->
         <div class="row">
-          <button class="btn btn-primary">+ Add HH member</button>
+          <button type="button" disabled class="btn btn-primary">+ Add HH member</button>
         </div>
       </div>
       <!-- Notes and misc household details -->
@@ -138,15 +164,15 @@
           <div class="col-6">
             <div class="row">
               <div class="form-group col-8">
-                <input placeholder="Parish" type="text" class="form-control" formControlName="parish" />
+                <input [attr.disabled]="true" placeholder="Parish" type="text" class="form-control" formControlName="parish" />
               </div>
               <span class="col-4">{{ hoh.id }}</span>
             </div>
             <div class="row">
               <div class="form-group col-8">
-                <input placeholder="Organizations" type="text" class="form-control" />
+                <input [attr.disabled]="true" placeholder="Organizations" type="text" class="form-control" />
               </div>
-              <button class="btn btn-secondary col">+ Add Organization</button>
+              <button type="button" disabled class="btn btn-secondary col">+ Add Organization</button>
             </div>
             <div class="row">
               <div class="form-group col-6">
