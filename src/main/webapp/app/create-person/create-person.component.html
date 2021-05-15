@@ -77,7 +77,26 @@
           <input placeholder="Name tag" type="text" class="form-control" formControlName="nameTag" />
         </div>
         <div class="form-group col">
-          <input placeholder="Membership level" type="text" class="form-control" formControlName="membershipLevel" />
+          <select
+            class="form-control"
+            id="field_membershipLevel"
+            data-cy="membershipLevel"
+            name="membershipLevel"
+            formControlName="membershipLevel"
+          >
+            <option [ngValue]="null">(Membership Level)</option>
+            <option
+              [ngValue]="
+                membershipLevelOption.id === createPersonForm.get('membershipLevel')!.value?.id
+                  ? createPersonForm.get('membershipLevel')!.value
+                  : membershipLevelOption
+              "
+              *ngFor="let membershipLevelOption of membershipLevels; trackBy: trackMembershipLevelById"
+            >
+              {{ membershipLevelOption.level }}
+            </option>
+          </select>
+          <!-- <input placeholder="Membership level" type="text" class="form-control" formControlName="membershipLevel" /> -->
         </div>
         <div class="form-group col">
           <input placeholder="Member since" type="text" class="form-control" formControlName="memberSince" />
