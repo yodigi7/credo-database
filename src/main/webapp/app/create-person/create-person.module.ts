@@ -7,7 +7,6 @@ import { CREATE_PERSON_ROUTE } from '../create-person/create-person.route';
 import { CreatePersonComponent } from '../create-person/create-person.component';
 import { CoreEntitiesModule } from 'app/entities/core-entities.module';
 import { CustomFormsModule } from 'app/custom-forms/custom-forms.module';
-import { EditPersonSubformComponent } from 'app/custom-forms/edit-person-subform/edit-person-subform.component';
 
 @NgModule({
   imports: [SharedModule, CoreEntitiesModule, CustomFormsModule, RouterModule.forRoot([CREATE_PERSON_ROUTE], { useHash: true })],

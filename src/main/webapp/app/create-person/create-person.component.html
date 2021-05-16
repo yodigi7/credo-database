@@ -7,123 +7,28 @@
     <!-- TODO: Update spacing for form -->
     <form name="editForm" role="form" novalidate [formGroup]="rootPersonForm" (ngSubmit)="submit()">
       <!-- Head of Household -->
-      <div class="row">
-        <div class="form-group col-1">
-          <input placeholder="Prefix" type="text" class="form-control" formControlName="prefix" />
-        </div>
-        <div class="form-group col">
-          <input placeholder="First Name" type="text" class="form-control" formControlName="firstName" />
-        </div>
-        <div class="form-group col">
-          <input placeholder="Middle Name" type="text" class="form-control" formControlName="middleName" />
-        </div>
-        <div class="form-group col">
-          <input placeholder="Last Name" type="text" class="form-control" formControlName="lastName" />
-        </div>
-        <div class="form-group col-1">
-          <input placeholder="Suffix" type="text" class="form-control" formControlName="suffix" />
-        </div>
-        <!-- <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
+      <div>
+        <jhi-edit-person-subform [personFormGroup]="getFormGroup('hoh')"></jhi-edit-person-subform>
       </div>
-
       <!-- Addresses -->
-      <div class="row">
-        <div class="form-group col">
-          <input placeholder="Street Address" type="text" class="form-control" formControlName="address" />
-        </div>
-        <div class="form-group col-2">
-          <input placeholder="City" type="text" class="form-control" formControlName="city" />
-        </div>
-        <div class="form-group col-1">
-          <input placeholder="State" type="text" class="form-control" formControlName="state" />
-        </div>
-        <div class="form-group col-2">
-          <input placeholder="Zipcode" type="text" class="form-control" formControlName="zipcode" />
-        </div>
-        <button type="button" disabled class="btn btn-primary col-1" id="addAddress">Add Address</button>
-        <!-- <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
-      </div>
-
-      <div class="row" style="margin-bottom: 10px">
-        <!-- Phones -->
-        <div class="col-6">
-          <div class="col-12" formArrayName="phones" *ngFor="let phone of getFormArray('phones').controls; let i = index">
-            <div [formGroupName]="i">
-              <div class="row col-12">
-                <div class="form-group col-6">
-                  <input placeholder="Phone Number" type="text" class="form-control" formControlName="number" />
-                </div>
-                <div class="form-group col-5">
-                  <input placeholder="Type" type="text" class="form-control" formControlName="type" />
-                </div>
-                <!-- <span class="col-1 d-flex justify-items-center"><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
-              </div>
-            </div>
+      <div class="row" formArrayName="addresses" *ngFor="let address of getFormArray('addresses').controls; let i = index">
+        <div [formGroupName]="i" class="row col">
+          <div class="form-group col">
+            <input placeholder="Street Address" type="text" class="form-control" formControlName="address" />
           </div>
-          <div class="col-12 text-center">
-            <button type="button" class="col-11 btn btn-secondary" (click)="addPhoneToForm('phones')">Add Phone</button>
+          <div class="form-group col-2">
+            <input placeholder="City" type="text" class="form-control" formControlName="city" />
           </div>
-        </div>
-        <!-- Emails -->
-        <div class="col-6">
-          <div class="col-12" formArrayName="emails" *ngFor="let email of getFormArray('emails').controls; let i = index">
-            <div [formGroupName]="i">
-              <div class="row col-12">
-                <div class="form-group col-6">
-                  <input placeholder="Email" type="text" class="form-control" formControlName="email" />
-                </div>
-                <div class="form-group col-5">
-                  <input placeholder="Type" type="text" class="form-control" formControlName="type" />
-                </div>
-                <!-- <span class="col-1 d-flex justify-items-center"><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
-              </div>
-            </div>
+          <div class="form-group col-1">
+            <input placeholder="State" type="text" class="form-control" formControlName="state" />
           </div>
-          <div class="col-12 text-center">
-            <button type="button" class="col-11 btn btn-secondary" (click)="addEmailToForm('emails')">Add Email</button>
+          <div class="form-group col-2">
+            <input placeholder="Zipcode" type="text" class="form-control" formControlName="zipcode" />
           </div>
+          <!-- <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span> -->
         </div>
       </div>
-      <!-- HoH member details -->
-      <div class="row">
-        <div class="form-group col">
-          <input placeholder="Name tag" type="text" class="form-control" formControlName="nameTag" />
-        </div>
-        <div class="form-group col">
-          <select
-            class="form-control"
-            id="field_membershipLevel"
-            data-cy="membershipLevel"
-            name="membershipLevel"
-            formControlName="membershipLevel"
-          >
-            <option [ngValue]="null">(Membership Level)</option>
-            <option
-              [ngValue]="
-                membershipLevelOption.id === rootPersonForm.get('membershipLevel')!.value?.id
-                  ? rootPersonForm.get('membershipLevel')!.value
-                  : membershipLevelOption
-              "
-              *ngFor="let membershipLevelOption of membershipLevels; trackBy: trackMembershipLevelById"
-            >
-              {{ membershipLevelOption.level }}
-            </option>
-          </select>
-          <!-- <input placeholder="Membership level" type="text" class="form-control" formControlName="membershipLevel" /> -->
-        </div>
-        <div class="form-group col">
-          <label class="form-control-label">Member Since</label>
-          <input type="date" class="form-control" formControlName="memberSince" />
-        </div>
-        <div class="form-group col">
-          <label class="form-control-label">Member Expiration Date</label>
-          <input placeholder="Membership expiration date" type="date" class="form-control" formControlName="memberExpDate" />
-        </div>
-        <div class="form-group col row">
-          <label class="form-control-label">Deceased?</label>
-          <input type="checkbox" class="form-control" formControlName="deceased" />
-        </div>
-      </div>
+      <button type="button" (click)="addAddressToForm('addresses')" class="btn btn-primary col-1" id="addAddress">Add Address</button>
       <hr />
       <!-- Spouse -->
       <!-- Row 2 -->
@@ -166,7 +71,11 @@
             <div class="row">
               <div class="form-group col-6">
                 <label class="form-control-label">Receive mail?</label>
-                <input placeholder="Y/N" type="text" class="form-control" formControlName="receiveMail" />
+                <select placeholder="Y/N" class="form-control" formControlName="receiveMail">
+                  <option value="EMPTY"></option>
+                  <option>YES</option>
+                  <option>NO</option>
+                </select>
               </div>
             </div>
           </div>

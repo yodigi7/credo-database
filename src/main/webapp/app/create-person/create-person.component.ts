@@ -18,20 +18,18 @@ import { PersonEmail } from 'app/entities/person-email/person-email.model';
   styleUrls: ['./create-person.component.css'],
 })
 export class CreatePersonComponent {
-  hoh: IPerson;
-  membershipLevels: MembershipLevel[];
+  hoh: IPerson = new Person();
+  membershipLevels: MembershipLevel[] = [];
   hasSpouse = false;
 
   rootPersonForm = this.fb.group({
+    hoh: this.createPersonFormGroup(),
     prefix: [],
     firstName: [],
     middleName: [],
     lastName: [],
     suffix: [],
-    address: [],
-    city: [],
-    state: [],
-    zipcode: [],
+    addresses: this.fb.array([]),
     nameTag: [],
     membershipLevel: [],
     memberSince: [],
@@ -41,8 +39,6 @@ export class CreatePersonComponent {
     mailingLabel: [],
     parish: [],
     receiveMail: [],
-    phones: this.fb.array([]),
-    emails: this.fb.array([]),
     spouse: this.createPersonFormGroup(),
   });
 
@@ -52,9 +48,6 @@ export class CreatePersonComponent {
     private houseDetailsService: HouseDetailsService,
     private membershipLevelService: MembershipLevelService
   ) {
-    this.hoh = new Person();
-
-    this.membershipLevels = [];
     const initMembershipLevels = (res: EntityArrayResponseType): void => {
       this.membershipLevels = res.body ?? [];
     };
@@ -62,7 +55,6 @@ export class CreatePersonComponent {
   }
 
   async submit(): Promise<void> {
-    console.log(this.rootPersonForm.get('spouse'));
     if (this.hoh.id) {
       this.updatePerson();
     } else {
@@ -75,12 +67,15 @@ export class CreatePersonComponent {
   }
 
   async createPerson(): Promise<void> {
-    this.hoh = this.generatePersonFromForm(this.rootPersonForm, true);
+    this.hoh = this.generatePersonFromForm(this.getFormGroup('hoh'), true);
+    console.log('hoh after generating from form');
+    console.log(this.hoh);
+    this.hoh.personsInHouses = [];
     if (
       this.getFormGroup('spouse').controls.deceased.value ||
       this.getFormGroup('spouse').controls.prefix.value ||
       this.getFormGroup('spouse').controls.firstName.value ||
-      this.getFormGroup('spouse').controls.midlleName.value ||
+      this.getFormGroup('spouse').controls.middleName.value ||
       this.getFormGroup('spouse').controls.lastName.value ||
       this.getFormGroup('spouse').controls.suffix.value ||
       this.getFormGroup('spouse').controls.nameTag.value ||
@@ -93,17 +88,22 @@ export class CreatePersonComponent {
       let spouse = this.generatePersonFromForm(this.getFormGroup('spouse'), false);
       spouse = <IPerson>this.deepCopy(spouse);
       spouse.headOfHouse = null;
+      this.hoh.spouse = spouse;
       this.hoh.personsInHouses = [spouse];
     }
 
     if (
-      this.rootPersonForm.get('address')?.value ||
-      this.rootPersonForm.get('city')?.value ||
-      this.rootPersonForm.get('state')?.value ||
-      this.rootPersonForm.get('zipcode')?.value ||
-      this.rootPersonForm.get('receiveMail')?.value ||
-      this.rootPersonForm.get('mailingLabel')?.value
+      (<FormGroup[]>this.getFormArray('addresses').controls).filter(
+        (addressForm: FormGroup) =>
+          addressForm.get('address')?.value ||
+          addressForm.get('city')?.value ||
+          addressForm.get('state')?.value ||
+          addressForm.get('zipcode')?.value
+      ).length ||
+      this.rootPersonForm.controls.receiveMail.value ||
+      this.rootPersonForm.controls.mailingLabel.value
     ) {
+      console.log(this.rootPersonForm.controls.receiveMail.value);
       const res = await this.houseDetailsService.create(this.hoh.houseDetails!).toPromise();
       this.hoh.houseDetails = res.body;
       this.hoh = this.hoh.houseDetails?.headOfHouse ?? this.hoh;
@@ -159,24 +159,51 @@ export class CreatePersonComponent {
         person.emails?.push(email);
       });
     if (
-      (personForm.get('address')?.value ||
-        personForm.get('city')?.value ||
-        personForm.get('state')?.value ||
-        personForm.get('zipcode')?.value ||
-        personForm.get('receiveMail')?.value ||
-        personForm.get('mailingLabel')?.value) &&
+      ((<FormGroup[]>this.getFormArray('addresses').controls).filter(
+        (addressForm: FormGroup) =>
+          addressForm.get('address')?.value ||
+          addressForm.get('city')?.value ||
+          addressForm.get('state')?.value ||
+          addressForm.get('zipcode')?.value
+      ).length ||
+        this.rootPersonForm.get('receiveMail')?.value ||
+        this.rootPersonForm.get('mailingLabel')?.value) &&
       isHoh
     ) {
       person.houseDetails = new HouseDetails();
       person.houseDetails.id = this.hoh.houseDetails?.id;
-      person.houseDetails.addresses = [new HouseAddress()];
-      person.houseDetails.addresses[0].id = this.hoh.houseDetails?.addresses?.[0]?.id;
-      person.houseDetails.addresses[0].streetAddress = personForm.get('address')?.value;
-      person.houseDetails.addresses[0].city = personForm.get('city')?.value;
-      person.houseDetails.addresses[0].state = personForm.get('state')?.value;
-      person.houseDetails.addresses[0].zipcode = personForm.get('zipcode')?.value;
-      person.houseDetails.addresses[0].mailNewsletterSubscription = personForm.get('receiveMail')?.value ?? YesNoEmpty.EMPTY;
-      person.houseDetails.addresses[0].mailEventNotificationSubscription = personForm.get('receiveMail')?.value ?? YesNoEmpty.EMPTY;
+      person.houseDetails.addresses = [];
+      (<FormGroup[]>this.getFormArray('addresses').controls)
+        .filter(
+          (addressForm: FormGroup) =>
+            addressForm.get('address')?.value ||
+            addressForm.get('city')?.value ||
+            addressForm.get('state')?.value ||
+            addressForm.get('zipcode')?.value
+        )
+        .forEach((addressForm: FormGroup) => {
+          const address = new HouseAddress();
+          // address.id = this.hoh.houseDetails?.addresses?.[0]?.id;
+          address.streetAddress = addressForm.get('address')?.value;
+          address.city = addressForm.get('city')?.value;
+          address.state = addressForm.get('state')?.value;
+          address.zipcode = addressForm.get('zipcode')?.value;
+          for (const addressExisting of this.hoh.houseDetails?.addresses ?? []) {
+            if (
+              address.streetAddress === addressExisting.streetAddress &&
+              address.city === addressExisting.city &&
+              address.state === addressExisting.state &&
+              address.zipcode === addressExisting.zipcode
+            ) {
+              address.id = addressExisting.id;
+              address.type = addressExisting.type;
+              address.mailEventNotificationSubscription = addressExisting.mailEventNotificationSubscription;
+              address.mailNewsletterSubscription = addressExisting.mailNewsletterSubscription;
+              break;
+            }
+          }
+          person.houseDetails!.addresses!.push(address);
+        });
       person.houseDetails.mailingLabel = personForm.get('mailingLabel')?.value;
       const baseHoh = <IPerson>this.deepCopy(person);
       baseHoh.houseDetails = null;
@@ -193,22 +220,17 @@ export class CreatePersonComponent {
   }
   /* eslint-enable */
 
-  createPhoneFormGroup(): FormGroup {
+  createAddressFormGroup(): FormGroup {
     return this.fb.group({
-      number: [],
-      type: [],
+      address: [],
+      city: [],
+      state: [],
+      zipcode: [],
     });
   }
 
-  addPhoneToForm(phoneList: string): void {
-    (<FormArray>this.rootPersonForm.get(phoneList)).push(this.createPhoneFormGroup());
-  }
-
-  createEmailFormGroup(): FormGroup {
-    return this.fb.group({
-      email: [],
-      type: [],
-    });
+  addAddressToForm(addressList: string): void {
+    (<FormArray>this.rootPersonForm.get(addressList)).push(this.createAddressFormGroup());
   }
 
   createPersonFormGroup(): FormGroup {
@@ -228,13 +250,8 @@ export class CreatePersonComponent {
     });
   }
 
-  addEmailToForm(emailList: string): void {
-    (<FormArray>this.rootPersonForm.get(emailList)).push(this.createEmailFormGroup());
-  }
-
   addSpouse(): void {
     this.hasSpouse = true;
-    console.log(this.getFormGroup('spouse'));
   }
 
   getFormArray(formArrayName: string): FormArray {
