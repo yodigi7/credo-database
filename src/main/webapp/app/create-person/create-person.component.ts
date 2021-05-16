@@ -2,13 +2,11 @@ import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPerson, Person } from 'app/entities/person/person.model';
 import { HouseDetails } from 'app/entities/house-details/house-details.model';
-import { EntityArrayResponseType, PersonService } from 'app/entities/person/service/person.service';
+import { PersonService } from 'app/entities/person/service/person.service';
 import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
 import { HouseAddress } from 'app/entities/house-address/house-address.model';
 import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
-import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
-import { YesNoEmpty } from 'app/entities/enumerations/yes-no-empty.model';
-import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
+import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { PersonPhone } from 'app/entities/person-phone/person-phone.model';
 import { PersonEmail } from 'app/entities/person-email/person-email.model';
 
@@ -19,7 +17,6 @@ import { PersonEmail } from 'app/entities/person-email/person-email.model';
 })
 export class CreatePersonComponent {
   hoh: IPerson = new Person();
-  membershipLevels: MembershipLevel[] = [];
   hasSpouse = false;
 
   rootPersonForm = this.fb.group({
@@ -31,7 +28,6 @@ export class CreatePersonComponent {
     suffix: [],
     addresses: this.fb.array([]),
     nameTag: [],
-    membershipLevel: [],
     memberSince: [],
     memberExpDate: [],
     deceased: [false],
@@ -42,17 +38,7 @@ export class CreatePersonComponent {
     spouse: this.createPersonFormGroup(),
   });
 
-  constructor(
-    private fb: FormBuilder,
-    private personService: PersonService,
-    private houseDetailsService: HouseDetailsService,
-    private membershipLevelService: MembershipLevelService
-  ) {
-    const initMembershipLevels = (res: EntityArrayResponseType): void => {
-      this.membershipLevels = res.body ?? [];
-    };
-    membershipLevelService.query().subscribe(initMembershipLevels);
-  }
+  constructor(private fb: FormBuilder, private personService: PersonService, private houseDetailsService: HouseDetailsService) {}
 
   async submit(): Promise<void> {
     if (this.hoh.id) {
@@ -60,6 +46,7 @@ export class CreatePersonComponent {
     } else {
       await this.createPerson();
     }
+    window.scroll(0, 0);
   }
 
   updatePerson(): void {
@@ -68,29 +55,7 @@ export class CreatePersonComponent {
 
   async createPerson(): Promise<void> {
     this.hoh = this.generatePersonFromForm(this.getFormGroup('hoh'), true);
-    console.log('hoh after generating from form');
-    console.log(this.hoh);
     this.hoh.personsInHouses = [];
-    if (
-      this.getFormGroup('spouse').controls.deceased.value ||
-      this.getFormGroup('spouse').controls.prefix.value ||
-      this.getFormGroup('spouse').controls.firstName.value ||
-      this.getFormGroup('spouse').controls.middleName.value ||
-      this.getFormGroup('spouse').controls.lastName.value ||
-      this.getFormGroup('spouse').controls.suffix.value ||
-      this.getFormGroup('spouse').controls.nameTag.value ||
-      this.getFormGroup('spouse').controls.membershipLevel.value ||
-      this.getFormGroup('spouse').controls.memberSince.value ||
-      this.getFormGroup('spouse').controls.memberExpDate.value ||
-      this.getFormGroup('spouse').controls.phones.value ||
-      this.getFormGroup('spouse').controls.emails.value
-    ) {
-      let spouse = this.generatePersonFromForm(this.getFormGroup('spouse'), false);
-      spouse = <IPerson>this.deepCopy(spouse);
-      spouse.headOfHouse = null;
-      this.hoh.spouse = spouse;
-      this.hoh.personsInHouses = [spouse];
-    }
 
     if (
       (<FormGroup[]>this.getFormArray('addresses').controls).filter(
@@ -103,7 +68,6 @@ export class CreatePersonComponent {
       this.rootPersonForm.controls.receiveMail.value ||
       this.rootPersonForm.controls.mailingLabel.value
     ) {
-      console.log(this.rootPersonForm.controls.receiveMail.value);
       const res = await this.houseDetailsService.create(this.hoh.houseDetails!).toPromise();
       this.hoh.houseDetails = res.body;
       this.hoh = this.hoh.houseDetails?.headOfHouse ?? this.hoh;
@@ -158,6 +122,27 @@ export class CreatePersonComponent {
         email.type = emailForm.get('type')?.value;
         person.emails?.push(email);
       });
+
+    if (
+      (this.getFormGroup('spouse').controls.deceased.value ||
+        this.getFormGroup('spouse').controls.prefix.value ||
+        this.getFormGroup('spouse').controls.firstName.value ||
+        this.getFormGroup('spouse').controls.middleName.value ||
+        this.getFormGroup('spouse').controls.lastName.value ||
+        this.getFormGroup('spouse').controls.suffix.value ||
+        this.getFormGroup('spouse').controls.nameTag.value ||
+        this.getFormGroup('spouse').controls.membershipLevel.value ||
+        this.getFormGroup('spouse').controls.memberSince.value ||
+        this.getFormGroup('spouse').controls.memberExpDate.value ||
+        this.getFormGroup('spouse').controls.phones.value ||
+        this.getFormGroup('spouse').controls.emails.value) &&
+      isHoh
+    ) {
+      let spouse = this.generatePersonFromForm(this.getFormGroup('spouse'), false);
+      spouse = <IPerson>this.deepCopy(spouse);
+      spouse.headOfHouse = null;
+      person.spouse = spouse;
+    }
     if (
       ((<FormGroup[]>this.getFormArray('addresses').controls).filter(
         (addressForm: FormGroup) =>
