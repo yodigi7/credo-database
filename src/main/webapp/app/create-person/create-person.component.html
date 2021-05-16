@@ -5,7 +5,7 @@
     <jhi-alert></jhi-alert>
     <h1 class="text-capitalize text-center">Create Person</h1>
     <!-- TODO: Update spacing for form -->
-    <form name="editForm" role="form" novalidate [formGroup]="createPersonForm" (ngSubmit)="submit()">
+    <form name="editForm" role="form" novalidate [formGroup]="rootPersonForm" (ngSubmit)="submit()">
       <!-- Head of Household -->
       <div class="row">
         <div class="form-group col-1">
@@ -47,7 +47,7 @@
       <div class="row" style="margin-bottom: 10px">
         <!-- Phones -->
         <div class="col-6">
-          <div class="col-12" formArrayName="hohPhones" *ngFor="let phone of getFormArray('hohPhones').controls; let i = index">
+          <div class="col-12" formArrayName="phones" *ngFor="let phone of getFormArray('phones').controls; let i = index">
             <div [formGroupName]="i">
               <div class="row col-12">
                 <div class="form-group col-6">
@@ -61,12 +61,12 @@
             </div>
           </div>
           <div class="col-12 text-center">
-            <button type="button" class="col-11 btn btn-secondary" (click)="addPhoneToForm('hohPhones')">Add Phone</button>
+            <button type="button" class="col-11 btn btn-secondary" (click)="addPhoneToForm('phones')">Add Phone</button>
           </div>
         </div>
         <!-- Emails -->
         <div class="col-6">
-          <div class="col-12" formArrayName="hohEmails" *ngFor="let email of getFormArray('hohEmails').controls; let i = index">
+          <div class="col-12" formArrayName="emails" *ngFor="let email of getFormArray('emails').controls; let i = index">
             <div [formGroupName]="i">
               <div class="row col-12">
                 <div class="form-group col-6">
@@ -80,21 +80,9 @@
             </div>
           </div>
           <div class="col-12 text-center">
-            <button type="button" class="col-11 btn btn-secondary" (click)="addEmailToForm('hohEmails')">Add Email</button>
+            <button type="button" class="col-11 btn btn-secondary" (click)="addEmailToForm('emails')">Add Email</button>
           </div>
         </div>
-        <!-- <div class="col-6 row justify-content-center">
-          <div class="col-12 row">
-            <div class="form-group col-6">
-              <input placeholder="Email" type="text" class="form-control" />
-            </div>
-            <div class="form-group col-5">
-              <input placeholder="Type" type="text" class="form-control" />
-            </div>
-          </div>
-          <span><fa-icon class="fa-2x" icon="trash-alt"></fa-icon></span>
-          <button type="button" class="btn btn-secondary row">Add Email</button>
-        </div> -->
       </div>
       <!-- HoH member details -->
       <div class="row">
@@ -112,8 +100,8 @@
             <option [ngValue]="null">(Membership Level)</option>
             <option
               [ngValue]="
-                membershipLevelOption.id === createPersonForm.get('membershipLevel')!.value?.id
-                  ? createPersonForm.get('membershipLevel')!.value
+                membershipLevelOption.id === rootPersonForm.get('membershipLevel')!.value?.id
+                  ? rootPersonForm.get('membershipLevel')!.value
                   : membershipLevelOption
               "
               *ngFor="let membershipLevelOption of membershipLevels; trackBy: trackMembershipLevelById"
@@ -138,11 +126,11 @@
       </div>
       <hr />
       <!-- Spouse -->
+      <!-- Row 2 -->
       <div>
-        <!-- Row 2 -->
-        <div class="row">
-          <button type="button" disabled class="btn btn-primary">+ Add spouse</button>
-        </div>
+        <button *ngIf="!hasSpouse" (click)="addSpouse()" type="button" class="btn btn-primary">+ Add spouse</button>
+        <span *ngIf="hasSpouse">Spouse</span>
+        <jhi-edit-person-subform *ngIf="hasSpouse" [personFormGroup]="getFormGroup('spouse')"></jhi-edit-person-subform>
       </div>
       <!-- HH member -->
       <div>
