@@ -31,17 +31,17 @@ entity OrganizationNotes {
 }
 
 entity PersonPhone {
-    phoneNumber String unique required minlength(7) pattern(/.*[0-9]{3}-[0-9]{4}$/) unique
+    phoneNumber String unique required minLength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/) unique
     type String,
 }
 
 entity OrganizationPhone {
-    phoneNumber String unique required minlength(7) pattern(/.*[0-9]{3}-[0-9]{4}$/) unique
+    phoneNumber String unique required minLength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/) unique
     type String,
 }
 
 entity ParishPhone {
-    phoneNumber String unique required minlength(7) pattern(/.*[0-9]{3}-[0-9]{4}$/) unique
+    phoneNumber String unique required minLength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/) unique
     type String,
 }
 

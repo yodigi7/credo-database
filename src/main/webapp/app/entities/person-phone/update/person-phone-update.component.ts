@@ -21,7 +21,7 @@ export class PersonPhoneUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    phoneNumber: [null, [Validators.required, Validators.minLength(7), Validators.pattern('.*[0-9]{3}-[0-9]{4}$')]],
+    phoneNumber: [null, [Validators.required, Validators.minLength(10), Validators.pattern('^([0-9]{3}) [0-9]{3}-[0-9]{4}$')]],
     type: [],
     person: [],
   });

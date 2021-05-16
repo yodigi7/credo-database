@@ -24,7 +24,7 @@ export class EditPersonSubformComponent {
 
   createPhoneFormGroup(): FormGroup {
     return this.fb.group({
-      number: new FormControl(undefined, Validators.compose([Validators.pattern('.*[0-9]{3}-[0-9]{4}$')])),
+      number: new FormControl(undefined, Validators.compose([Validators.pattern('^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$')])),
       type: [],
     });
   }
@@ -50,5 +50,13 @@ export class EditPersonSubformComponent {
 
   trackMembershipLevelById(index: number, item: IMembershipLevel): number {
     return item.id!;
+  }
+
+  updatePhoneFormat(index: number): void {
+    let number: string = this.getFormArray('phones').controls[index].get('number')?.value ?? '';
+    if (number.length === 10) {
+      number = '(' + number.substr(0, 3) + ') ' + number.substr(3, 3) + '-' + number.substr(6, 4);
+      this.getFormArray('phones').controls[index].get('number')?.setValue(number);
+    }
   }
 }

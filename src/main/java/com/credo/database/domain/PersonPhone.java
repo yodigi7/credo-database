@@ -32,8 +32,8 @@ public class PersonPhone implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 7)
-    @Pattern(regexp = ".*[0-9]{3}-[0-9]{4}$")
+    @Size(min = 10)
+    @Pattern(regexp = "^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$")
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
