@@ -25,6 +25,9 @@
           <div class="row col-12">
             <div class="form-group col-6">
               <input placeholder="Phone Number" type="text" class="form-control" formControlName="number" />
+              <small class="form-text text-danger" *ngIf="getFormArray('phones').controls[i]?.invalid">
+                Invald phone number ###-#### (optional area code)
+              </small>
             </div>
             <div class="form-group col-5">
               <input placeholder="Type" type="text" class="form-control" formControlName="type" />

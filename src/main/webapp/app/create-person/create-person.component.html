@@ -81,7 +81,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary" data-cy="submit">Save</button>
+      <button [disabled]="this.rootPersonForm.invalid" type="submit" class="btn btn-primary" data-cy="submit">Submit</button>
     </form>
   </div>
   <div class="col-md-1"></div>

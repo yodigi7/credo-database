@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EntityArrayResponseType } from 'app/entities/person/service/person.service';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
@@ -24,7 +24,7 @@ export class EditPersonSubformComponent {
 
   createPhoneFormGroup(): FormGroup {
     return this.fb.group({
-      number: [],
+      number: new FormControl(undefined, Validators.compose([Validators.pattern('.*[0-9]{3}-[0-9]{4}$')])),
       type: [],
     });
   }
