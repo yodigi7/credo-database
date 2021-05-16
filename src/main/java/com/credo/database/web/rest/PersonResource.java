@@ -6,6 +6,7 @@ import com.credo.database.service.PersonQueryService;
 import com.credo.database.service.PersonService;
 import com.credo.database.service.criteria.PersonCriteria;
 import com.credo.database.web.rest.errors.BadRequestAlertException;
+import com.credo.database.web.rest.errors.SaveException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -73,7 +74,12 @@ public class PersonResource {
         if (person.getId() != null) {
             throw new BadRequestAlertException("A new person cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Person result = personService.save(person);
+        Person result;
+        try {
+            result = personService.save(person);
+        } catch (Exception e) {
+            throw new SaveException();
+        }
         return ResponseEntity
             .created(new URI("/api/people/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

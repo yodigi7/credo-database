@@ -1,11 +1,12 @@
 <div class="row">
   <div class="col-md-1"></div>
   <div class="col-md-10">
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
     <h1 class="text-capitalize text-center">Create Person</h1>
     <!-- TODO: Update spacing for form -->
     <form name="editForm" role="form" novalidate [formGroup]="createPersonForm" (ngSubmit)="submit()">
       <!-- Head of Household -->
-
       <div class="row">
         <div class="form-group col-1">
           <input placeholder="Prefix" type="text" class="form-control" formControlName="prefix" />
