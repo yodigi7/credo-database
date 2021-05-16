@@ -40,6 +40,30 @@ export class CreatePersonComponent {
 
   constructor(private fb: FormBuilder, private personService: PersonService, private houseDetailsService: HouseDetailsService) {}
 
+  resetPage(): void {
+    this.hoh = new Person();
+    this.hasSpouse = false;
+
+    this.rootPersonForm = this.fb.group({
+      hoh: this.createPersonFormGroup(),
+      prefix: [],
+      firstName: [],
+      middleName: [],
+      lastName: [],
+      suffix: [],
+      addresses: this.fb.array([]),
+      nameTag: [],
+      memberSince: [],
+      memberExpDate: [],
+      deceased: [false],
+      notes: [],
+      mailingLabel: [],
+      parish: [],
+      receiveMail: [],
+      spouse: this.createPersonFormGroup(),
+    });
+  }
+
   async submit(): Promise<void> {
     if (this.hoh.id) {
       this.updatePerson();
@@ -76,6 +100,7 @@ export class CreatePersonComponent {
       this.hoh = res.body ?? this.hoh;
       this.hoh.houseDetails = res.body ?? this.hoh.houseDetails;
     }
+    this.resetPage();
   }
 
   trackMembershipLevelById(index: number, item: IMembershipLevel): number {
