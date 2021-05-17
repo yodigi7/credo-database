@@ -158,11 +158,10 @@ export class CreatePersonComponent {
         this.getFormGroup('spouse').controls.nameTag.value ||
         this.getFormGroup('spouse').controls.membershipLevel.value ||
         this.getFormGroup('spouse').controls.memberSince.value ||
-        this.getFormGroup('spouse').controls.memberExpDate.value ||
-        this.getFormGroup('spouse').controls.phones.value ||
-        this.getFormGroup('spouse').controls.emails.value) &&
+        this.getFormGroup('spouse').controls.memberExpDate.value) &&
       isHoh
     ) {
+      console.log(this.getFormGroup('spouse'));
       let spouse = this.generatePersonFromForm(this.getFormGroup('spouse'), false);
       spouse = <IPerson>this.deepCopy(spouse);
       spouse.headOfHouse = null;
