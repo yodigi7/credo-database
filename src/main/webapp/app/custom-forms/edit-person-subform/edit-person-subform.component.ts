@@ -31,12 +31,11 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
   constructor(private fb: FormBuilder, private membershipLevelService: MembershipLevelService) {
     this.membershipLevels = [];
     this.personFormGroup = this.fb.group(new Person());
-    this.personFormGroup.addControl('phones', new FormArray([]));
-    this.personFormGroup.controls.phones.setValue(this.fb.array([]));
-    this.personFormGroup.addControl('emails', new FormArray([]));
+    this.personFormGroup.addControl('phones', this.fb.array([]));
+    this.personFormGroup.addControl('emails', this.fb.array([]));
+    this.personFormGroup.setControl('phones', this.fb.array([]));
+    this.personFormGroup.setControl('emails', this.fb.array([]));
     this.personFormGroup.controls.emails = this.fb.array([]);
-    this.personFormGroup.valueChanges.subscribe(console.log);
-    console.log(this.personFormGroup);
     const initMembershipLevels = (res: EntityArrayResponseType): void => {
       this.membershipLevels = res.body ?? [];
     };
@@ -46,7 +45,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.personFormGroup.setControl('phones', new FormArray([]));
     console.error(this.personFormGroup.controls);
   }
 
@@ -60,7 +58,7 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
 
   addEmailToForm(): void {
     (<FormArray>this.personFormGroup.get('emails')).push(this.createEmailFormGroup());
-    (<FormArray>this.personFormGroup.get('emails')).push(this.createEmailFormGroup(), { emitEvent: true });
+    // (<FormArray>this.personFormGroup.controls.emails).push(this.createEmailFormGroup(), { emitEvent: true });
   }
 
   addPhoneToForm(): void {
