@@ -1,51 +1,75 @@
-import { Component, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { EntityArrayResponseType } from 'app/entities/person/service/person.service';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
+import { PersonPhone } from 'app/entities/person-phone/person-phone.model';
+import { PersonEmail } from 'app/entities/person-email/person-email.model';
+import { Person } from 'app/entities/person/person.model';
 
 @Component({
   selector: 'jhi-edit-person-subform',
   templateUrl: './edit-person-subform.component.html',
   styleUrls: ['./edit-person-subform.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: EditPersonSubformComponent,
+    },
+  ],
 })
-export class EditPersonSubformComponent {
-  @Input() personFormGroup?: FormGroup;
-  @Input() isHoh = false;
+export class EditPersonSubformComponent implements ControlValueAccessor, OnInit {
+  personFormGroup: FormGroup;
+  isHoh = false;
   membershipLevels: MembershipLevel[];
+
+  onChange: any;
+  onTouched: any;
+  disabled = false;
 
   constructor(private fb: FormBuilder, private membershipLevelService: MembershipLevelService) {
     this.membershipLevels = [];
+    this.personFormGroup = this.fb.group(new Person());
+    this.personFormGroup.addControl('phones', new FormArray([]));
+    this.personFormGroup.controls.phones.setValue(this.fb.array([]));
+    this.personFormGroup.addControl('emails', new FormArray([]));
+    this.personFormGroup.controls.emails = this.fb.array([]);
+    this.personFormGroup.valueChanges.subscribe(console.log);
+    console.log(this.personFormGroup);
     const initMembershipLevels = (res: EntityArrayResponseType): void => {
       this.membershipLevels = res.body ?? [];
     };
     membershipLevelService.query().subscribe(initMembershipLevels);
   }
 
-  createPhoneFormGroup(): FormGroup {
-    return this.fb.group({
-      number: new FormControl(undefined, Validators.compose([Validators.pattern('^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$')])),
-      type: [],
-    });
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.personFormGroup.setControl('phones', new FormArray([]));
+    console.error(this.personFormGroup.controls);
   }
 
-  addPhoneToForm(phoneList: string): void {
-    (<FormArray>this.personFormGroup?.get(phoneList)).push(this.createPhoneFormGroup());
+  createPhoneFormGroup(): FormGroup {
+    return this.fb.group(new PersonPhone());
   }
 
   createEmailFormGroup(): FormGroup {
-    return this.fb.group({
-      email: [],
-      type: [],
-    });
+    return this.fb.group(new PersonEmail());
   }
 
-  addEmailToForm(emailList: string): void {
-    (<FormArray>this.personFormGroup?.get(emailList)).push(this.createEmailFormGroup());
+  addEmailToForm(): void {
+    (<FormArray>this.personFormGroup.get('emails')).push(this.createEmailFormGroup());
+    (<FormArray>this.personFormGroup.get('emails')).push(this.createEmailFormGroup(), { emitEvent: true });
+  }
+
+  addPhoneToForm(): void {
+    console.log(this.personFormGroup.controls);
+    (this.personFormGroup.get('phones') as FormArray).push(this.createPhoneFormGroup());
   }
 
   getFormArray(formArrayName: string): FormArray {
-    return <FormArray>this.personFormGroup?.get(formArrayName);
+    return <FormArray>this.personFormGroup.get(formArrayName);
   }
 
   trackMembershipLevelById(index: number, item: IMembershipLevel): number {
@@ -53,10 +77,32 @@ export class EditPersonSubformComponent {
   }
 
   updatePhoneFormat(index: number): void {
-    let number: string = this.getFormArray('phones').controls[index].get('number')?.value ?? '';
+    let number: string = this.getFormArray('phones').controls[index].get('phoneNumber')?.value ?? '';
     if (number.length === 10) {
       number = '(' + number.substr(0, 3) + ') ' + number.substr(3, 3) + '-' + number.substr(6, 4);
-      this.getFormArray('phones').controls[index].get('number')?.setValue(number);
+      this.getFormArray('phones').controls[index].get('phoneNumber')?.setValue(number);
     }
+    this.onChange();
+  }
+
+  writeValue(form: any): void {
+    if (form) {
+      console.error('Write value');
+      console.log(form);
+      this.personFormGroup.reset();
+      this.personFormGroup.patchValue(form);
+    }
+  }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+    this.personFormGroup.valueChanges.subscribe(fn);
+    // this.personFormGroup.controls.phones.valueChanges.subscribe(fn);
+    // this.personFormGroup.controls.emails.valueChanges.subscribe(fn);
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(disabled: boolean): void {
+    this.disabled = disabled;
   }
 }

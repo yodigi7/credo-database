@@ -8,7 +8,7 @@
     <form name="editForm" role="form" novalidate [formGroup]="rootPersonForm" (ngSubmit)="submit()">
       <!-- Head of Household -->
       <div>
-        <jhi-edit-person-subform [personFormGroup]="getFormGroup('hoh')"></jhi-edit-person-subform>
+        <jhi-edit-person-subform formControlName="hoh"></jhi-edit-person-subform>
       </div>
       <!-- Addresses -->
       <div class="row" formArrayName="addresses" *ngFor="let address of getFormArray('addresses').controls; let i = index">
@@ -35,7 +35,7 @@
       <div>
         <button *ngIf="!hasSpouse" (click)="addSpouse()" type="button" class="btn btn-primary">+ Add spouse</button>
         <span *ngIf="hasSpouse">Spouse</span>
-        <jhi-edit-person-subform *ngIf="hasSpouse" [personFormGroup]="getFormGroup('spouse')"></jhi-edit-person-subform>
+        <jhi-edit-person-subform *ngIf="hasSpouse" formControlName="spouse"></jhi-edit-person-subform>
       </div>
       <!-- HH member -->
       <div>
@@ -58,9 +58,10 @@
           <div class="col-6">
             <div class="row">
               <div class="form-group col-8">
-                <input [attr.disabled]="true" placeholder="Parish" type="text" class="form-control" formControlName="parish" />
+                <input [attr.disabled]="true" placeholder="Parish" type="text" class="form-control" />
               </div>
-              <span class="col-4">{{ hoh.id }}</span>
+              <!-- HOH ID -->
+              <span class="col-4">{{ getHohId() }}</span>
             </div>
             <div class="row">
               <div class="form-group col-8">

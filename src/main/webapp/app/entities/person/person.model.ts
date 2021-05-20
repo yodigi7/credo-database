@@ -71,6 +71,8 @@ export class Person implements IPerson {
     this.currentMember = this.currentMember ?? false;
     this.isHeadOfHouse = this.isHeadOfHouse ?? false;
     this.isDeceased = this.isDeceased ?? false;
+    this.phones = this.phones ?? [];
+    this.emails = this.emails ?? [];
   }
 }
 

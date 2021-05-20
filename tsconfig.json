@@ -6,6 +6,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "strict": true,
+    "strictPropertyInitialization": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "outDir": "target/classes/static/app",

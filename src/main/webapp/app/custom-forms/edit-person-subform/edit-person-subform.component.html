@@ -30,7 +30,7 @@
                 mask="(000) 000-0000"
                 type="text"
                 class="form-control"
-                formControlName="number"
+                formControlName="phoneNumber"
               />
               <small class="form-text text-danger" *ngIf="getFormArray('phones').controls[i]?.invalid">
                 Invald phone number (###) ###-####
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="col-12 text-center">
-        <button type="button" class="col-11 btn btn-secondary" (click)="addPhoneToForm('phones')">Add Phone</button>
+        <button type="button" class="col-11 btn btn-secondary" (click)="addPhoneToForm()">Add Phone</button>
       </div>
     </div>
     <!-- Emails -->
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="col-12 text-center">
-        <button type="button" class="col-11 btn btn-secondary" (click)="addEmailToForm('emails')">Add Email</button>
+        <button type="button" class="col-11 btn btn-secondary" (click)="addEmailToForm()">Add Email</button>
       </div>
     </div>
   </div>
@@ -89,15 +89,15 @@
     </div>
     <div class="form-group col">
       <label class="form-control-label">Member Since</label>
-      <input type="date" class="form-control" formControlName="memberSince" />
+      <input type="date" class="form-control" formControlName="membershipStartDate" />
     </div>
     <div class="form-group col">
       <label class="form-control-label">Member Expiration Date</label>
-      <input placeholder="Membership expiration date" type="date" class="form-control" formControlName="memberExpDate" />
+      <input placeholder="Membership expiration date" type="date" class="form-control" formControlName="membershipExpirationDate" />
     </div>
     <div class="form-group col row">
       <label class="form-control-label">Deceased?</label>
-      <input type="checkbox" class="form-control" formControlName="deceased" />
+      <input type="checkbox" class="form-control" formControlName="isDeceased" />
     </div>
   </div>
 </div>

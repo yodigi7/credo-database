@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPerson, Person } from 'app/entities/person/person.model';
 import { HouseDetails } from 'app/entities/house-details/house-details.model';
@@ -6,9 +6,11 @@ import { PersonService } from 'app/entities/person/service/person.service';
 import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
 import { HouseAddress } from 'app/entities/house-address/house-address.model';
 import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
-import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
+import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { PersonPhone } from 'app/entities/person-phone/person-phone.model';
 import { PersonEmail } from 'app/entities/person-email/person-email.model';
+import { EditPersonSubformComponent } from 'app/custom-forms/edit-person-subform/edit-person-subform.component';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'jhi-create-person',
@@ -16,26 +18,18 @@ import { PersonEmail } from 'app/entities/person-email/person-email.model';
   styleUrls: ['./create-person.component.css'],
 })
 export class CreatePersonComponent {
-  hoh: IPerson = new Person();
+  hoh = new Person();
   hasSpouse = false;
+  @ViewChild(EditPersonSubformComponent, { static: true }) personSubform: EditPersonSubformComponent;
 
   rootPersonForm = this.fb.group({
-    hoh: this.createPersonFormGroup(),
-    prefix: [],
-    firstName: [],
-    middleName: [],
-    lastName: [],
-    suffix: [],
+    hoh: [],
     addresses: this.fb.array([]),
-    nameTag: [],
-    memberSince: [],
-    memberExpDate: [],
-    deceased: [false],
     notes: [],
     mailingLabel: [],
-    parish: [],
     receiveMail: [],
-    spouse: this.createPersonFormGroup(),
+    spouse: [],
+    temp: [],
   });
 
   constructor(private fb: FormBuilder, private personService: PersonService, private houseDetailsService: HouseDetailsService) {}
@@ -45,26 +39,20 @@ export class CreatePersonComponent {
     this.hasSpouse = false;
 
     this.rootPersonForm = this.fb.group({
-      hoh: this.createPersonFormGroup(),
-      prefix: [],
-      firstName: [],
-      middleName: [],
-      lastName: [],
-      suffix: [],
+      hoh: [],
       addresses: this.fb.array([]),
-      nameTag: [],
-      memberSince: [],
-      memberExpDate: [],
-      deceased: [false],
       notes: [],
       mailingLabel: [],
-      parish: [],
       receiveMail: [],
-      spouse: this.createPersonFormGroup(),
+      spouse: [],
     });
   }
 
   async submit(): Promise<void> {
+    const person = new Person();
+    person.id = 1;
+    console.log(this.rootPersonForm);
+    console.log(this.rootPersonForm.value);
     if (this.hoh.id) {
       this.updatePerson();
     } else {
@@ -78,29 +66,31 @@ export class CreatePersonComponent {
   }
 
   async createPerson(): Promise<void> {
-    this.hoh = this.generatePersonFromForm(this.getFormGroup('hoh'), true);
-    this.hoh.personsInHouses = [];
+    // this.hoh = this.generatePersonFromForm(this.getFormGroup('hoh'), true);
+    this.hoh = this.rootPersonForm.controls.hoh.value;
+    await of(1).toPromise();
+    // this.hoh.personsInHouses = [];
 
-    if (
-      (<FormGroup[]>this.getFormArray('addresses').controls).filter(
-        (addressForm: FormGroup) =>
-          addressForm.get('address')?.value ||
-          addressForm.get('city')?.value ||
-          addressForm.get('state')?.value ||
-          addressForm.get('zipcode')?.value
-      ).length ||
-      this.rootPersonForm.controls.receiveMail.value ||
-      this.rootPersonForm.controls.mailingLabel.value
-    ) {
-      const res = await this.houseDetailsService.create(this.hoh.houseDetails!).toPromise();
-      this.hoh.houseDetails = res.body;
-      this.hoh = this.hoh.houseDetails?.headOfHouse ?? this.hoh;
-    } else {
-      const res = await this.personService.create(this.hoh).toPromise();
-      this.hoh = res.body ?? this.hoh;
-      this.hoh.houseDetails = res.body ?? this.hoh.houseDetails;
-    }
-    this.resetPage();
+    // if (
+    //   (<FormGroup[]>this.getFormArray('addresses').controls).filter(
+    //     (addressForm: FormGroup) =>
+    //       addressForm.get('address')?.value ||
+    //       addressForm.get('city')?.value ||
+    //       addressForm.get('state')?.value ||
+    //       addressForm.get('zipcode')?.value
+    //   ).length ||
+    //   this.rootPersonForm.controls.receiveMail.value ||
+    //   this.rootPersonForm.controls.mailingLabel.value
+    // ) {
+    //   const res = await this.houseDetailsService.create(this.hoh.houseDetails!).toPromise();
+    //   this.hoh.houseDetails = res.body;
+    //   this.hoh = this.hoh.houseDetails?.headOfHouse ?? this.hoh;
+    // } else {
+    // const res = await this.personService.create(this.hoh).toPromise();
+    // this.hoh = res.body ?? this.hoh;
+    // this.hoh.houseDetails = res.body ?? this.hoh.houseDetails;
+    // }
+    // this.resetPage();
   }
 
   trackMembershipLevelById(index: number, item: IMembershipLevel): number {
@@ -123,7 +113,6 @@ export class CreatePersonComponent {
     const notes = new PersonNotes();
     notes.notes = personForm.get('notes')?.value ?? null;
     person.notes = notes.notes ? notes : null;
-    // person.parish = personForm.get("parish")?.value;
     person.isHeadOfHouse = isHoh;
     person.phones = [];
     (<FormGroup[]>(<FormArray>personForm.get('phones')).controls)
@@ -243,20 +232,10 @@ export class CreatePersonComponent {
   }
 
   createPersonFormGroup(): FormGroup {
-    return this.fb.group({
-      prefix: [],
-      firstName: [],
-      middleName: [],
-      lastName: [],
-      suffix: [],
-      nameTag: [],
-      membershipLevel: [],
-      memberSince: [],
-      memberExpDate: [],
-      phones: this.fb.array([]),
-      emails: this.fb.array([]),
-      deceased: [false],
-    });
+    const blankPerson = new Person();
+    blankPerson.membershipLevel = new MembershipLevel();
+    const person = this.fb.group(blankPerson);
+    return person;
   }
 
   addSpouse(): void {
@@ -269,5 +248,9 @@ export class CreatePersonComponent {
 
   getFormGroup(formGroupName: string): FormGroup {
     return <FormGroup>this.rootPersonForm.get(formGroupName);
+  }
+
+  getHohId(): any {
+    // return (<number | null>this.rootPersonForm.controls.hoh.value?.id?.value) ?? null;
   }
 }
