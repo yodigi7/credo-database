@@ -4,13 +4,8 @@ import { IPerson, Person } from 'app/entities/person/person.model';
 import { HouseDetails } from 'app/entities/house-details/house-details.model';
 import { PersonService } from 'app/entities/person/service/person.service';
 import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
-import { HouseAddress } from 'app/entities/house-address/house-address.model';
-import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
-import { PersonPhone } from 'app/entities/person-phone/person-phone.model';
-import { PersonEmail } from 'app/entities/person-email/person-email.model';
 import { EditPersonSubformComponent } from 'app/custom-forms/edit-person-subform/edit-person-subform.component';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'jhi-create-person',

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormArray, FormBuilder, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { EntityArrayResponseType } from 'app/entities/person/service/person.service';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
@@ -45,8 +45,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     console.log(this.personFormGroup.controls);
   }
 
@@ -60,7 +58,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
 
   addEmailToForm(): void {
     (<FormArray>this.personFormGroup.get('emails')).push(this.createEmailFormGroup());
-    // (<FormArray>this.personFormGroup.controls.emails).push(this.createEmailFormGroup(), { emitEvent: true });
   }
 
   addPhoneToForm(): void {
@@ -107,8 +104,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     for (const sub of this.subscribers) {
       sub.unsubscribe();
     }
