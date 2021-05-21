@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { EntityArrayResponseType } from 'app/entities/person/service/person.service';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
@@ -6,6 +6,7 @@ import { MembershipLevelService } from 'app/entities/membership-level/service/me
 import { PersonPhone } from 'app/entities/person-phone/person-phone.model';
 import { PersonEmail } from 'app/entities/person-email/person-email.model';
 import { Person } from 'app/entities/person/person.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jhi-edit-person-subform',
@@ -19,7 +20,7 @@ import { Person } from 'app/entities/person/person.model';
     },
   ],
 })
-export class EditPersonSubformComponent implements ControlValueAccessor, OnInit {
+export class EditPersonSubformComponent implements ControlValueAccessor, OnInit, OnDestroy {
   personFormGroup: FormGroup;
   isHoh = false;
   membershipLevels: MembershipLevel[];
@@ -27,6 +28,7 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
   onChange: any;
   onTouched: any;
   disabled = false;
+  subscribers: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private membershipLevelService: MembershipLevelService) {
     this.membershipLevels = [];
@@ -35,7 +37,7 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
     this.personFormGroup.addControl('emails', this.fb.array([]));
     this.personFormGroup.setControl('phones', this.fb.array([]));
     this.personFormGroup.setControl('emails', this.fb.array([]));
-    this.personFormGroup.controls.emails = this.fb.array([]);
+    // this.subscribers.push(this.personFormGroup.valueChanges.subscribe(console.log));
     const initMembershipLevels = (res: EntityArrayResponseType): void => {
       this.membershipLevels = res.body ?? [];
     };
@@ -45,7 +47,7 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    console.error(this.personFormGroup.controls);
+    console.log(this.personFormGroup.controls);
   }
 
   createPhoneFormGroup(): FormGroup {
@@ -78,14 +80,16 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
     let number: string = this.getFormArray('phones').controls[index].get('phoneNumber')?.value ?? '';
     if (number.length === 10) {
       number = '(' + number.substr(0, 3) + ') ' + number.substr(3, 3) + '-' + number.substr(6, 4);
+      console.log(number);
+      console.log(this.personFormGroup);
       this.getFormArray('phones').controls[index].get('phoneNumber')?.setValue(number);
+      this.onChange(this.personFormGroup);
+      // console.log(this.personFormGroup);
     }
-    this.onChange();
   }
 
   writeValue(form: any): void {
     if (form) {
-      console.error('Write value');
       console.log(form);
       this.personFormGroup.reset();
       this.personFormGroup.patchValue(form);
@@ -93,14 +97,20 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit 
   }
   registerOnChange(fn: any): void {
     this.onChange = fn;
-    this.personFormGroup.valueChanges.subscribe(fn);
-    // this.personFormGroup.controls.phones.valueChanges.subscribe(fn);
-    // this.personFormGroup.controls.emails.valueChanges.subscribe(fn);
+    this.subscribers.push(this.personFormGroup.valueChanges.subscribe(fn));
   }
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
   setDisabledState(disabled: boolean): void {
     this.disabled = disabled;
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    for (const sub of this.subscribers) {
+      sub.unsubscribe();
+    }
   }
 }

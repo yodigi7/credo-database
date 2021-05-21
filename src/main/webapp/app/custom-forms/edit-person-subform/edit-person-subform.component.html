@@ -27,6 +27,7 @@
               <input
                 placeholder="Phone Number"
                 (keyup)="updatePhoneFormat(i)"
+                (blur)="updatePhoneFormat(i)"
                 mask="(000) 000-0000"
                 type="text"
                 class="form-control"
