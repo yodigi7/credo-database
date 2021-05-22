@@ -1,21 +1,22 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPerson, Person } from 'app/entities/person/person.model';
 import { HouseDetails } from 'app/entities/house-details/house-details.model';
 import { PersonService } from 'app/entities/person/service/person.service';
 import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
-import { EditPersonSubformComponent } from 'app/custom-forms/edit-person-subform/edit-person-subform.component';
+import { ActivatedRoute } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
 
 @Component({
-  selector: 'jhi-create-person',
-  templateUrl: './create-person.component.html',
-  styleUrls: ['./create-person.component.css'],
+  selector: 'jhi-edit-person',
+  templateUrl: './edit-person.component.html',
+  styleUrls: ['./edit-person.component.css'],
 })
-export class CreatePersonComponent {
+export class EditPersonComponent implements OnInit {
   hoh = new Person();
   hasSpouse = false;
-  @ViewChild(EditPersonSubformComponent, { static: true }) personSubform: EditPersonSubformComponent;
 
   rootPersonForm = this.fb.group({
     hoh: [],
@@ -24,22 +25,50 @@ export class CreatePersonComponent {
     mailingLabel: [],
     receiveMail: [],
     spouse: [],
-    temp: [],
   });
 
-  constructor(private fb: FormBuilder, private personService: PersonService, private houseDetailsService: HouseDetailsService) {}
+  constructor(
+    private fb: FormBuilder,
+    private personService: PersonService,
+    private houseDetailsService: HouseDetailsService,
+    private activatedRoute: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    console.error(this.activatedRoute);
+    this.activatedRoute.data.subscribe(({ person }) => {
+      if (person) {
+        console.error(person);
+        this.loadFromPerson(person);
+      }
+    });
+  }
 
   resetPage(): void {
     this.hoh = new Person();
+    // const res = await this.personService.find(1).toPromise();
+    // this.hoh = res.body ?? new Person();
+    // this.rootPersonForm.controls.hoh.setValue(this.hoh);
     this.hasSpouse = false;
     this.rootPersonForm.reset();
   }
 
-  async submit(): Promise<void> {
-    const person = new Person();
-    person.id = 1;
+  loadFromPerson(person: IPerson): void {
+    this.hoh = person;
+    this.hasSpouse = this.hoh.spouse ? true : false;
+    this.rootPersonForm.controls.hoh.setValue(this.hoh);
+    // TODO: get from database
+    this.rootPersonForm.controls.addresses.setValue(this.hoh.houseDetails?.addresses ?? []);
+    // TODO: get from database notes
+    this.rootPersonForm.controls.notes.setValue(this.hoh.notes?.notes);
+    this.rootPersonForm.controls.spouse.setValue(this.hoh.spouse);
+    console.log(this.hoh);
     console.log(this.rootPersonForm);
-    console.log(this.rootPersonForm.value);
+  }
+
+  async submit(): Promise<void> {
+    console.log(this.rootPersonForm.controls);
+    console.log(this.hoh);
     if (this.hoh.id) {
       this.updatePerson();
     } else {
@@ -54,12 +83,15 @@ export class CreatePersonComponent {
 
   async createPerson(): Promise<void> {
     this.hoh = this.rootPersonForm.controls.hoh.value.value;
+    console.log(this.rootPersonForm.controls);
     console.log(this.hoh);
-    this.hoh.notes = this.rootPersonForm.controls.notes.value;
-    this.hoh.spouse = this.rootPersonForm.controls.spouse.value.value;
-    console.log(this.hoh);
+    const notes = new PersonNotes();
+    notes.notes = this.rootPersonForm.controls.notes.value;
+    this.hoh.notes = notes;
+    this.hoh.spouse = this.hasSpouse ? this.rootPersonForm.controls.spouse.value.value : null;
     this.hoh.isHeadOfHouse = true;
     this.hoh.personsInHouses = [];
+    console.log(this.hoh);
 
     if (
       this.rootPersonForm.controls.addresses.value ||
@@ -68,7 +100,6 @@ export class CreatePersonComponent {
     ) {
       this.hoh.houseDetails = new HouseDetails();
       this.hoh.houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
-      console.log(this.hoh);
       const hohCopy = this.deepCopy(this.hoh) as IPerson;
       hohCopy.houseDetails = undefined;
       this.hoh.houseDetails.headOfHouse = hohCopy;
@@ -91,7 +122,7 @@ export class CreatePersonComponent {
   }
 
   /* eslint-disable */
-  deepCopy(object: object): object {
+  deepCopy(object: object): any {
     return JSON.parse(JSON.stringify(object));
   }
   /* eslint-enable */

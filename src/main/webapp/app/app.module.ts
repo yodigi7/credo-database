@@ -17,7 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './home/home.module';
 import { EntityRoutingModule } from './entities/entity-routing.module';
 import { CredoDatabaseAppSearchModule } from './search/search.module';
-import { CredoDatabaseAppCreatePersonModule } from './create-person/create-person.module';
+import { CredoDatabaseAppEditPersonModule } from './edit-person/edit-person.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { fontAwesomeIcons } from './config/font-awesome-icons';
@@ -34,7 +34,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     SharedModule,
     HomeModule,
     CredoDatabaseAppSearchModule,
-    CredoDatabaseAppCreatePersonModule,
+    CredoDatabaseAppEditPersonModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,

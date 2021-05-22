@@ -5,7 +5,7 @@ import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
 import { PersonPhone } from 'app/entities/person-phone/person-phone.model';
 import { PersonEmail } from 'app/entities/person-email/person-email.model';
-import { Person } from 'app/entities/person/person.model';
+import { IPerson, Person } from 'app/entities/person/person.model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -37,7 +37,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
     this.personFormGroup.addControl('emails', this.fb.array([]));
     this.personFormGroup.setControl('phones', this.fb.array([]));
     this.personFormGroup.setControl('emails', this.fb.array([]));
-    // this.subscribers.push(this.personFormGroup.valueChanges.subscribe(console.log));
     const initMembershipLevels = (res: EntityArrayResponseType): void => {
       this.membershipLevels = res.body ?? [];
     };
@@ -61,7 +60,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
   }
 
   addPhoneToForm(): void {
-    console.log(this.personFormGroup.controls);
     (this.personFormGroup.get('phones') as FormArray).push(this.createPhoneFormGroup());
   }
 
@@ -77,24 +75,32 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
     let number: string = this.getFormArray('phones').controls[index].get('phoneNumber')?.value ?? '';
     if (number.length === 10) {
       number = '(' + number.substr(0, 3) + ') ' + number.substr(3, 3) + '-' + number.substr(6, 4);
-      console.log(number);
-      console.log(this.personFormGroup);
       this.getFormArray('phones').controls[index].get('phoneNumber')?.setValue(number);
       this.onChange(this.personFormGroup);
-      // console.log(this.personFormGroup);
     }
   }
 
-  writeValue(form: any): void {
+  writeValue(form: IPerson | null): void {
     if (form) {
-      console.log(form);
       this.personFormGroup.reset();
       this.personFormGroup.patchValue(form);
+      if (typeof form.membershipExpirationDate !== 'string') {
+        this.personFormGroup.patchValue({
+          membershipStartDate: form.membershipStartDate?.format('YYYY-MM-DD'),
+        });
+      }
+      if (typeof form.membershipExpirationDate !== 'string') {
+        this.personFormGroup.patchValue({
+          membershipExpirationDate: form.membershipExpirationDate?.format('YYYY-MM-DD'),
+        });
+      }
     }
   }
   registerOnChange(fn: any): void {
     this.onChange = fn;
-    this.subscribers.push(this.personFormGroup.valueChanges.subscribe(fn));
+    // eslint-disable-next-line
+    this.subscribers.push(this.personFormGroup.valueChanges.subscribe(() => fn(this.personFormGroup)));
+    fn(this.personFormGroup);
   }
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
