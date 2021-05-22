@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPerson, Person } from 'app/entities/person/person.model';
 import { HouseDetails } from 'app/entities/house-details/house-details.model';
@@ -6,8 +6,8 @@ import { PersonService } from 'app/entities/person/service/person.service';
 import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { ActivatedRoute } from '@angular/router';
-import * as dayjs from 'dayjs';
 import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
+import { PersonNotesService } from 'app/entities/person-notes/service/person-notes.service';
 
 @Component({
   selector: 'jhi-edit-person',
@@ -31,14 +31,13 @@ export class EditPersonComponent implements OnInit {
     private fb: FormBuilder,
     private personService: PersonService,
     private houseDetailsService: HouseDetailsService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private personNotesService: PersonNotesService
   ) {}
 
   ngOnInit(): void {
-    console.error(this.activatedRoute);
     this.activatedRoute.data.subscribe(({ person }) => {
       if (person) {
-        console.error(person);
         this.loadFromPerson(person);
       }
     });
@@ -59,7 +58,6 @@ export class EditPersonComponent implements OnInit {
     this.rootPersonForm.controls.hoh.setValue(this.hoh);
     // TODO: get from database
     this.rootPersonForm.controls.addresses.setValue(this.hoh.houseDetails?.addresses ?? []);
-    // TODO: get from database notes
     this.rootPersonForm.controls.notes.setValue(this.hoh.notes?.notes);
     this.rootPersonForm.controls.spouse.setValue(this.hoh.spouse);
     console.log(this.hoh);
@@ -101,12 +99,14 @@ export class EditPersonComponent implements OnInit {
       this.hoh.houseDetails = new HouseDetails();
       this.hoh.houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
       const hohCopy = this.deepCopy(this.hoh) as IPerson;
-      hohCopy.houseDetails = undefined;
-      this.hoh.houseDetails.headOfHouse = hohCopy;
-      console.log(this.hoh);
+      this.hoh.houseDetails.headOfHouse = { ...this.hoh };
+      this.hoh.houseDetails.headOfHouse.houseDetails = null;
+      console.log({ ...this.hoh });
       const res = await this.houseDetailsService.create(this.hoh.houseDetails).toPromise();
       this.hoh.houseDetails = res.body;
       this.hoh = this.hoh.houseDetails?.headOfHouse ?? this.hoh;
+      // notes.person = this.hoh;
+      // await this.personNotesService.create(notes).toPromise();
     } else {
       const res = await this.personService.create(this.hoh).toPromise();
       this.hoh = res.body ?? this.hoh;

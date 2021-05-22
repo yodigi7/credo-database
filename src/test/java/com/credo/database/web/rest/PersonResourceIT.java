@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.credo.database.IntegrationTest;
+import com.credo.database.domain.HouseAddress;
 import com.credo.database.domain.HouseDetails;
 import com.credo.database.domain.MembershipLevel;
 import com.credo.database.domain.Organization;
@@ -32,6 +33,8 @@ import com.credo.database.service.PersonService;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -195,6 +198,44 @@ class PersonResourceIT {
         assertThat(testPerson.getMembershipExpirationDate()).isEqualTo(DEFAULT_MEMBERSHIP_EXPIRATION_DATE);
         assertThat(testPerson.getIsHeadOfHouse()).isEqualTo(DEFAULT_IS_HEAD_OF_HOUSE);
         assertThat(testPerson.getIsDeceased()).isEqualTo(DEFAULT_IS_DECEASED);
+    }
+
+    @Test
+    @Transactional
+    void createPersonCascadesAllRelationships() throws Exception {
+        int databaseSizeBeforeCreate = personRepository.findAll().size();
+        // Create the Person
+        person.setNotes(new PersonNotes().notes("notes"));
+        person.setSpouse(new Person().isDeceased(false).isHeadOfHouse(false));
+        person.setHouseDetails(new HouseDetails().addresses(new HashSet<>(Arrays.asList(new HouseAddress().city("city")))));
+        person.setPhones(new HashSet<>(Arrays.asList(new PersonPhone().phoneNumber("(111) 111-1111"))));
+        person.setEmails(new HashSet<>(Arrays.asList(new PersonEmail().email("email"))));
+        restPersonMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(person)))
+            .andExpect(status().isCreated());
+
+        // Validate the Person in the database
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeCreate + 2);
+        Person testPerson = personList.get(personList.size() - 2);
+        assertThat(testPerson.getPrefix()).isEqualTo(DEFAULT_PREFIX);
+        assertThat(testPerson.getPreferredName()).isEqualTo(DEFAULT_PREFERRED_NAME);
+        assertThat(testPerson.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
+        assertThat(testPerson.getMiddleName()).isEqualTo(DEFAULT_MIDDLE_NAME);
+        assertThat(testPerson.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
+        assertThat(testPerson.getSuffix()).isEqualTo(DEFAULT_SUFFIX);
+        assertThat(testPerson.getNameTag()).isEqualTo(DEFAULT_NAME_TAG);
+        assertThat(testPerson.getCurrentMember()).isEqualTo(DEFAULT_CURRENT_MEMBER);
+        assertThat(testPerson.getMembershipStartDate()).isEqualTo(DEFAULT_MEMBERSHIP_START_DATE);
+        assertThat(testPerson.getMembershipExpirationDate()).isEqualTo(DEFAULT_MEMBERSHIP_EXPIRATION_DATE);
+        assertThat(testPerson.getIsHeadOfHouse()).isEqualTo(DEFAULT_IS_HEAD_OF_HOUSE);
+        assertThat(testPerson.getIsDeceased()).isEqualTo(DEFAULT_IS_DECEASED);
+        assertThat(testPerson.getNotes()).isNotNull();
+        assertThat(testPerson.getSpouse()).isNotNull();
+        assertThat(testPerson.getHouseDetails()).isNotNull();
+        assertThat(testPerson.getHouseDetails().getAddresses()).isNotEmpty();
+        assertThat(testPerson.getPhones()).isNotEmpty();
+        assertThat(testPerson.getEmails()).isNotEmpty();
     }
 
     @Test
