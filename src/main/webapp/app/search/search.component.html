@@ -30,7 +30,7 @@
           <tbody>
             <tr *ngFor="let person of personList; trackBy: trackId" data-cy="entityTable">
               <td>
-                <a [routerLink]="['/person', person.id, 'view']">{{ person.id }}</a>
+                <a [routerLink]="['/edit-person', person.id]">{{ person.id }}</a>
               </td>
               <td>{{ person.preferredName }}</td>
               <td>{{ person.firstName }}</td>
