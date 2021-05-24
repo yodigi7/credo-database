@@ -14,7 +14,7 @@
       <div class="row" formArrayName="addresses" *ngFor="let address of getFormArray('addresses').controls; let i = index">
         <div [formGroupName]="i" class="row col">
           <div class="form-group col">
-            <input placeholder="Street Address" type="text" class="form-control" formControlName="address" />
+            <input placeholder="Street Address" type="text" class="form-control" formControlName="streetAddress" />
           </div>
           <div class="form-group col-2">
             <input placeholder="City" type="text" class="form-control" formControlName="city" />

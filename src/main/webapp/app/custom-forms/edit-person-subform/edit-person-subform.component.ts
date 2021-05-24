@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
     },
   ],
 })
-export class EditPersonSubformComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class EditPersonSubformComponent implements ControlValueAccessor, OnDestroy {
   personFormGroup: FormGroup;
   isHoh = false;
   membershipLevels: MembershipLevel[];
@@ -41,10 +41,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
       this.membershipLevels = res.body ?? [];
     };
     membershipLevelService.query().subscribe(initMembershipLevels);
-  }
-
-  ngOnInit(): void {
-    console.log(this.personFormGroup.controls);
   }
 
   createPhoneFormGroup(): FormGroup {
@@ -81,8 +77,10 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
   }
 
   writeValue(form: IPerson | null): void {
+    this.personFormGroup.reset();
+    this.personFormGroup.controls.isDeceased.setValue(false);
+    this.personFormGroup.controls.isHeadOfHouse.setValue(false);
     if (form) {
-      this.personFormGroup.reset();
       this.personFormGroup.patchValue(form);
       if (typeof form.membershipExpirationDate !== 'string') {
         this.personFormGroup.patchValue({
@@ -94,6 +92,8 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnInit,
           membershipExpirationDate: form.membershipExpirationDate?.format('YYYY-MM-DD'),
         });
       }
+      this.personFormGroup.setControl('emails', this.fb.array(form.emails ?? []));
+      this.personFormGroup.setControl('phones', this.fb.array(form.phones?.map(phone => this.fb.group(phone)) ?? []));
     }
   }
   registerOnChange(fn: any): void {

@@ -3,11 +3,11 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPerson, Person } from 'app/entities/person/person.model';
 import { HouseDetails } from 'app/entities/house-details/house-details.model';
 import { PersonService } from 'app/entities/person/service/person.service';
-import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
 import { IMembershipLevel, MembershipLevel } from 'app/entities/membership-level/membership-level.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
 import { PersonNotesService } from 'app/entities/person-notes/service/person-notes.service';
+import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
 
 @Component({
   selector: 'jhi-edit-person',
@@ -30,91 +30,93 @@ export class EditPersonComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private personService: PersonService,
-    private houseDetailsService: HouseDetailsService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private houseDetailsService: HouseDetailsService,
     private personNotesService: PersonNotesService
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ person }) => {
       if (person) {
-        this.loadFromPerson(person);
+        this.loadFromPerson(person).then(console.log);
       }
     });
   }
 
   resetPage(): void {
-    this.hoh = new Person();
-    // const res = await this.personService.find(1).toPromise();
-    // this.hoh = res.body ?? new Person();
-    // this.rootPersonForm.controls.hoh.setValue(this.hoh);
-    this.hasSpouse = false;
-    this.rootPersonForm.reset();
+    if (this.router.url !== '/edit-person') {
+      this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+    } else {
+      this.hoh = new Person();
+      this.hasSpouse = false;
+      this.rootPersonForm.reset();
+    }
   }
 
-  loadFromPerson(person: IPerson): void {
+  async loadFromPerson(person: IPerson): Promise<void> {
     this.hoh = person;
     this.hasSpouse = this.hoh.spouse ? true : false;
     this.rootPersonForm.controls.hoh.setValue(this.hoh);
-    // TODO: get from database
-    this.rootPersonForm.controls.addresses.setValue(this.hoh.houseDetails?.addresses ?? []);
+    this.rootPersonForm.setControl('addresses', this.fb.array(this.hoh.houseDetails?.addresses?.map(addr => this.fb.group(addr)) ?? []));
     this.rootPersonForm.controls.notes.setValue(this.hoh.notes?.notes);
-    this.rootPersonForm.controls.spouse.setValue(this.hoh.spouse);
-    console.log(this.hoh);
-    console.log(this.rootPersonForm);
+    if (this.hoh.spouse?.id) {
+      const spouse = await this.personService.find(this.hoh.spouse.id).toPromise();
+      this.rootPersonForm.controls.spouse.setValue(spouse.body);
+    }
   }
 
   async submit(): Promise<void> {
-    console.log(this.rootPersonForm.controls);
-    console.log(this.hoh);
     if (this.hoh.id) {
-      this.updatePerson();
+      await this.updatePerson();
     } else {
       await this.createPerson();
     }
     window.scroll(0, 0);
   }
 
-  updatePerson(): void {
-    return;
+  async updatePerson(): Promise<void> {
+    await this.sendPerson(
+      this.personService.update.bind(this.personService),
+      this.houseDetailsService.update.bind(this.houseDetailsService),
+      this.personNotesService.update.bind(this.personNotesService)
+    );
   }
 
   async createPerson(): Promise<void> {
+    await this.sendPerson(
+      this.personService.create.bind(this.personService),
+      this.houseDetailsService.create.bind(this.houseDetailsService),
+      this.personNotesService.create.bind(this.personNotesService)
+    );
+  }
+
+  async sendPerson(personSvcFn: any, houseDetailsSvcFn: any, personNotesSvcFn: any): Promise<void> {
     this.hoh = this.rootPersonForm.controls.hoh.value.value;
-    console.log(this.rootPersonForm.controls);
-    console.log(this.hoh);
-    const notes = new PersonNotes();
-    notes.notes = this.rootPersonForm.controls.notes.value;
-    this.hoh.notes = notes;
     this.hoh.spouse = this.hasSpouse ? this.rootPersonForm.controls.spouse.value.value : null;
     this.hoh.isHeadOfHouse = true;
     this.hoh.personsInHouses = [];
-    console.log(this.hoh);
-
+    const houseDetails = new HouseDetails();
+    houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
+    const res = await personSvcFn(this.hoh).toPromise();
+    this.hoh = res.body ?? new Person();
     if (
-      this.rootPersonForm.controls.addresses.value ||
+      this.rootPersonForm.controls.addresses.value.length ||
       this.rootPersonForm.controls.receiveMail.value ||
       this.rootPersonForm.controls.mailingLabel.value
     ) {
-      this.hoh.houseDetails = new HouseDetails();
-      this.hoh.houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
-      const hohCopy = this.deepCopy(this.hoh) as IPerson;
-      this.hoh.houseDetails.headOfHouse = { ...this.hoh };
-      this.hoh.houseDetails.headOfHouse.houseDetails = null;
-      console.log({ ...this.hoh });
-      const res = await this.houseDetailsService.create(this.hoh.houseDetails).toPromise();
-      this.hoh.houseDetails = res.body;
-      this.hoh = this.hoh.houseDetails?.headOfHouse ?? this.hoh;
-      // notes.person = this.hoh;
-      // await this.personNotesService.create(notes).toPromise();
-    } else {
-      const res = await this.personService.create(this.hoh).toPromise();
-      this.hoh = res.body ?? this.hoh;
-      this.hoh.houseDetails = res.body ?? this.hoh.houseDetails;
+      houseDetails.headOfHouse = { ...this.hoh };
+      houseDetails.headOfHouse.houseDetails = null;
+      await houseDetailsSvcFn(houseDetails).toPromise();
+    }
+    if (this.rootPersonForm.controls.notes.value) {
+      const notes = new PersonNotes();
+      notes.notes = this.rootPersonForm.controls.notes.value;
+      notes.person = { ...this.hoh };
+      notes.person.houseDetails = undefined;
+      await personNotesSvcFn(notes).toPromise();
     }
     this.resetPage();
-    console.log(this.rootPersonForm);
-    console.log(this.hoh);
   }
 
   trackMembershipLevelById(index: number, item: IMembershipLevel): number {
@@ -129,7 +131,7 @@ export class EditPersonComponent implements OnInit {
 
   createAddressFormGroup(): FormGroup {
     return this.fb.group({
-      address: [],
+      streetAddress: [],
       city: [],
       state: [],
       zipcode: [],

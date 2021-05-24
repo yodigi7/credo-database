@@ -36,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ParishPhoneResourceIT {
 
-    private static final String DEFAULT_PHONE_NUMBER = "VS979-1302";
-    private static final String UPDATED_PHONE_NUMBER = ">[\"O777-1202";
+    private static final String DEFAULT_PHONE_NUMBER = "(111) 111-1111";
+    private static final String UPDATED_PHONE_NUMBER = "(222) 222-2222";
 
     private static final String DEFAULT_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_TYPE = "BBBBBBBBBB";

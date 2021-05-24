@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -70,6 +71,7 @@ public class PersonNotesResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/person-notes")
+    @Transactional
     public ResponseEntity<PersonNotes> createPersonNotes(@RequestBody PersonNotes personNotes) throws URISyntaxException {
         log.debug("REST request to save PersonNotes : {}", personNotes);
         if (personNotes.getId() != null) {

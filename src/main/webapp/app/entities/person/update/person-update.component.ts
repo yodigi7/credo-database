@@ -239,7 +239,7 @@ export class PersonUpdateComponent implements OnInit {
       membershipStartDate: this.editForm.get(['membershipStartDate'])!.value,
       membershipExpirationDate: this.editForm.get(['membershipExpirationDate'])!.value,
       isHeadOfHouse: this.editForm.get(['isHeadOfHouse'])!.value,
-      isDeceased: this.editForm.get(['isDeceased'])!.value,
+      isDeceased: this.editForm.get(['isDeceased'])!.value ? this.editForm.get(['isDeceased'])!.value : false,
       spouse: this.editForm.get(['spouse'])!.value,
       membershipLevel: this.editForm.get(['membershipLevel'])!.value,
       headOfHouse: this.editForm.get(['headOfHouse'])!.value,
