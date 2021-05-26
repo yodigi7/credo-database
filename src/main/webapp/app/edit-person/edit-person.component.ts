@@ -59,11 +59,14 @@ export class EditPersonComponent implements OnInit {
     this.hasSpouse = this.hoh.spouse ? true : false;
     this.rootPersonForm.controls.hoh.setValue(this.hoh);
     this.rootPersonForm.setControl('addresses', this.fb.array(this.hoh.houseDetails?.addresses?.map(addr => this.fb.group(addr)) ?? []));
+    this.rootPersonForm.controls.mailingLabel.setValue(this.hoh.houseDetails?.mailingLabel);
     this.rootPersonForm.controls.notes.setValue(this.hoh.notes?.notes);
     if (this.hoh.spouse?.id) {
       const spouse = await this.personService.find(this.hoh.spouse.id).toPromise();
       this.rootPersonForm.controls.spouse.setValue(spouse.body);
     }
+    console.log(this.hoh);
+    console.log(this.rootPersonForm);
   }
 
   async submit(): Promise<void> {
@@ -96,8 +99,6 @@ export class EditPersonComponent implements OnInit {
     this.hoh.spouse = this.hasSpouse ? this.rootPersonForm.controls.spouse.value.value : null;
     this.hoh.isHeadOfHouse = true;
     this.hoh.personsInHouses = [];
-    const houseDetails = new HouseDetails();
-    houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
     const res = await personSvcFn(this.hoh).toPromise();
     this.hoh = res.body ?? new Person();
     if (
@@ -105,12 +106,19 @@ export class EditPersonComponent implements OnInit {
       this.rootPersonForm.controls.receiveMail.value ||
       this.rootPersonForm.controls.mailingLabel.value
     ) {
+      const houseDetails = new HouseDetails();
+      houseDetails.id = this.rootPersonForm.controls.hoh.value.controls.houseDetails.value.id;
+      houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
       houseDetails.headOfHouse = { ...this.hoh };
+      houseDetails.mailingLabel = this.rootPersonForm.controls.mailingLabel.value;
       houseDetails.headOfHouse.houseDetails = null;
+      console.log(houseDetails);
+      console.log(this.rootPersonForm.controls.hoh.value.controls);
       await houseDetailsSvcFn(houseDetails).toPromise();
     }
     if (this.rootPersonForm.controls.notes.value) {
       const notes = new PersonNotes();
+      notes.id = this.rootPersonForm.controls.hoh.value.controls?.notes?.value?.id;
       notes.notes = this.rootPersonForm.controls.notes.value;
       notes.person = { ...this.hoh };
       notes.person.houseDetails = undefined;

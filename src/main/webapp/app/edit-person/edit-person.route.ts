@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { EditPersonSubformComponent } from 'app/custom-forms/edit-person-subform/edit-person-subform.component';
 import { PersonRoutingResolveService } from 'app/entities/person/route/person-routing-resolve.service';
 import { EditPersonComponent } from './edit-person.component';
 
