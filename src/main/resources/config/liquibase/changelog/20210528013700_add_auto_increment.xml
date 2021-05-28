@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="20210528013700-1" author="anthony">
+        <addAutoIncrement tableName="event" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="person" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="person_email" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="person_phone" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="person_notes" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="house_details" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="house_address" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="organization" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="membership_level" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="organization" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="organization_address" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="organization_email" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="organization_notes" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="organization_phone" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="parish" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="parish_email" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="parish_phone" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="payment" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="relationship" columnName="id" columnDataType="bigint"/>
+        <addAutoIncrement tableName="ticket" columnName="id" columnDataType="bigint"/>
+
+        <addDefaultValue tableName="person" columnName="is_deceased" defaultValue="false"/>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+</databaseChangeLog>
