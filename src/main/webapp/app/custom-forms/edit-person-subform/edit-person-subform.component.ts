@@ -92,7 +92,7 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnDestr
           membershipExpirationDate: form.membershipExpirationDate?.format('YYYY-MM-DD'),
         });
       }
-      this.personFormGroup.setControl('emails', this.fb.array(form.emails ?? []));
+      this.personFormGroup.setControl('emails', this.fb.array(form.emails?.map(email => this.fb.group(email)) ?? []));
       this.personFormGroup.setControl('phones', this.fb.array(form.phones?.map(phone => this.fb.group(phone)) ?? []));
     }
   }
