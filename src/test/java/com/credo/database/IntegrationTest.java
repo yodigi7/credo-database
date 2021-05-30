@@ -1,6 +1,5 @@
 package com.credo.database;
 
-import com.credo.database.CredoDatabaseApp;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -8,6 +8,12 @@ import com.credo.database.security.AuthoritiesConstants;
 import com.credo.database.security.SecurityUtils;
 import com.credo.database.service.dto.AdminUserDTO;
 import com.credo.database.service.dto.UserDTO;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -17,13 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -70,13 +69,11 @@ public class UserService {
         newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.WRITER).ifPresent(authorities::add);
+        authorityRepository.findById(AuthoritiesConstants.SUPERVISOR).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
@@ -97,8 +94,6 @@ public class UserService {
     public User createUser(AdminUserDTO userDTO) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
         String randomPassword = RandomUtil.generatePassword();
         String encryptedPassword = passwordEncoder.encode(randomPassword);
         log.error(randomPassword);
@@ -135,8 +130,6 @@ public class UserService {
                 user -> {
                     this.clearUserCaches(user);
                     user.setLogin(userDTO.getLogin().toLowerCase());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
                     user.setActivated(userDTO.isActivated());
                     Set<Authority> managedAuthorities = user.getAuthorities();
                     managedAuthorities.clear();
@@ -163,26 +156,6 @@ public class UserService {
                     userRepository.delete(user);
                     this.clearUserCaches(user);
                     log.debug("Deleted User: {}", user);
-                }
-            );
-    }
-
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     */
-    public void updateUser(String firstName, String lastName) {
-        SecurityUtils
-            .getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
-            .ifPresent(
-                user -> {
-                    user.setFirstName(firstName);
-                    user.setLastName(lastName);
-                    this.clearUserCaches(user);
-                    log.debug("Changed Information for User: {}", user);
                 }
             );
     }

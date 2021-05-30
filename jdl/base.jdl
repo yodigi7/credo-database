@@ -31,17 +31,17 @@ entity OrganizationNotes {
 }
 
 entity PersonPhone {
-    phoneNumber String unique required minLength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/) unique
+    phoneNumber String unique required minlength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
     type String,
 }
 
 entity OrganizationPhone {
-    phoneNumber String unique required minLength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/) unique
+    phoneNumber String unique required minlength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
     type String,
 }
 
 entity ParishPhone {
-    phoneNumber String unique required minLength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/) unique
+    phoneNumber String unique required minlength(10) pattern(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
     type String,
 }
 
@@ -129,7 +129,7 @@ relationship ManyToOne {
     PersonEmail{person} to Person{emails},
     Person{headOfHouse} to Person{personsInHouse},
     Ticket{person} to Person{tickets},
-    Event{tickets} to Ticket{event},
+    Ticket{event} to Event{tickets},
     Person{parish} to Parish{people},
     Person{relationship} to Relationship{people},
     ParishEmail{parish} to Parish{emails},

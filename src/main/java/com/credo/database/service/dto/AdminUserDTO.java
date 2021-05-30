@@ -3,13 +3,12 @@ package com.credo.database.service.dto;
 import com.credo.database.config.Constants;
 import com.credo.database.domain.Authority;
 import com.credo.database.domain.User;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -22,12 +21,6 @@ public class AdminUserDTO {
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     private String login;
-
-    @Size(max = 50)
-    private String firstName;
-
-    @Size(max = 50)
-    private String lastName;
 
     private boolean activated = false;
 
@@ -48,8 +41,6 @@ public class AdminUserDTO {
     public AdminUserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
         this.activated = user.isActivated();
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
@@ -72,22 +63,6 @@ public class AdminUserDTO {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public boolean isActivated() {
@@ -143,8 +118,6 @@ public class AdminUserDTO {
     public String toString() {
         return "AdminUserDTO{" +
             "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
             ", activated=" + activated +
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +

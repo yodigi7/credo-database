@@ -27,7 +27,7 @@ describe('Component Tests', () => {
             {
               provide: ActivatedRoute,
               useValue: {
-                data: of({ user: new User(123, 'user', true, [Authority.WRITER], 'admin') }),
+                data: of({ user: new User(123, 'user', true, [Authority.SUPERVISOR], 'admin') }),
               },
             },
           ],
@@ -48,14 +48,14 @@ describe('Component Tests', () => {
         [],
         fakeAsync(() => {
           // GIVEN
-          spyOn(service, 'authorities').and.returnValue(of(['WRITER']));
+          spyOn(service, 'authorities').and.returnValue(of(['SUPERVISOR']));
 
           // WHEN
           comp.ngOnInit();
 
           // THEN
           expect(service.authorities).toHaveBeenCalled();
-          expect(comp.authorities).toEqual(['WRITER']);
+          expect(comp.authorities).toEqual(['SUPERVISOR']);
         })
       ));
     });

@@ -1,18 +1,17 @@
 package com.credo.database.service.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.credo.database.domain.User;
 import com.credo.database.service.dto.AdminUserDTO;
 import com.credo.database.service.dto.UserDTO;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link UserMapper}.
@@ -33,9 +32,6 @@ class UserMapperTest {
         user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-        user.setFirstName("john");
-        user.setLastName("doe");
-
         userDto = new AdminUserDTO(user);
     }
 

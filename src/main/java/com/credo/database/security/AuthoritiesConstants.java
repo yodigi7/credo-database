@@ -10,9 +10,9 @@ public final class AuthoritiesConstants {
 
     public static final String ADMIN = "ROLE_ADMIN";
 
-    public static final String WRITER = "ROLE_WRITER";
+    public static final String SUPERVISOR = "ROLE_SUPERVISOR";
 
-    public static final String READER = "ROLE_READER";
+    public static final String AMBASSADOR = "ROLE_AMBASSADOR";
 
     public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 
