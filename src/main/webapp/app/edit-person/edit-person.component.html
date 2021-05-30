@@ -20,7 +20,12 @@
             <input placeholder="City" type="text" class="form-control" formControlName="city" />
           </div>
           <div class="form-group col-1">
-            <input placeholder="State" type="text" class="form-control" formControlName="state" />
+            <select class="form-control" data-cy="state" name="state" formControlName="state">
+              <option value="">State</option>
+              <option *ngFor="let state of states">
+                {{ state }}
+              </option>
+            </select>
           </div>
           <div class="form-group col-2">
             <input placeholder="Zipcode" type="text" class="form-control" formControlName="zipcode" />
