@@ -1,0 +1,29 @@
+<div>
+  <form [formGroup]="personForm">
+    <label>First Name:</label>
+    <input type="text" formControlName="firstName" />
+    <label>Last Name:</label>
+    <input type="text" formControlName="lastName" />
+    <label>ID:</label>
+    <input class="col-1" type="text" formControlName="id" />
+  </form>
+  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+    <ngb-panel title="Tickets Form">
+      <ng-template ngbPanelContent>
+        <form name="addTransactionForm" role="form" novalidate (ngSubmit)="submit()" [formGroup]="addTransaction">
+          <div class="row" style="display: flex">
+            <input type="date" class="col-2" formControlName="date" />
+            <input type="number" class="col-2" placeholder="$ amount" formControlName="dollarAmount" />
+            <input type="number" placeholder="Tickets Purchased" formControlName="numberOfTickets" />
+          </div>
+          <!-- TODO do ngFor for all events -->
+          <select>
+            <option></option>
+            <option>Event 1</option>
+          </select>
+          <button class="row">Submit</button>
+        </form>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>

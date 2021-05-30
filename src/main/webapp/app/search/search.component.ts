@@ -48,8 +48,6 @@ export class SearchComponent implements OnInit {
       query['lastName.contains'] = this.searchForm.get('lastName')?.value;
     }
 
-    // firstName: this.searchForm.get('firstName')?.value ?? undefined,
-    // lastName: this.searchForm.get('lastName')?.value ?? undefined,
     const res = await this.personService.query(query).toPromise();
     this.personList = res.body ?? [];
     this.totalItems = Number(res.headers.get('X-Total-Count'));
