@@ -1,29 +1,79 @@
 <div>
-  <form [formGroup]="personForm">
-    <label>First Name:</label>
-    <input type="text" formControlName="firstName" />
-    <label>Last Name:</label>
-    <input type="text" formControlName="lastName" />
-    <label>ID:</label>
-    <input class="col-1" type="text" formControlName="id" />
+  <h1>Transactions</h1>
+  <form [formGroup]="addTransaction" (ngSubmit)="submit()">
+    <div class="row d-flex justify-content-around">
+      <span class="col d-flex" formGroupName="person">
+        <span>
+          <label class="text-nowrap">Person ID:</label>
+          <mark class="mr-5 ml-2">{{ person.id }}</mark>
+        </span>
+        <span>
+          <label class="text-nowrap">First Name:</label>
+          <mark class="mr-5 ml-2">{{ person.firstName }}</mark>
+        </span>
+        <span>
+          <label class="text-nowrap">Last Name:</label>
+          <mark class="mr-5 ml-2">{{ person.lastName }}</mark>
+        </span>
+      </span>
+      <span class="col-4">
+        <label>Date: </label>
+        <input type="date" class="ml-3" formControlName="date" />
+      </span>
+    </div>
+    <hr />
+    <h3>Tickets</h3>
+    <div class="d-flex justify-content-around mb-3" style="display: flex">
+      <input type="number" class="form-control" placeholder="$ cost/ticket" formControlName="costPerTicket" />
+      <input type="number" class="form-control" placeholder="# of tickets" formControlName="numberOfTickets" />
+      <!-- TODO do ngFor for all events -->
+      <select class="form-control" formControlName="ticketEvent">
+        <option></option>
+        <option>TODO Event 1</option>
+      </select>
+      <label class="text-nowrap mx-3">Total cost:</label>
+      <input
+        type="text"
+        disabled
+        class="form-control"
+        [value]="addTransaction.get('costPerTicket')?.value * addTransaction.get('numberOfTickets')?.value | currency"
+      />
+    </div>
+    <div class="d-flex">
+      <input type="number" class="form-control mr-5" placeholder="$ donation" formControlName="eventDonationAmount" />
+      <span>for</span>
+      <!-- TODO -->
+      <select class="form-control ml-5" formControlName="donationEvent">
+        <option></option>
+        <option>TODO Event 1</option>
+      </select>
+    </div>
+    <hr />
+    <div class="d-flex mb-3">
+      <input type="text" class="form-control" placeholder="Description of items purchased" formControlName="itemDescriptions" />
+      <input type="number" class="form-control" placeholder="$ for total items" formControlName="itemDollarAmount" />
+    </div>
+    <div class="d-flex mb-3">
+      <select class="form-control" formControlName="membershipLevel">
+        <!-- TODO -->
+        <option></option>
+        <option>Gold</option>
+        <option>Rose</option>
+        <option>Green</option>
+      </select>
+      <input type="number" class="form-control" placeholder="# of memberships" formControlName="numberOfMemberships" />
+      <!-- TODO -->
+      <input type="number" class="form-control" placeholder="$ membership paid" disabled value="" />
+    </div>
+    <div class="d-flex mb-3">
+      <input type="number" class="form-control" placeholder="Donation to Credo" formControlName="donationAmount" />
+      <input type="number" class="form-control" disabled />
+    </div>
+    <div>
+      <span>Total amount for this transaction:</span>
+      <!-- TODO -->
+      <span>TODO</span>
+    </div>
+    <button class="btn btn-primary">Submit</button>
   </form>
-  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
-    <ngb-panel title="Tickets Form">
-      <ng-template ngbPanelContent>
-        <form name="addTransactionForm" role="form" novalidate (ngSubmit)="submit()" [formGroup]="addTransaction">
-          <div class="row" style="display: flex">
-            <input type="date" class="col-2" formControlName="date" />
-            <input type="number" class="col-2" placeholder="$ amount" formControlName="dollarAmount" />
-            <input type="number" placeholder="Tickets Purchased" formControlName="numberOfTickets" />
-          </div>
-          <!-- TODO do ngFor for all events -->
-          <select>
-            <option></option>
-            <option>Event 1</option>
-          </select>
-          <button class="row">Submit</button>
-        </form>
-      </ng-template>
-    </ngb-panel>
-  </ngb-accordion>
 </div>

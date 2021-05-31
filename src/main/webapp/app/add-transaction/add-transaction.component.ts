@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -11,15 +12,23 @@ import { IPerson, Person } from 'app/entities/person/person.model';
 export class AddTransactionComponent implements OnInit {
   addTransaction: FormGroup;
   person: IPerson;
-  personForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute) {}
+  constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute, private location: Location) {}
 
   ngOnInit(): void {
     this.addTransaction = this.fb.group({
       date: [],
-      dollarAmount: [],
+      costPerTicket: [],
       numberOfTickets: [],
+      ticketEvent: [],
+      eventDonationAmount: [],
+      donationEvent: [],
+      itemDescriptions: [],
+      itemDollarAmount: [],
+      membershipLevel: [],
+      numberOfMemberships: [],
+      donationAmount: [],
+      person: this.fb.group(new Person()),
     });
     this.activatedRoute.data.subscribe(({ person }) => {
       this.person = person;
@@ -33,12 +42,11 @@ export class AddTransactionComponent implements OnInit {
   }
 
   loadFromPerson(person: IPerson): void {
-    console.log(person);
-    this.personForm = this.fb.group(person);
-    this.personForm.disable();
+    this.addTransaction.get('person')?.setValue(person);
+    // this.addTransaction.get('person')?.disable();
   }
 
   submit(): void {
-    console.log(this.addTransaction.controls);
+    this.location.back();
   }
 }
