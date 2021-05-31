@@ -1,0 +1,78 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="transaction">
+      <h2 data-cy="transactionDetailsHeading"><span>Transaction</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ transaction.id }}</span>
+        </dd>
+        <dt><span>Total Amount</span></dt>
+        <dd>
+          <span>{{ transaction.totalAmount }}</span>
+        </dd>
+        <dt><span>Date</span></dt>
+        <dd>
+          <span>{{ transaction.date | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Generic Sub Items Purchased</span></dt>
+        <dd>
+          <span>{{ transaction.genericSubItemsPurchased }}</span>
+        </dd>
+        <dt><span>Cost Sub Items Purchased</span></dt>
+        <dd>
+          <span>{{ transaction.costSubItemsPurchased }}</span>
+        </dd>
+        <dt><span>Number Of Memberships</span></dt>
+        <dd>
+          <span>{{ transaction.numberOfMemberships }}</span>
+        </dd>
+        <dt><span>Donation</span></dt>
+        <dd>
+          <span>{{ transaction.donation }}</span>
+        </dd>
+        <dt><span>Event Donation</span></dt>
+        <dd>
+          <span>{{ transaction.eventDonation }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <span>{{ transaction.notes }}</span>
+        </dd>
+        <dt><span>Tickets</span></dt>
+        <dd>
+          <div *ngIf="transaction.tickets">
+            <a [routerLink]="['/ticket', transaction.tickets?.id, 'view']">{{ transaction.tickets?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Membership Level</span></dt>
+        <dd>
+          <div *ngIf="transaction.membershipLevel">
+            <a [routerLink]="['/membership-level', transaction.membershipLevel?.id, 'view']">{{ transaction.membershipLevel?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+          <div *ngIf="transaction.person">
+            <a [routerLink]="['/person', transaction.person?.id, 'view']">{{ transaction.person?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/transaction', transaction.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

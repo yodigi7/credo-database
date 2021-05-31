@@ -24,7 +24,7 @@
           <div *ngIf="editForm.get('phoneNumber')!.invalid && (editForm.get('phoneNumber')!.dirty || editForm.get('phoneNumber')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('phoneNumber')?.errors?.required"> This field is required. </small>
             <small class="form-text text-danger" *ngIf="editForm.get('phoneNumber')?.errors?.minlength">
-              This field is required to be at least 7 characters.
+              This field is required to be at least 10 characters.
             </small>
             <small class="form-text text-danger" *ngIf="editForm.get('phoneNumber')?.errors?.pattern">
               This field should follow pattern for "Phone Number".

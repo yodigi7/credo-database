@@ -3,6 +3,7 @@ package com.credo.database.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
+import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
@@ -24,20 +25,23 @@ public class TicketCriteria implements Serializable, Criteria {
 
     private IntegerFilter count;
 
+    private DoubleFilter costPerTicket;
+
     private LongFilter personId;
 
-    private LongFilter paymentId;
-
     private LongFilter eventId;
+
+    private LongFilter transactionId;
 
     public TicketCriteria() {}
 
     public TicketCriteria(TicketCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.count = other.count == null ? null : other.count.copy();
+        this.costPerTicket = other.costPerTicket == null ? null : other.costPerTicket.copy();
         this.personId = other.personId == null ? null : other.personId.copy();
-        this.paymentId = other.paymentId == null ? null : other.paymentId.copy();
         this.eventId = other.eventId == null ? null : other.eventId.copy();
+        this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
     }
 
     @Override
@@ -75,6 +79,21 @@ public class TicketCriteria implements Serializable, Criteria {
         this.count = count;
     }
 
+    public DoubleFilter getCostPerTicket() {
+        return costPerTicket;
+    }
+
+    public DoubleFilter costPerTicket() {
+        if (costPerTicket == null) {
+            costPerTicket = new DoubleFilter();
+        }
+        return costPerTicket;
+    }
+
+    public void setCostPerTicket(DoubleFilter costPerTicket) {
+        this.costPerTicket = costPerTicket;
+    }
+
     public LongFilter getPersonId() {
         return personId;
     }
@@ -88,21 +107,6 @@ public class TicketCriteria implements Serializable, Criteria {
 
     public void setPersonId(LongFilter personId) {
         this.personId = personId;
-    }
-
-    public LongFilter getPaymentId() {
-        return paymentId;
-    }
-
-    public LongFilter paymentId() {
-        if (paymentId == null) {
-            paymentId = new LongFilter();
-        }
-        return paymentId;
-    }
-
-    public void setPaymentId(LongFilter paymentId) {
-        this.paymentId = paymentId;
     }
 
     public LongFilter getEventId() {
@@ -120,6 +124,21 @@ public class TicketCriteria implements Serializable, Criteria {
         this.eventId = eventId;
     }
 
+    public LongFilter getTransactionId() {
+        return transactionId;
+    }
+
+    public LongFilter transactionId() {
+        if (transactionId == null) {
+            transactionId = new LongFilter();
+        }
+        return transactionId;
+    }
+
+    public void setTransactionId(LongFilter transactionId) {
+        this.transactionId = transactionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -132,15 +151,16 @@ public class TicketCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(count, that.count) &&
+            Objects.equals(costPerTicket, that.costPerTicket) &&
             Objects.equals(personId, that.personId) &&
-            Objects.equals(paymentId, that.paymentId) &&
-            Objects.equals(eventId, that.eventId)
+            Objects.equals(eventId, that.eventId) &&
+            Objects.equals(transactionId, that.transactionId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, count, personId, paymentId, eventId);
+        return Objects.hash(id, count, costPerTicket, personId, eventId, transactionId);
     }
 
     // prettier-ignore
@@ -149,9 +169,10 @@ public class TicketCriteria implements Serializable, Criteria {
         return "TicketCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (count != null ? "count=" + count + ", " : "") +
+            (costPerTicket != null ? "costPerTicket=" + costPerTicket + ", " : "") +
             (personId != null ? "personId=" + personId + ", " : "") +
-            (paymentId != null ? "paymentId=" + paymentId + ", " : "") +
             (eventId != null ? "eventId=" + eventId + ", " : "") +
+            (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
             "}";
     }
 }

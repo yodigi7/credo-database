@@ -83,12 +83,11 @@ public class Person implements Serializable {
             "membershipLevel",
             "headOfHouse",
             "parish",
-            "relationship",
             "organizations",
             "houseDetails",
             "notes",
             "phones",
-            "payments",
+            "transactions",
             "emails",
             "personsInHouses",
             "tickets",
@@ -110,12 +109,11 @@ public class Person implements Serializable {
             "membershipLevel",
             "headOfHouse",
             "parish",
-            "relationship",
             "organizations",
             "houseDetails",
             "notes",
             "phones",
-            "payments",
+            "transactions",
             "emails",
             "personsInHouses",
             "tickets",
@@ -127,10 +125,6 @@ public class Person implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties(value = { "organizations", "phones", "people", "emails" }, allowSetters = true)
     private Parish parish;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "people" }, allowSetters = true)
-    private Relationship relationship;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -157,8 +151,8 @@ public class Person implements Serializable {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "tickets", "person" }, allowSetters = true)
-    private Set<Payment> payments = new HashSet<>();
+    @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person" }, allowSetters = true)
+    private Set<Transaction> transactions = new HashSet<>();
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -173,12 +167,11 @@ public class Person implements Serializable {
             "membershipLevel",
             "headOfHouse",
             "parish",
-            "relationship",
             "organizations",
             "houseDetails",
             "notes",
             "phones",
-            "payments",
+            "transactions",
             "emails",
             "personsInHouses",
             "tickets",
@@ -189,7 +182,7 @@ public class Person implements Serializable {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "person", "payments", "events" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "person", "event", "transaction" }, allowSetters = true)
     private Set<Ticket> tickets = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -414,19 +407,6 @@ public class Person implements Serializable {
         this.parish = parish;
     }
 
-    public Relationship getRelationship() {
-        return this.relationship;
-    }
-
-    public Person relationship(Relationship relationship) {
-        this.setRelationship(relationship);
-        return this;
-    }
-
-    public void setRelationship(Relationship relationship) {
-        this.relationship = relationship;
-    }
-
     public Set<Organization> getOrganizations() {
         return this.organizations;
     }
@@ -521,35 +501,35 @@ public class Person implements Serializable {
         this.phones = personPhones;
     }
 
-    public Set<Payment> getPayments() {
-        return this.payments;
+    public Set<Transaction> getTransactions() {
+        return this.transactions;
     }
 
-    public Person payments(Set<Payment> payments) {
-        this.setPayments(payments);
+    public Person transactions(Set<Transaction> transactions) {
+        this.setTransactions(transactions);
         return this;
     }
 
-    public Person addPayments(Payment payment) {
-        this.payments.add(payment);
-        payment.setPerson(this);
+    public Person addTransactions(Transaction transaction) {
+        this.transactions.add(transaction);
+        transaction.setPerson(this);
         return this;
     }
 
-    public Person removePayments(Payment payment) {
-        this.payments.remove(payment);
-        payment.setPerson(null);
+    public Person removeTransactions(Transaction transaction) {
+        this.transactions.remove(transaction);
+        transaction.setPerson(null);
         return this;
     }
 
-    public void setPayments(Set<Payment> payments) {
-        if (this.payments != null) {
-            this.payments.forEach(i -> i.setPerson(null));
+    public void setTransactions(Set<Transaction> transactions) {
+        if (this.transactions != null) {
+            this.transactions.forEach(i -> i.setPerson(null));
         }
-        if (payments != null) {
-            payments.forEach(i -> i.setPerson(this));
+        if (transactions != null) {
+            transactions.forEach(i -> i.setPerson(this));
         }
-        this.payments = payments;
+        this.transactions = transactions;
     }
 
     public Set<PersonEmail> getEmails() {

@@ -122,8 +122,6 @@ describe('Person e2e test', () => {
 
     cy.setFieldSelectToLastOfEntity('parish');
 
-    cy.setFieldSelectToLastOfEntity('relationship');
-
     cy.setFieldSelectToLastOfEntity('organizations');
 
     cy.get(entityCreateSaveButtonSelector).click({ force: true });

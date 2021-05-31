@@ -2,7 +2,6 @@ package com.credo.database.web.rest;
 
 import com.credo.database.domain.HouseDetails;
 import com.credo.database.repository.HouseDetailsRepository;
-import com.credo.database.repository.PersonRepository;
 import com.credo.database.service.HouseDetailsQueryService;
 import com.credo.database.service.HouseDetailsService;
 import com.credo.database.service.criteria.HouseDetailsCriteria;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -51,17 +49,14 @@ public class HouseDetailsResource {
     private final HouseDetailsService houseDetailsService;
 
     private final HouseDetailsRepository houseDetailsRepository;
-    private final PersonRepository personRepository;
 
     private final HouseDetailsQueryService houseDetailsQueryService;
 
     public HouseDetailsResource(
-        PersonRepository personRepository,
         HouseDetailsService houseDetailsService,
         HouseDetailsRepository houseDetailsRepository,
         HouseDetailsQueryService houseDetailsQueryService
     ) {
-        this.personRepository = personRepository;
         this.houseDetailsService = houseDetailsService;
         this.houseDetailsRepository = houseDetailsRepository;
         this.houseDetailsQueryService = houseDetailsQueryService;
@@ -75,20 +70,10 @@ public class HouseDetailsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/house-details")
-    @Transactional
     public ResponseEntity<HouseDetails> createHouseDetails(@RequestBody HouseDetails houseDetails) throws URISyntaxException {
         log.debug("REST request to save HouseDetails : {}", houseDetails);
         if (houseDetails.getId() != null) {
             throw new BadRequestAlertException("A new houseDetails cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        if (houseDetails.getHeadOfHouse() != null) {
-            if (houseDetails.getHeadOfHouse().getId() != null) {
-                houseDetails.setHeadOfHouse(
-                    personRepository
-                        .findById(houseDetails.getHeadOfHouse().getId())
-                        .orElseThrow(() -> new Error("Unable to find person by id"))
-                );
-            }
         }
         HouseDetails result = houseDetailsService.save(houseDetails);
         return ResponseEntity

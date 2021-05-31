@@ -86,12 +86,6 @@
             <a [routerLink]="['/parish', person.parish?.id, 'view']">{{ person.parish?.id }}</a>
           </div>
         </dd>
-        <dt><span>Relationship</span></dt>
-        <dd>
-          <div *ngIf="person.relationship">
-            <a [routerLink]="['/relationship', person.relationship?.id, 'view']">{{ person.relationship?.id }}</a>
-          </div>
-        </dd>
         <dt><span>Organizations</span></dt>
         <dd>
           <span *ngFor="let organizations of person.organizations; let last = last">

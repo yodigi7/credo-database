@@ -1,22 +1,24 @@
 import { IPerson } from 'app/entities/person/person.model';
-import { IPayment } from 'app/entities/payment/payment.model';
 import { IEvent } from 'app/entities/event/event.model';
+import { ITransaction } from 'app/entities/transaction/transaction.model';
 
 export interface ITicket {
   id?: number;
   count?: number | null;
+  costPerTicket?: number | null;
   person?: IPerson | null;
-  payments?: IPayment[] | null;
-  events?: IEvent[] | null;
+  event?: IEvent | null;
+  transaction?: ITransaction | null;
 }
 
 export class Ticket implements ITicket {
   constructor(
     public id?: number,
     public count?: number | null,
+    public costPerTicket?: number | null,
     public person?: IPerson | null,
-    public payments?: IPayment[] | null,
-    public events?: IEvent[] | null
+    public event?: IEvent | null,
+    public transaction?: ITransaction | null
   ) {}
 }
 

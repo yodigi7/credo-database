@@ -22,12 +22,6 @@
         <dd>
           <span>{{ event.date | formatMediumDate }}</span>
         </dd>
-        <dt><span>Tickets</span></dt>
-        <dd>
-          <div *ngIf="event.tickets">
-            <a [routerLink]="['/ticket', event.tickets?.id, 'view']">{{ event.tickets?.id }}</a>
-          </div>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

@@ -21,6 +21,30 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_costPerTicket">Cost Per Ticket</label>
+          <input
+            type="number"
+            class="form-control"
+            name="costPerTicket"
+            id="field_costPerTicket"
+            data-cy="costPerTicket"
+            formControlName="costPerTicket"
+          />
+          <div
+            *ngIf="
+              editForm.get('costPerTicket')!.invalid && (editForm.get('costPerTicket')!.dirty || editForm.get('costPerTicket')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('costPerTicket')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('costPerTicket')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_person">Person</label>
           <select class="form-control" id="field_person" data-cy="person" name="person" formControlName="person">
             <option [ngValue]="null"></option>
@@ -29,6 +53,19 @@
               *ngFor="let personOption of peopleSharedCollection; trackBy: trackPersonById"
             >
               {{ personOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_event">Event</label>
+          <select class="form-control" id="field_event" data-cy="event" name="event" formControlName="event">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="eventOption.id === editForm.get('event')!.value?.id ? editForm.get('event')!.value : eventOption"
+              *ngFor="let eventOption of eventsSharedCollection; trackBy: trackEventById"
+            >
+              {{ eventOption.id }}
             </option>
           </select>
         </div>

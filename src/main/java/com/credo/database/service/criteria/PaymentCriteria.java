@@ -30,8 +30,6 @@ public class PaymentCriteria implements Serializable, Criteria {
 
     private StringFilter notes;
 
-    private LongFilter ticketsId;
-
     private LongFilter personId;
 
     public PaymentCriteria() {}
@@ -41,7 +39,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.amount = other.amount == null ? null : other.amount.copy();
         this.date = other.date == null ? null : other.date.copy();
         this.notes = other.notes == null ? null : other.notes.copy();
-        this.ticketsId = other.ticketsId == null ? null : other.ticketsId.copy();
         this.personId = other.personId == null ? null : other.personId.copy();
     }
 
@@ -110,21 +107,6 @@ public class PaymentCriteria implements Serializable, Criteria {
         this.notes = notes;
     }
 
-    public LongFilter getTicketsId() {
-        return ticketsId;
-    }
-
-    public LongFilter ticketsId() {
-        if (ticketsId == null) {
-            ticketsId = new LongFilter();
-        }
-        return ticketsId;
-    }
-
-    public void setTicketsId(LongFilter ticketsId) {
-        this.ticketsId = ticketsId;
-    }
-
     public LongFilter getPersonId() {
         return personId;
     }
@@ -154,14 +136,13 @@ public class PaymentCriteria implements Serializable, Criteria {
             Objects.equals(amount, that.amount) &&
             Objects.equals(date, that.date) &&
             Objects.equals(notes, that.notes) &&
-            Objects.equals(ticketsId, that.ticketsId) &&
             Objects.equals(personId, that.personId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, amount, date, notes, ticketsId, personId);
+        return Objects.hash(id, amount, date, notes, personId);
     }
 
     // prettier-ignore
@@ -172,7 +153,6 @@ public class PaymentCriteria implements Serializable, Criteria {
             (amount != null ? "amount=" + amount + ", " : "") +
             (date != null ? "date=" + date + ", " : "") +
             (notes != null ? "notes=" + notes + ", " : "") +
-            (ticketsId != null ? "ticketsId=" + ticketsId + ", " : "") +
             (personId != null ? "personId=" + personId + ", " : "") +
             "}";
     }

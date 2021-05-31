@@ -5,8 +5,8 @@
       "fieldName": "phoneNumber",
       "fieldType": "String",
       "fieldValidateRules": ["unique", "required", "minlength", "pattern"],
-      "fieldValidateRulesMinlength": "7",
-      "fieldValidateRulesPattern": ".*[0-9]{3}-[0-9]{4}$"
+      "fieldValidateRulesMinlength": "10",
+      "fieldValidateRulesPattern": "^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$"
     },
     {
       "fieldName": "type",

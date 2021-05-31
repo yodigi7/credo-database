@@ -79,12 +79,6 @@
       "relationshipName": "parish"
     },
     {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "relationship",
-      "otherEntityRelationshipName": "people",
-      "relationshipName": "relationship"
-    },
-    {
       "relationshipType": "many-to-many",
       "otherEntityName": "organization",
       "otherEntityRelationshipName": "persons",
@@ -113,9 +107,9 @@
     },
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "payment",
+      "otherEntityName": "transaction",
       "otherEntityRelationshipName": "person",
-      "relationshipName": "payments"
+      "relationshipName": "transactions"
     },
     {
       "relationshipType": "one-to-many",

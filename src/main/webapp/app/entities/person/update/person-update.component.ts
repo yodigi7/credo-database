@@ -11,8 +11,6 @@ import { IMembershipLevel } from 'app/entities/membership-level/membership-level
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
 import { IParish } from 'app/entities/parish/parish.model';
 import { ParishService } from 'app/entities/parish/service/parish.service';
-import { IRelationship } from 'app/entities/relationship/relationship.model';
-import { RelationshipService } from 'app/entities/relationship/service/relationship.service';
 import { IOrganization } from 'app/entities/organization/organization.model';
 import { OrganizationService } from 'app/entities/organization/service/organization.service';
 
@@ -27,7 +25,6 @@ export class PersonUpdateComponent implements OnInit {
   spousesCollection: IPerson[] = [];
   membershipLevelsSharedCollection: IMembershipLevel[] = [];
   parishesSharedCollection: IParish[] = [];
-  relationshipsSharedCollection: IRelationship[] = [];
   organizationsSharedCollection: IOrganization[] = [];
 
   editForm = this.fb.group({
@@ -48,7 +45,6 @@ export class PersonUpdateComponent implements OnInit {
     membershipLevel: [],
     headOfHouse: [],
     parish: [],
-    relationship: [],
     organizations: [],
   });
 
@@ -56,7 +52,6 @@ export class PersonUpdateComponent implements OnInit {
     protected personService: PersonService,
     protected membershipLevelService: MembershipLevelService,
     protected parishService: ParishService,
-    protected relationshipService: RelationshipService,
     protected organizationService: OrganizationService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -93,10 +88,6 @@ export class PersonUpdateComponent implements OnInit {
   }
 
   trackParishById(index: number, item: IParish): number {
-    return item.id!;
-  }
-
-  trackRelationshipById(index: number, item: IRelationship): number {
     return item.id!;
   }
 
@@ -153,7 +144,6 @@ export class PersonUpdateComponent implements OnInit {
       membershipLevel: person.membershipLevel,
       headOfHouse: person.headOfHouse,
       parish: person.parish,
-      relationship: person.relationship,
       organizations: person.organizations,
     });
 
@@ -164,10 +154,6 @@ export class PersonUpdateComponent implements OnInit {
       person.membershipLevel
     );
     this.parishesSharedCollection = this.parishService.addParishToCollectionIfMissing(this.parishesSharedCollection, person.parish);
-    this.relationshipsSharedCollection = this.relationshipService.addRelationshipToCollectionIfMissing(
-      this.relationshipsSharedCollection,
-      person.relationship
-    );
     this.organizationsSharedCollection = this.organizationService.addOrganizationToCollectionIfMissing(
       this.organizationsSharedCollection,
       ...(person.organizations ?? [])
@@ -203,16 +189,6 @@ export class PersonUpdateComponent implements OnInit {
       .pipe(map((parishes: IParish[]) => this.parishService.addParishToCollectionIfMissing(parishes, this.editForm.get('parish')!.value)))
       .subscribe((parishes: IParish[]) => (this.parishesSharedCollection = parishes));
 
-    this.relationshipService
-      .query()
-      .pipe(map((res: HttpResponse<IRelationship[]>) => res.body ?? []))
-      .pipe(
-        map((relationships: IRelationship[]) =>
-          this.relationshipService.addRelationshipToCollectionIfMissing(relationships, this.editForm.get('relationship')!.value)
-        )
-      )
-      .subscribe((relationships: IRelationship[]) => (this.relationshipsSharedCollection = relationships));
-
     this.organizationService
       .query()
       .pipe(map((res: HttpResponse<IOrganization[]>) => res.body ?? []))
@@ -239,12 +215,11 @@ export class PersonUpdateComponent implements OnInit {
       membershipStartDate: this.editForm.get(['membershipStartDate'])!.value,
       membershipExpirationDate: this.editForm.get(['membershipExpirationDate'])!.value,
       isHeadOfHouse: this.editForm.get(['isHeadOfHouse'])!.value,
-      isDeceased: this.editForm.get(['isDeceased'])!.value ? this.editForm.get(['isDeceased'])!.value : false,
+      isDeceased: this.editForm.get(['isDeceased'])!.value,
       spouse: this.editForm.get(['spouse'])!.value,
       membershipLevel: this.editForm.get(['membershipLevel'])!.value,
       headOfHouse: this.editForm.get(['headOfHouse'])!.value,
       parish: this.editForm.get(['parish'])!.value,
-      relationship: this.editForm.get(['relationship'])!.value,
       organizations: this.editForm.get(['organizations'])!.value,
     };
   }

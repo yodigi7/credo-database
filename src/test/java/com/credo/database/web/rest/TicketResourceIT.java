@@ -13,9 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.credo.database.IntegrationTest;
 import com.credo.database.domain.Event;
-import com.credo.database.domain.Payment;
 import com.credo.database.domain.Person;
 import com.credo.database.domain.Ticket;
+import com.credo.database.domain.Transaction;
 import com.credo.database.repository.TicketRepository;
 import java.util.List;
 import java.util.Random;
@@ -42,6 +42,10 @@ class TicketResourceIT {
     private static final Integer UPDATED_COUNT = 1;
     private static final Integer SMALLER_COUNT = 0 - 1;
 
+    private static final Double DEFAULT_COST_PER_TICKET = 0D;
+    private static final Double UPDATED_COST_PER_TICKET = 1D;
+    private static final Double SMALLER_COST_PER_TICKET = 0D - 1D;
+
     private static final String ENTITY_API_URL = "/api/tickets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -66,7 +70,7 @@ class TicketResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Ticket createEntity(EntityManager em) {
-        Ticket ticket = new Ticket().count(DEFAULT_COUNT);
+        Ticket ticket = new Ticket().count(DEFAULT_COUNT).costPerTicket(DEFAULT_COST_PER_TICKET);
         return ticket;
     }
 
@@ -77,7 +81,7 @@ class TicketResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Ticket createUpdatedEntity(EntityManager em) {
-        Ticket ticket = new Ticket().count(UPDATED_COUNT);
+        Ticket ticket = new Ticket().count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET);
         return ticket;
     }
 
@@ -100,6 +104,7 @@ class TicketResourceIT {
         assertThat(ticketList).hasSize(databaseSizeBeforeCreate + 1);
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(DEFAULT_COUNT);
+        assertThat(testTicket.getCostPerTicket()).isEqualTo(DEFAULT_COST_PER_TICKET);
     }
 
     @Test
@@ -132,7 +137,8 @@ class TicketResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ticket.getId().intValue())))
-            .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)));
+            .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)))
+            .andExpect(jsonPath("$.[*].costPerTicket").value(hasItem(DEFAULT_COST_PER_TICKET.doubleValue())));
     }
 
     @Test
@@ -147,25 +153,8 @@ class TicketResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(ticket.getId().intValue()))
-            .andExpect(jsonPath("$.count").value(DEFAULT_COUNT));
-    }
-
-    @Test
-    @Transactional
-    void getTicketsByIdFiltering() throws Exception {
-        // Initialize the database
-        ticketRepository.saveAndFlush(ticket);
-
-        Long id = ticket.getId();
-
-        defaultTicketShouldBeFound("id.equals=" + id);
-        defaultTicketShouldNotBeFound("id.notEquals=" + id);
-
-        defaultTicketShouldBeFound("id.greaterThanOrEqual=" + id);
-        defaultTicketShouldNotBeFound("id.greaterThan=" + id);
-
-        defaultTicketShouldBeFound("id.lessThanOrEqual=" + id);
-        defaultTicketShouldNotBeFound("id.lessThan=" + id);
+            .andExpect(jsonPath("$.count").value(DEFAULT_COUNT))
+            .andExpect(jsonPath("$.costPerTicket").value(DEFAULT_COST_PER_TICKET.doubleValue()));
     }
 
     @Test
@@ -274,6 +263,110 @@ class TicketResourceIT {
 
     @Test
     @Transactional
+    void getAllTicketsByCostPerTicketIsEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket equals to DEFAULT_COST_PER_TICKET
+        defaultTicketShouldBeFound("costPerTicket.equals=" + DEFAULT_COST_PER_TICKET);
+
+        // Get all the ticketList where costPerTicket equals to UPDATED_COST_PER_TICKET
+        defaultTicketShouldNotBeFound("costPerTicket.equals=" + UPDATED_COST_PER_TICKET);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByCostPerTicketIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket not equals to DEFAULT_COST_PER_TICKET
+        defaultTicketShouldNotBeFound("costPerTicket.notEquals=" + DEFAULT_COST_PER_TICKET);
+
+        // Get all the ticketList where costPerTicket not equals to UPDATED_COST_PER_TICKET
+        defaultTicketShouldBeFound("costPerTicket.notEquals=" + UPDATED_COST_PER_TICKET);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByCostPerTicketIsInShouldWork() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket in DEFAULT_COST_PER_TICKET or UPDATED_COST_PER_TICKET
+        defaultTicketShouldBeFound("costPerTicket.in=" + DEFAULT_COST_PER_TICKET + "," + UPDATED_COST_PER_TICKET);
+
+        // Get all the ticketList where costPerTicket equals to UPDATED_COST_PER_TICKET
+        defaultTicketShouldNotBeFound("costPerTicket.in=" + UPDATED_COST_PER_TICKET);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByCostPerTicketIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket is not null
+        defaultTicketShouldBeFound("costPerTicket.specified=true");
+
+        // Get all the ticketList where costPerTicket is null
+        defaultTicketShouldNotBeFound("costPerTicket.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByCostPerTicketIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket is greater than or equal to DEFAULT_COST_PER_TICKET
+        defaultTicketShouldBeFound("costPerTicket.greaterThanOrEqual=" + DEFAULT_COST_PER_TICKET);
+
+        // Get all the ticketList where costPerTicket is greater than or equal to UPDATED_COST_PER_TICKET
+        defaultTicketShouldNotBeFound("costPerTicket.greaterThanOrEqual=" + UPDATED_COST_PER_TICKET);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByCostPerTicketIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket is less than or equal to DEFAULT_COST_PER_TICKET
+        defaultTicketShouldBeFound("costPerTicket.lessThanOrEqual=" + DEFAULT_COST_PER_TICKET);
+
+        // Get all the ticketList where costPerTicket is less than or equal to SMALLER_COST_PER_TICKET
+        defaultTicketShouldNotBeFound("costPerTicket.lessThanOrEqual=" + SMALLER_COST_PER_TICKET);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByCostPerTicketIsLessThanSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket is less than DEFAULT_COST_PER_TICKET
+        defaultTicketShouldNotBeFound("costPerTicket.lessThan=" + DEFAULT_COST_PER_TICKET);
+
+        // Get all the ticketList where costPerTicket is less than UPDATED_COST_PER_TICKET
+        defaultTicketShouldBeFound("costPerTicket.lessThan=" + UPDATED_COST_PER_TICKET);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByCostPerTicketIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where costPerTicket is greater than DEFAULT_COST_PER_TICKET
+        defaultTicketShouldNotBeFound("costPerTicket.greaterThan=" + DEFAULT_COST_PER_TICKET);
+
+        // Get all the ticketList where costPerTicket is greater than SMALLER_COST_PER_TICKET
+        defaultTicketShouldBeFound("costPerTicket.greaterThan=" + SMALLER_COST_PER_TICKET);
+    }
+
+    @Test
+    @Transactional
     void getAllTicketsByPersonIsEqualToSomething() throws Exception {
         // Initialize the database
         ticketRepository.saveAndFlush(ticket);
@@ -293,32 +386,13 @@ class TicketResourceIT {
 
     @Test
     @Transactional
-    void getAllTicketsByPaymentIsEqualToSomething() throws Exception {
-        // Initialize the database
-        ticketRepository.saveAndFlush(ticket);
-        Payment payment = PaymentResourceIT.createEntity(em);
-        em.persist(payment);
-        em.flush();
-        ticket.addPayment(payment);
-        ticketRepository.saveAndFlush(ticket);
-        Long paymentId = payment.getId();
-
-        // Get all the ticketList where payment equals to paymentId
-        defaultTicketShouldBeFound("paymentId.equals=" + paymentId);
-
-        // Get all the ticketList where payment equals to (paymentId + 1)
-        defaultTicketShouldNotBeFound("paymentId.equals=" + (paymentId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllTicketsByEventIsEqualToSomething() throws Exception {
         // Initialize the database
         ticketRepository.saveAndFlush(ticket);
         Event event = EventResourceIT.createEntity(em);
         em.persist(event);
         em.flush();
-        ticket.addEvent(event);
+        ticket.setEvent(event);
         ticketRepository.saveAndFlush(ticket);
         Long eventId = event.getId();
 
@@ -327,6 +401,26 @@ class TicketResourceIT {
 
         // Get all the ticketList where event equals to (eventId + 1)
         defaultTicketShouldNotBeFound("eventId.equals=" + (eventId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByTransactionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+        Transaction transaction = TransactionResourceIT.createEntity(em);
+        em.persist(transaction);
+        em.flush();
+        ticket.setTransaction(transaction);
+        transaction.setTickets(ticket);
+        ticketRepository.saveAndFlush(ticket);
+        Long transactionId = transaction.getId();
+
+        // Get all the ticketList where transaction equals to transactionId
+        defaultTicketShouldBeFound("transactionId.equals=" + transactionId);
+
+        // Get all the ticketList where transaction equals to (transactionId + 1)
+        defaultTicketShouldNotBeFound("transactionId.equals=" + (transactionId + 1));
     }
 
     /**
@@ -338,7 +432,8 @@ class TicketResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ticket.getId().intValue())))
-            .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)));
+            .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)))
+            .andExpect(jsonPath("$.[*].costPerTicket").value(hasItem(DEFAULT_COST_PER_TICKET.doubleValue())));
 
         // Check, that the count call also returns 1
         restTicketMockMvc
@@ -386,7 +481,7 @@ class TicketResourceIT {
         Ticket updatedTicket = ticketRepository.findById(ticket.getId()).get();
         // Disconnect from session so that the updates on updatedTicket are not directly saved in db
         em.detach(updatedTicket);
-        updatedTicket.count(UPDATED_COUNT);
+        updatedTicket.count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET);
 
         restTicketMockMvc
             .perform(
@@ -401,6 +496,7 @@ class TicketResourceIT {
         assertThat(ticketList).hasSize(databaseSizeBeforeUpdate);
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(UPDATED_COUNT);
+        assertThat(testTicket.getCostPerTicket()).isEqualTo(UPDATED_COST_PER_TICKET);
     }
 
     @Test
@@ -486,6 +582,7 @@ class TicketResourceIT {
         assertThat(ticketList).hasSize(databaseSizeBeforeUpdate);
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(UPDATED_COUNT);
+        assertThat(testTicket.getCostPerTicket()).isEqualTo(DEFAULT_COST_PER_TICKET);
     }
 
     @Test
@@ -500,7 +597,7 @@ class TicketResourceIT {
         Ticket partialUpdatedTicket = new Ticket();
         partialUpdatedTicket.setId(ticket.getId());
 
-        partialUpdatedTicket.count(UPDATED_COUNT);
+        partialUpdatedTicket.count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET);
 
         restTicketMockMvc
             .perform(
@@ -515,6 +612,7 @@ class TicketResourceIT {
         assertThat(ticketList).hasSize(databaseSizeBeforeUpdate);
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(UPDATED_COUNT);
+        assertThat(testTicket.getCostPerTicket()).isEqualTo(UPDATED_COST_PER_TICKET);
     }
 
     @Test

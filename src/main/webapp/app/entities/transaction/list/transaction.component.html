@@ -1,0 +1,128 @@
+<div>
+  <h2 id="page-heading" data-cy="TransactionHeading">
+    <span>Transactions</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-transaction"
+        [routerLink]="['/transaction/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Transaction </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="transactions?.length === 0">
+    <span>No transactions found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="transactions && transactions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="totalAmount"><span>Total Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="date"><span>Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="genericSubItemsPurchased"><span>Generic Sub Items Purchased</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="costSubItemsPurchased"><span>Cost Sub Items Purchased</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="numberOfMemberships"><span>Number Of Memberships</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="donation"><span>Donation</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="eventDonation"><span>Event Donation</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tickets.id"><span>Tickets</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="membershipLevel.id"><span>Membership Level</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="person.id"><span>Person</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of transactions; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/transaction', transaction.id, 'view']">{{ transaction.id }}</a>
+          </td>
+          <td>{{ transaction.totalAmount }}</td>
+          <td>{{ transaction.date | formatMediumDate }}</td>
+          <td>{{ transaction.genericSubItemsPurchased }}</td>
+          <td>{{ transaction.costSubItemsPurchased }}</td>
+          <td>{{ transaction.numberOfMemberships }}</td>
+          <td>{{ transaction.donation }}</td>
+          <td>{{ transaction.eventDonation }}</td>
+          <td>{{ transaction.notes }}</td>
+          <td>
+            <div *ngIf="transaction.tickets">
+              <a [routerLink]="['/ticket', transaction.tickets?.id, 'view']">{{ transaction.tickets?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transaction.membershipLevel">
+              <a [routerLink]="['/membership-level', transaction.membershipLevel?.id, 'view']">{{ transaction.membershipLevel?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transaction.person">
+              <a [routerLink]="['/person', transaction.person?.id, 'view']">{{ transaction.person?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/transaction', transaction.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/transaction', transaction.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="transactions && transactions.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

@@ -85,7 +85,7 @@ describe('OrganizationPhone e2e test', () => {
     cy.get(entityCreateButtonSelector).click({ force: true });
     cy.getEntityCreateUpdateHeading('OrganizationPhone');
 
-    cy.get(`[data-cy="type"]`).type('Fantastic', { force: true }).invoke('val').should('match', new RegExp('Fantastic'));
+    cy.get(`[data-cy="type"]`).type('brand', { force: true }).invoke('val').should('match', new RegExp('brand'));
 
     cy.setFieldSelectToLastOfEntity('organization');
 

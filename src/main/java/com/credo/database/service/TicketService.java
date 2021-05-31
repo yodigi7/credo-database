@@ -2,7 +2,10 @@ package com.credo.database.service;
 
 import com.credo.database.domain.Ticket;
 import com.credo.database.repository.TicketRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -52,6 +55,9 @@ public class TicketService {
                     if (ticket.getCount() != null) {
                         existingTicket.setCount(ticket.getCount());
                     }
+                    if (ticket.getCostPerTicket() != null) {
+                        existingTicket.setCostPerTicket(ticket.getCostPerTicket());
+                    }
 
                     return existingTicket;
                 }
@@ -69,6 +75,19 @@ public class TicketService {
     public Page<Ticket> findAll(Pageable pageable) {
         log.debug("Request to get all Tickets");
         return ticketRepository.findAll(pageable);
+    }
+
+    /**
+     *  Get all the tickets where Transaction is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Ticket> findAllWhereTransactionIsNull() {
+        log.debug("Request to get all tickets where Transaction is null");
+        return StreamSupport
+            .stream(ticketRepository.findAll().spliterator(), false)
+            .filter(ticket -> ticket.getTransaction() == null)
+            .collect(Collectors.toList());
     }
 
     /**

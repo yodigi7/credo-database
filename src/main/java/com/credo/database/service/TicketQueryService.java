@@ -1,10 +1,10 @@
 package com.credo.database.service;
 
 import com.credo.database.domain.Event_;
-import com.credo.database.domain.Payment_;
 import com.credo.database.domain.Person_;
 import com.credo.database.domain.Ticket;
 import com.credo.database.domain.Ticket_;
+import com.credo.database.domain.Transaction_;
 import com.credo.database.repository.TicketRepository;
 import com.credo.database.service.criteria.TicketCriteria;
 import java.util.List;
@@ -87,22 +87,28 @@ public class TicketQueryService extends QueryService<Ticket> {
             if (criteria.getCount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCount(), Ticket_.count));
             }
+            if (criteria.getCostPerTicket() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCostPerTicket(), Ticket_.costPerTicket));
+            }
             if (criteria.getPersonId() != null) {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getPersonId(), root -> root.join(Ticket_.person, JoinType.LEFT).get(Person_.id))
                     );
             }
-            if (criteria.getPaymentId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getPaymentId(), root -> root.join(Ticket_.payments, JoinType.LEFT).get(Payment_.id))
-                    );
-            }
             if (criteria.getEventId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getEventId(), root -> root.join(Ticket_.events, JoinType.LEFT).get(Event_.id))
+                        buildSpecification(criteria.getEventId(), root -> root.join(Ticket_.event, JoinType.LEFT).get(Event_.id))
+                    );
+            }
+            if (criteria.getTransactionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getTransactionId(),
+                            root -> root.join(Ticket_.transaction, JoinType.LEFT).get(Transaction_.id)
+                        )
                     );
             }
         }

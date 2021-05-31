@@ -132,11 +132,20 @@ export class EditPersonComponent implements OnInit {
   }
 
   async updatePerson(): Promise<void> {
-    await this.sendPerson(
-      this.personService.update.bind(this.personService),
-      this.houseDetailsService.update.bind(this.houseDetailsService),
-      this.personNotesService.update.bind(this.personNotesService)
-    );
+    let personNotesFn: any;
+    let houseDetailsFn: any;
+
+    if (this.hoh.houseDetails?.id) {
+      houseDetailsFn = this.houseDetailsService.update.bind(this.houseDetailsService);
+    } else {
+      houseDetailsFn = this.houseDetailsService.create.bind(this.houseDetailsService);
+    }
+    if (this.hoh.notes?.id) {
+      personNotesFn = this.personNotesService.update.bind(this.personNotesService);
+    } else {
+      personNotesFn = this.personNotesService.create.bind(this.personNotesService);
+    }
+    await this.sendPerson(this.personService.update.bind(this.personService), houseDetailsFn, personNotesFn);
   }
 
   async createPerson(): Promise<void> {

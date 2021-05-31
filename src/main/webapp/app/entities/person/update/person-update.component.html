@@ -211,21 +211,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_relationship">Relationship</label>
-          <select class="form-control" id="field_relationship" data-cy="relationship" name="relationship" formControlName="relationship">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                relationshipOption.id === editForm.get('relationship')!.value?.id ? editForm.get('relationship')!.value : relationshipOption
-              "
-              *ngFor="let relationshipOption of relationshipsSharedCollection; trackBy: trackRelationshipById"
-            >
-              {{ relationshipOption.id }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label for="field_organizations">Organizations</label>
           <select
             class="form-control"

@@ -23,6 +23,7 @@ describe('Service Tests', () => {
       elemDefault = {
         id: 0,
         count: 0,
+        costPerTicket: 0,
       };
     });
 
@@ -59,6 +60,7 @@ describe('Service Tests', () => {
           {
             id: 1,
             count: 1,
+            costPerTicket: 1,
           },
           elemDefault
         );
@@ -96,6 +98,7 @@ describe('Service Tests', () => {
           {
             id: 1,
             count: 1,
+            costPerTicket: 1,
           },
           elemDefault
         );
@@ -147,7 +150,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Ticket to an array', () => {
-          const ticketArray: ITicket[] = [{ id: 123 }, { id: 456 }, { id: 34742 }];
+          const ticketArray: ITicket[] = [{ id: 123 }, { id: 456 }, { id: 75063 }];
           const ticketCollection: ITicket[] = [{ id: 123 }];
           expectedResult = service.addTicketToCollectionIfMissing(ticketCollection, ...ticketArray);
           expect(expectedResult).toHaveLength(3);

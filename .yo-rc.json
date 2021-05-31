@@ -44,14 +44,12 @@
     "languages": ["en", "fr"],
     "entities": [
       "Person",
-      "Relationship",
       "PersonNotes",
       "Organization",
       "OrganizationNotes",
       "PersonPhone",
       "OrganizationPhone",
       "ParishPhone",
-      "Payment",
       "Parish",
       "Event",
       "Ticket",
@@ -61,8 +59,9 @@
       "HouseDetails",
       "HouseAddress",
       "OrganizationAddress",
-      "MembershipLevel"
+      "MembershipLevel",
+      "Transaction"
     ],
-    "lastLiquibaseTimestamp": 1621052484000
+    "lastLiquibaseTimestamp": 1622479751000
   }
 }

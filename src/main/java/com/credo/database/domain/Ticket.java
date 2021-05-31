@@ -2,19 +2,8 @@ package com.credo.database.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.Min;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -37,6 +26,10 @@ public class Ticket implements Serializable {
     @Column(name = "count")
     private Integer count;
 
+    @DecimalMin(value = "0")
+    @Column(name = "cost_per_ticket")
+    private Double costPerTicket;
+
     @ManyToOne
     @JsonIgnoreProperties(
         value = {
@@ -44,12 +37,11 @@ public class Ticket implements Serializable {
             "membershipLevel",
             "headOfHouse",
             "parish",
-            "relationship",
             "organizations",
             "houseDetails",
             "notes",
             "phones",
-            "payments",
+            "transactions",
             "emails",
             "personsInHouses",
             "tickets",
@@ -58,15 +50,13 @@ public class Ticket implements Serializable {
     )
     private Person person;
 
-    @OneToMany(mappedBy = "tickets", cascade = CascadeType.ALL)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "tickets", "person" }, allowSetters = true)
-    private Set<Payment> payments = new HashSet<>();
-
-    @OneToMany(mappedBy = "tickets", cascade = CascadeType.ALL)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToOne
     @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
-    private Set<Event> events = new HashSet<>();
+    private Event event;
+
+    @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person" }, allowSetters = true)
+    @OneToOne(mappedBy = "tickets")
+    private Transaction transaction;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -95,6 +85,19 @@ public class Ticket implements Serializable {
         this.count = count;
     }
 
+    public Double getCostPerTicket() {
+        return this.costPerTicket;
+    }
+
+    public Ticket costPerTicket(Double costPerTicket) {
+        this.costPerTicket = costPerTicket;
+        return this;
+    }
+
+    public void setCostPerTicket(Double costPerTicket) {
+        this.costPerTicket = costPerTicket;
+    }
+
     public Person getPerson() {
         return this.person;
     }
@@ -108,66 +111,36 @@ public class Ticket implements Serializable {
         this.person = person;
     }
 
-    public Set<Payment> getPayments() {
-        return this.payments;
+    public Event getEvent() {
+        return this.event;
     }
 
-    public Ticket payments(Set<Payment> payments) {
-        this.setPayments(payments);
+    public Ticket event(Event event) {
+        this.setEvent(event);
         return this;
     }
 
-    public Ticket addPayment(Payment payment) {
-        this.payments.add(payment);
-        payment.setTickets(this);
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public Transaction getTransaction() {
+        return this.transaction;
+    }
+
+    public Ticket transaction(Transaction transaction) {
+        this.setTransaction(transaction);
         return this;
     }
 
-    public Ticket removePayment(Payment payment) {
-        this.payments.remove(payment);
-        payment.setTickets(null);
-        return this;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        if (this.payments != null) {
-            this.payments.forEach(i -> i.setTickets(null));
+    public void setTransaction(Transaction transaction) {
+        if (this.transaction != null) {
+            this.transaction.setTickets(null);
         }
-        if (payments != null) {
-            payments.forEach(i -> i.setTickets(this));
+        if (transaction != null) {
+            transaction.setTickets(this);
         }
-        this.payments = payments;
-    }
-
-    public Set<Event> getEvents() {
-        return this.events;
-    }
-
-    public Ticket events(Set<Event> events) {
-        this.setEvents(events);
-        return this;
-    }
-
-    public Ticket addEvent(Event event) {
-        this.events.add(event);
-        event.setTickets(this);
-        return this;
-    }
-
-    public Ticket removeEvent(Event event) {
-        this.events.remove(event);
-        event.setTickets(null);
-        return this;
-    }
-
-    public void setEvents(Set<Event> events) {
-        if (this.events != null) {
-            this.events.forEach(i -> i.setTickets(null));
-        }
-        if (events != null) {
-            events.forEach(i -> i.setTickets(this));
-        }
-        this.events = events;
+        this.transaction = transaction;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -195,6 +168,7 @@ public class Ticket implements Serializable {
         return "Ticket{" +
             "id=" + getId() +
             ", count=" + getCount() +
+            ", costPerTicket=" + getCostPerTicket() +
             "}";
     }
 }

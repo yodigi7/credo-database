@@ -76,10 +76,10 @@ export class PersonService {
 
   protected convertDateFromClient(person: IPerson): IPerson {
     if (typeof person.membershipStartDate === 'string') {
-      person.membershipStartDate = dayjs();
+      person.membershipStartDate = dayjs(person.membershipStartDate, DATE_FORMAT);
     }
     if (typeof person.membershipExpirationDate === 'string') {
-      person.membershipExpirationDate = dayjs();
+      person.membershipExpirationDate = dayjs(person.membershipExpirationDate, DATE_FORMAT);
     }
     return Object.assign({}, person, {
       membershipStartDate: person.membershipStartDate?.isValid() ? person.membershipStartDate.format(DATE_FORMAT) : undefined,

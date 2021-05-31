@@ -85,7 +85,10 @@ describe('ParishPhone e2e test', () => {
     cy.get(entityCreateButtonSelector).click({ force: true });
     cy.getEntityCreateUpdateHeading('ParishPhone');
 
-    cy.get(`[data-cy="type"]`).type('Dominica Manager', { force: true }).invoke('val').should('match', new RegExp('Dominica Manager'));
+    cy.get(`[data-cy="type"]`)
+      .type('Borders Virtual Outdoors', { force: true })
+      .invoke('val')
+      .should('match', new RegExp('Borders Virtual Outdoors'));
 
     cy.setFieldSelectToLastOfEntity('parish');
 

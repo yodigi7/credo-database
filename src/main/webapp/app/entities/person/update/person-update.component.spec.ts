@@ -13,13 +13,10 @@ import { IMembershipLevel } from 'app/entities/membership-level/membership-level
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
 import { IParish } from 'app/entities/parish/parish.model';
 import { ParishService } from 'app/entities/parish/service/parish.service';
-import { IRelationship } from 'app/entities/relationship/relationship.model';
-import { RelationshipService } from 'app/entities/relationship/service/relationship.service';
 import { IOrganization } from 'app/entities/organization/organization.model';
 import { OrganizationService } from 'app/entities/organization/service/organization.service';
 
 import { PersonUpdateComponent } from './person-update.component';
-import * as dayjs from 'dayjs';
 
 describe('Component Tests', () => {
   describe('Person Management Update Component', () => {
@@ -29,7 +26,6 @@ describe('Component Tests', () => {
     let personService: PersonService;
     let membershipLevelService: MembershipLevelService;
     let parishService: ParishService;
-    let relationshipService: RelationshipService;
     let organizationService: OrganizationService;
 
     beforeEach(() => {
@@ -46,7 +42,6 @@ describe('Component Tests', () => {
       personService = TestBed.inject(PersonService);
       membershipLevelService = TestBed.inject(MembershipLevelService);
       parishService = TestBed.inject(ParishService);
-      relationshipService = TestBed.inject(RelationshipService);
       organizationService = TestBed.inject(OrganizationService);
 
       comp = fixture.componentInstance;
@@ -131,28 +126,6 @@ describe('Component Tests', () => {
         expect(comp.parishesSharedCollection).toEqual(expectedCollection);
       });
 
-      it('Should call Relationship query and add missing value', () => {
-        const person: IPerson = { id: 456 };
-        const relationship: IRelationship = { id: 29568 };
-        person.relationship = relationship;
-
-        const relationshipCollection: IRelationship[] = [{ id: 47618 }];
-        spyOn(relationshipService, 'query').and.returnValue(of(new HttpResponse({ body: relationshipCollection })));
-        const additionalRelationships = [relationship];
-        const expectedCollection: IRelationship[] = [...additionalRelationships, ...relationshipCollection];
-        spyOn(relationshipService, 'addRelationshipToCollectionIfMissing').and.returnValue(expectedCollection);
-
-        activatedRoute.data = of({ person });
-        comp.ngOnInit();
-
-        expect(relationshipService.query).toHaveBeenCalled();
-        expect(relationshipService.addRelationshipToCollectionIfMissing).toHaveBeenCalledWith(
-          relationshipCollection,
-          ...additionalRelationships
-        );
-        expect(comp.relationshipsSharedCollection).toEqual(expectedCollection);
-      });
-
       it('Should call Organization query and add missing value', () => {
         const person: IPerson = { id: 456 };
         const organizations: IOrganization[] = [{ id: 7594 }];
@@ -185,8 +158,6 @@ describe('Component Tests', () => {
         person.membershipLevel = membershipLevel;
         const parish: IParish = { id: 82163 };
         person.parish = parish;
-        const relationship: IRelationship = { id: 66195 };
-        person.relationship = relationship;
         const organizations: IOrganization = { id: 87375 };
         person.organizations = [organizations];
 
@@ -198,7 +169,6 @@ describe('Component Tests', () => {
         expect(comp.peopleSharedCollection).toContain(headOfHouse);
         expect(comp.membershipLevelsSharedCollection).toContain(membershipLevel);
         expect(comp.parishesSharedCollection).toContain(parish);
-        expect(comp.relationshipsSharedCollection).toContain(relationship);
         expect(comp.organizationsSharedCollection).toContain(organizations);
       });
     });
@@ -220,9 +190,9 @@ describe('Component Tests', () => {
         saveSubject.complete();
 
         // THEN
-        // expect(comp.previousState).toHaveBeenCalled();
-        // expect(personService.update).toHaveBeenCalledWith(person);
-        // expect(comp.isSaving).toEqual(false);
+        expect(comp.previousState).toHaveBeenCalled();
+        expect(personService.update).toHaveBeenCalledWith(person);
+        expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', () => {
@@ -261,9 +231,9 @@ describe('Component Tests', () => {
         saveSubject.error('This is an error!');
 
         // THEN
-        // expect(personService.update).toHaveBeenCalledWith(person);
-        // expect(comp.isSaving).toEqual(false);
-        // expect(comp.previousState).not.toHaveBeenCalled();
+        expect(personService.update).toHaveBeenCalledWith(person);
+        expect(comp.isSaving).toEqual(false);
+        expect(comp.previousState).not.toHaveBeenCalled();
       });
     });
 
@@ -288,14 +258,6 @@ describe('Component Tests', () => {
         it('Should return tracked Parish primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackParishById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
-      describe('trackRelationshipById', () => {
-        it('Should return tracked Relationship primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackRelationshipById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

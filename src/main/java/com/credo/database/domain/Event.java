@@ -3,15 +3,10 @@ package com.credo.database.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -37,9 +32,10 @@ public class Event implements Serializable {
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "person", "payments", "events" }, allowSetters = true)
-    private Ticket tickets;
+    @OneToMany(mappedBy = "event")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "person", "event", "transaction" }, allowSetters = true)
+    private Set<Ticket> tickets = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -81,17 +77,35 @@ public class Event implements Serializable {
         this.date = date;
     }
 
-    public Ticket getTickets() {
+    public Set<Ticket> getTickets() {
         return this.tickets;
     }
 
-    public Event tickets(Ticket ticket) {
-        this.setTickets(ticket);
+    public Event tickets(Set<Ticket> tickets) {
+        this.setTickets(tickets);
         return this;
     }
 
-    public void setTickets(Ticket ticket) {
-        this.tickets = ticket;
+    public Event addTickets(Ticket ticket) {
+        this.tickets.add(ticket);
+        ticket.setEvent(this);
+        return this;
+    }
+
+    public Event removeTickets(Ticket ticket) {
+        this.tickets.remove(ticket);
+        ticket.setEvent(null);
+        return this;
+    }
+
+    public void setTickets(Set<Ticket> tickets) {
+        if (this.tickets != null) {
+            this.tickets.forEach(i -> i.setEvent(null));
+        }
+        if (tickets != null) {
+            tickets.forEach(i -> i.setEvent(this));
+        }
+        this.tickets = tickets;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

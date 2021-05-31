@@ -37,10 +37,11 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnDestr
     this.personFormGroup.addControl('emails', this.fb.array([]));
     this.personFormGroup.setControl('phones', this.fb.array([]));
     this.personFormGroup.setControl('emails', this.fb.array([]));
-    const initMembershipLevels = (res: EntityArrayResponseType): void => {
-      this.membershipLevels = res.body ?? [];
-    };
-    membershipLevelService.query().subscribe(initMembershipLevels);
+    this.subscribers.push(
+      membershipLevelService.query().subscribe((res: EntityArrayResponseType): void => {
+        this.membershipLevels = res.body ?? [];
+      })
+    );
   }
 
   createPhoneFormGroup(): FormGroup {
@@ -110,8 +111,6 @@ export class EditPersonSubformComponent implements ControlValueAccessor, OnDestr
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscribers) {
-      sub.unsubscribe();
-    }
+    this.subscribers.forEach(sub => sub.unsubscribe());
   }
 }

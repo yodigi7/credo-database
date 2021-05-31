@@ -3,12 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { IEvent, Event } from '../event.model';
 import { EventService } from '../service/event.service';
-import { ITicket } from 'app/entities/ticket/ticket.model';
-import { TicketService } from 'app/entities/ticket/service/ticket.service';
 
 @Component({
   selector: 'jhi-event-update',
@@ -17,27 +15,17 @@ import { TicketService } from 'app/entities/ticket/service/ticket.service';
 export class EventUpdateComponent implements OnInit {
   isSaving = false;
 
-  ticketsSharedCollection: ITicket[] = [];
-
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
     date: [],
-    tickets: [],
   });
 
-  constructor(
-    protected eventService: EventService,
-    protected ticketService: TicketService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+  constructor(protected eventService: EventService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ event }) => {
       this.updateForm(event);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -53,10 +41,6 @@ export class EventUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.eventService.create(event));
     }
-  }
-
-  trackTicketById(index: number, item: ITicket): number {
-    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IEvent>>): void {
@@ -83,18 +67,7 @@ export class EventUpdateComponent implements OnInit {
       id: event.id,
       name: event.name,
       date: event.date,
-      tickets: event.tickets,
     });
-
-    this.ticketsSharedCollection = this.ticketService.addTicketToCollectionIfMissing(this.ticketsSharedCollection, event.tickets);
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.ticketService
-      .query()
-      .pipe(map((res: HttpResponse<ITicket[]>) => res.body ?? []))
-      .pipe(map((tickets: ITicket[]) => this.ticketService.addTicketToCollectionIfMissing(tickets, this.editForm.get('tickets')!.value)))
-      .subscribe((tickets: ITicket[]) => (this.ticketsSharedCollection = tickets));
   }
 
   protected createFromForm(): IEvent {
@@ -103,7 +76,6 @@ export class EventUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
       date: this.editForm.get(['date'])!.value,
-      tickets: this.editForm.get(['tickets'])!.value,
     };
   }
 }

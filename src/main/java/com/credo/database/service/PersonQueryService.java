@@ -4,14 +4,13 @@ import com.credo.database.domain.HouseDetails_;
 import com.credo.database.domain.MembershipLevel_;
 import com.credo.database.domain.Organization_;
 import com.credo.database.domain.Parish_;
-import com.credo.database.domain.Payment_;
 import com.credo.database.domain.Person;
 import com.credo.database.domain.PersonEmail_;
 import com.credo.database.domain.PersonNotes_;
 import com.credo.database.domain.PersonPhone_;
 import com.credo.database.domain.Person_;
-import com.credo.database.domain.Relationship_;
 import com.credo.database.domain.Ticket_;
+import com.credo.database.domain.Transaction_;
 import com.credo.database.repository.PersonRepository;
 import com.credo.database.service.criteria.PersonCriteria;
 import java.util.List;
@@ -158,15 +157,6 @@ public class PersonQueryService extends QueryService<Person> {
                         buildSpecification(criteria.getParishId(), root -> root.join(Person_.parish, JoinType.LEFT).get(Parish_.id))
                     );
             }
-            if (criteria.getRelationshipId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getRelationshipId(),
-                            root -> root.join(Person_.relationship, JoinType.LEFT).get(Relationship_.id)
-                        )
-                    );
-            }
             if (criteria.getOrganizationsId() != null) {
                 specification =
                     specification.and(
@@ -197,10 +187,13 @@ public class PersonQueryService extends QueryService<Person> {
                         buildSpecification(criteria.getPhonesId(), root -> root.join(Person_.phones, JoinType.LEFT).get(PersonPhone_.id))
                     );
             }
-            if (criteria.getPaymentsId() != null) {
+            if (criteria.getTransactionsId() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(criteria.getPaymentsId(), root -> root.join(Person_.payments, JoinType.LEFT).get(Payment_.id))
+                        buildSpecification(
+                            criteria.getTransactionsId(),
+                            root -> root.join(Person_.transactions, JoinType.LEFT).get(Transaction_.id)
+                        )
                     );
             }
             if (criteria.getEmailsId() != null) {

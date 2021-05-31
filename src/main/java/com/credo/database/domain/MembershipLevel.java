@@ -1,10 +1,9 @@
 package com.credo.database.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.CascadeType;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,9 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MembershipLevel.
@@ -37,7 +35,7 @@ public class MembershipLevel implements Serializable {
     @Column(name = "level", nullable = false, unique = true)
     private String level;
 
-    @OneToMany(mappedBy = "membershipLevel", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "membershipLevel")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
@@ -45,12 +43,11 @@ public class MembershipLevel implements Serializable {
             "membershipLevel",
             "headOfHouse",
             "parish",
-            "relationship",
             "organizations",
             "houseDetails",
             "notes",
             "phones",
-            "payments",
+            "transactions",
             "emails",
             "personsInHouses",
             "tickets",

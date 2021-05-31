@@ -13,10 +13,6 @@ entity Person {
     isDeceased Boolean required,
 }
 
-entity Relationship {
-    relationship String,
-}
-
 entity PersonNotes {
     notes String,
 }
@@ -45,9 +41,14 @@ entity ParishPhone {
     type String,
 }
 
-entity Payment {
-    amount Double min(0),
+entity Transaction {
+    totalAmount Double min(0),
     date LocalDate,
+    genericSubItemsPurchased String,
+    costSubItemsPurchased Double min(0),
+    numberOfMemberships Integer min(0),
+    donation Double min(0),
+    eventDonation Double min(0),
     notes String,
 }
 
@@ -62,6 +63,7 @@ entity Event {
 
 entity Ticket {
     count Integer min(0),
+    costPerTicket Double min(0),
 }
 
 entity PersonEmail {
@@ -117,7 +119,7 @@ enum YesNoEmpty {
 }
 
 relationship ManyToOne {
-    Payment{tickets} to Ticket{payment},
+    Transaction{membershipLevel} to MembershipLevel,
     OrganizationAddress{organization} to Organization{addresses},
     Organization{parish} to Parish{organizations},
     OrganizationPhone{organization} to Organization{phones},
@@ -125,18 +127,18 @@ relationship ManyToOne {
     Person{membershipLevel} to MembershipLevel{people},
     PersonPhone{person} to Person{phones},
     ParishPhone{parish} to Parish{phones},
-    Payment{person} to Person{payments},
+    Transaction{person} to Person{transactions},
     PersonEmail{person} to Person{emails},
     Person{headOfHouse} to Person{personsInHouse},
     Ticket{person} to Person{tickets},
     Ticket{event} to Event{tickets},
     Person{parish} to Parish{people},
-    Person{relationship} to Relationship{people},
     ParishEmail{parish} to Parish{emails},
     HouseAddress{houseDetails} to HouseDetails{addresses}
 }
 
 relationship OneToOne {
+    Transaction{tickets} to Ticket{transaction},
     HouseDetails{headOfHouse} to Person{houseDetails},
     PersonNotes{person} to Person{notes},
     OrganizationNotes{organization} to Organization{notes},

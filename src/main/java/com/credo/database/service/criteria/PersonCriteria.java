@@ -56,8 +56,6 @@ public class PersonCriteria implements Serializable, Criteria {
 
     private LongFilter parishId;
 
-    private LongFilter relationshipId;
-
     private LongFilter organizationsId;
 
     private LongFilter houseDetailsId;
@@ -66,7 +64,7 @@ public class PersonCriteria implements Serializable, Criteria {
 
     private LongFilter phonesId;
 
-    private LongFilter paymentsId;
+    private LongFilter transactionsId;
 
     private LongFilter emailsId;
 
@@ -94,12 +92,11 @@ public class PersonCriteria implements Serializable, Criteria {
         this.membershipLevelId = other.membershipLevelId == null ? null : other.membershipLevelId.copy();
         this.headOfHouseId = other.headOfHouseId == null ? null : other.headOfHouseId.copy();
         this.parishId = other.parishId == null ? null : other.parishId.copy();
-        this.relationshipId = other.relationshipId == null ? null : other.relationshipId.copy();
         this.organizationsId = other.organizationsId == null ? null : other.organizationsId.copy();
         this.houseDetailsId = other.houseDetailsId == null ? null : other.houseDetailsId.copy();
         this.notesId = other.notesId == null ? null : other.notesId.copy();
         this.phonesId = other.phonesId == null ? null : other.phonesId.copy();
-        this.paymentsId = other.paymentsId == null ? null : other.paymentsId.copy();
+        this.transactionsId = other.transactionsId == null ? null : other.transactionsId.copy();
         this.emailsId = other.emailsId == null ? null : other.emailsId.copy();
         this.personsInHouseId = other.personsInHouseId == null ? null : other.personsInHouseId.copy();
         this.ticketsId = other.ticketsId == null ? null : other.ticketsId.copy();
@@ -365,21 +362,6 @@ public class PersonCriteria implements Serializable, Criteria {
         this.parishId = parishId;
     }
 
-    public LongFilter getRelationshipId() {
-        return relationshipId;
-    }
-
-    public LongFilter relationshipId() {
-        if (relationshipId == null) {
-            relationshipId = new LongFilter();
-        }
-        return relationshipId;
-    }
-
-    public void setRelationshipId(LongFilter relationshipId) {
-        this.relationshipId = relationshipId;
-    }
-
     public LongFilter getOrganizationsId() {
         return organizationsId;
     }
@@ -440,19 +422,19 @@ public class PersonCriteria implements Serializable, Criteria {
         this.phonesId = phonesId;
     }
 
-    public LongFilter getPaymentsId() {
-        return paymentsId;
+    public LongFilter getTransactionsId() {
+        return transactionsId;
     }
 
-    public LongFilter paymentsId() {
-        if (paymentsId == null) {
-            paymentsId = new LongFilter();
+    public LongFilter transactionsId() {
+        if (transactionsId == null) {
+            transactionsId = new LongFilter();
         }
-        return paymentsId;
+        return transactionsId;
     }
 
-    public void setPaymentsId(LongFilter paymentsId) {
-        this.paymentsId = paymentsId;
+    public void setTransactionsId(LongFilter transactionsId) {
+        this.transactionsId = transactionsId;
     }
 
     public LongFilter getEmailsId() {
@@ -527,12 +509,11 @@ public class PersonCriteria implements Serializable, Criteria {
             Objects.equals(membershipLevelId, that.membershipLevelId) &&
             Objects.equals(headOfHouseId, that.headOfHouseId) &&
             Objects.equals(parishId, that.parishId) &&
-            Objects.equals(relationshipId, that.relationshipId) &&
             Objects.equals(organizationsId, that.organizationsId) &&
             Objects.equals(houseDetailsId, that.houseDetailsId) &&
             Objects.equals(notesId, that.notesId) &&
             Objects.equals(phonesId, that.phonesId) &&
-            Objects.equals(paymentsId, that.paymentsId) &&
+            Objects.equals(transactionsId, that.transactionsId) &&
             Objects.equals(emailsId, that.emailsId) &&
             Objects.equals(personsInHouseId, that.personsInHouseId) &&
             Objects.equals(ticketsId, that.ticketsId)
@@ -559,12 +540,11 @@ public class PersonCriteria implements Serializable, Criteria {
             membershipLevelId,
             headOfHouseId,
             parishId,
-            relationshipId,
             organizationsId,
             houseDetailsId,
             notesId,
             phonesId,
-            paymentsId,
+            transactionsId,
             emailsId,
             personsInHouseId,
             ticketsId
@@ -592,12 +572,11 @@ public class PersonCriteria implements Serializable, Criteria {
             (membershipLevelId != null ? "membershipLevelId=" + membershipLevelId + ", " : "") +
             (headOfHouseId != null ? "headOfHouseId=" + headOfHouseId + ", " : "") +
             (parishId != null ? "parishId=" + parishId + ", " : "") +
-            (relationshipId != null ? "relationshipId=" + relationshipId + ", " : "") +
             (organizationsId != null ? "organizationsId=" + organizationsId + ", " : "") +
             (houseDetailsId != null ? "houseDetailsId=" + houseDetailsId + ", " : "") +
             (notesId != null ? "notesId=" + notesId + ", " : "") +
             (phonesId != null ? "phonesId=" + phonesId + ", " : "") +
-            (paymentsId != null ? "paymentsId=" + paymentsId + ", " : "") +
+            (transactionsId != null ? "transactionsId=" + transactionsId + ", " : "") +
             (emailsId != null ? "emailsId=" + emailsId + ", " : "") +
             (personsInHouseId != null ? "personsInHouseId=" + personsInHouseId + ", " : "") +
             (ticketsId != null ? "ticketsId=" + ticketsId + ", " : "") +

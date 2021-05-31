@@ -16,14 +16,12 @@
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042106_added_entity_Person.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210515042107_added_entity_Relationship.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042108_added_entity_PersonNotes.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042109_added_entity_Organization.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042110_added_entity_OrganizationNotes.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042111_added_entity_PersonPhone.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042112_added_entity_OrganizationPhone.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042113_added_entity_ParishPhone.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210515042114_added_entity_Payment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042115_added_entity_Parish.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042116_added_entity_Event.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042117_added_entity_Ticket.xml" relativeToChangelogFile="false"/>
@@ -34,6 +32,7 @@
     <include file="config/liquibase/changelog/20210515042122_added_entity_HouseAddress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042123_added_entity_OrganizationAddress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042124_added_entity_MembershipLevel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210531164910_added_entity_Transaction.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210515042106_added_entity_constraints_Person.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042108_added_entity_constraints_PersonNotes.xml" relativeToChangelogFile="false"/>
@@ -42,8 +41,6 @@
     <include file="config/liquibase/changelog/20210515042111_added_entity_constraints_PersonPhone.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042112_added_entity_constraints_OrganizationPhone.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042113_added_entity_constraints_ParishPhone.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210515042114_added_entity_constraints_Payment.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210515042116_added_entity_constraints_Event.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042117_added_entity_constraints_Ticket.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042118_added_entity_constraints_PersonEmail.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042119_added_entity_constraints_OrganizationEmail.xml" relativeToChangelogFile="false"/>
@@ -52,6 +49,7 @@
     <include file="config/liquibase/changelog/20210515042122_added_entity_constraints_HouseAddress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042123_added_entity_constraints_OrganizationAddress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210528013700_add_auto_increment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210531164910_added_entity_constraints_Transaction.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

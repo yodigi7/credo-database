@@ -36,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class OrganizationPhoneResourceIT {
 
-    private static final String DEFAULT_PHONE_NUMBER = "f0C108-5165";
-    private static final String UPDATED_PHONE_NUMBER = "B!577-5447";
+    private static final String DEFAULT_PHONE_NUMBER = "(713) 108-5165";
+    private static final String UPDATED_PHONE_NUMBER = "(301) 776-4472";
 
     private static final String DEFAULT_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_TYPE = "BBBBBBBBBB";
@@ -515,6 +515,8 @@ class OrganizationPhoneResourceIT {
         OrganizationPhone partialUpdatedOrganizationPhone = new OrganizationPhone();
         partialUpdatedOrganizationPhone.setId(organizationPhone.getId());
 
+        partialUpdatedOrganizationPhone.type(UPDATED_TYPE);
+
         restOrganizationPhoneMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedOrganizationPhone.getId())
@@ -528,7 +530,7 @@ class OrganizationPhoneResourceIT {
         assertThat(organizationPhoneList).hasSize(databaseSizeBeforeUpdate);
         OrganizationPhone testOrganizationPhone = organizationPhoneList.get(organizationPhoneList.size() - 1);
         assertThat(testOrganizationPhone.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
-        assertThat(testOrganizationPhone.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testOrganizationPhone.getType()).isEqualTo(UPDATED_TYPE);
     }
 
     @Test

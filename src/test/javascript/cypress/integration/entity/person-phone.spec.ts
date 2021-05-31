@@ -85,10 +85,7 @@ describe('PersonPhone e2e test', () => {
     cy.get(entityCreateButtonSelector).click({ force: true });
     cy.getEntityCreateUpdateHeading('PersonPhone');
 
-    cy.get(`[data-cy="type"]`)
-      .type('optimize turquoise Director', { force: true })
-      .invoke('val')
-      .should('match', new RegExp('optimize turquoise Director'));
+    cy.get(`[data-cy="type"]`).type('teal', { force: true }).invoke('val').should('match', new RegExp('teal'));
 
     cy.setFieldSelectToLastOfEntity('person');
 

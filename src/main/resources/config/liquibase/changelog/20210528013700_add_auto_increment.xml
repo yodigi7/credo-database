@@ -22,8 +22,6 @@
         <addAutoIncrement tableName="parish" columnName="id" columnDataType="bigint"/>
         <addAutoIncrement tableName="parish_email" columnName="id" columnDataType="bigint"/>
         <addAutoIncrement tableName="parish_phone" columnName="id" columnDataType="bigint"/>
-        <addAutoIncrement tableName="payment" columnName="id" columnDataType="bigint"/>
-        <addAutoIncrement tableName="relationship" columnName="id" columnDataType="bigint"/>
         <addAutoIncrement tableName="ticket" columnName="id" columnDataType="bigint"/>
 
         <addDefaultValue tableName="person" columnName="is_deceased" defaultValue="false"/>

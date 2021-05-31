@@ -13,12 +13,6 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
         loadChildren: () => import('./person/person.module').then(m => m.PersonModule),
       },
       {
-        path: 'relationship',
-        data: { pageTitle: 'Relationships', authorities: [Authority.ADMIN] },
-        canActivate: [UserRouteAccessService],
-        loadChildren: () => import('./relationship/relationship.module').then(m => m.RelationshipModule),
-      },
-      {
         path: 'person-notes',
         data: { pageTitle: 'PersonNotes', authorities: [Authority.ADMIN] },
         canActivate: [UserRouteAccessService],
@@ -53,12 +47,6 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
         data: { pageTitle: 'ParishPhones', authorities: [Authority.ADMIN] },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./parish-phone/parish-phone.module').then(m => m.ParishPhoneModule),
-      },
-      {
-        path: 'payment',
-        data: { pageTitle: 'Payments', authorities: [Authority.ADMIN] },
-        canActivate: [UserRouteAccessService],
-        loadChildren: () => import('./payment/payment.module').then(m => m.PaymentModule),
       },
       {
         path: 'parish',
@@ -119,6 +107,11 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
         data: { pageTitle: 'MembershipLevels', authorities: [Authority.ADMIN] },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./membership-level/membership-level.module').then(m => m.MembershipLevelModule),
+      },
+      {
+        path: 'transaction',
+        data: { pageTitle: 'Transactions' },
+        loadChildren: () => import('./transaction/transaction.module').then(m => m.TransactionModule),
       },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),

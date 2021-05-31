@@ -87,7 +87,11 @@ describe('Ticket e2e test', () => {
 
     cy.get(`[data-cy="count"]`).type('95897').should('have.value', '95897');
 
+    cy.get(`[data-cy="costPerTicket"]`).type('73476').should('have.value', '73476');
+
     cy.setFieldSelectToLastOfEntity('person');
+
+    cy.setFieldSelectToLastOfEntity('event');
 
     cy.get(entityCreateSaveButtonSelector).click({ force: true });
     cy.scrollTo('top', { ensureScrollable: false });

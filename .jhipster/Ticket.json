@@ -6,6 +6,12 @@
       "fieldType": "Integer",
       "fieldValidateRules": ["min"],
       "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "costPerTicket",
+      "fieldType": "Double",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
     }
   ],
   "relationships": [
@@ -16,16 +22,17 @@
       "relationshipName": "person"
     },
     {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "payment",
-      "otherEntityRelationshipName": "tickets",
-      "relationshipName": "payment"
-    },
-    {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-one",
       "otherEntityName": "event",
       "otherEntityRelationshipName": "tickets",
       "relationshipName": "event"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "transaction",
+      "otherEntityRelationshipName": "tickets",
+      "relationshipName": "transaction",
+      "ownerSide": false
     }
   ],
   "entityTableName": "ticket",

@@ -2,7 +2,6 @@ package com.credo.database.service;
 
 import com.credo.database.domain.PersonNotes;
 import com.credo.database.repository.PersonNotesRepository;
-import com.credo.database.repository.PersonRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +20,9 @@ public class PersonNotesService {
     private final Logger log = LoggerFactory.getLogger(PersonNotesService.class);
 
     private final PersonNotesRepository personNotesRepository;
-    private final PersonRepository personRepository;
 
-    public PersonNotesService(PersonNotesRepository personNotesRepository, PersonRepository personRepository) {
+    public PersonNotesService(PersonNotesRepository personNotesRepository) {
         this.personNotesRepository = personNotesRepository;
-        this.personRepository = personRepository;
     }
 
     /**
@@ -36,13 +33,6 @@ public class PersonNotesService {
      */
     public PersonNotes save(PersonNotes personNotes) {
         log.debug("Request to save PersonNotes : {}", personNotes);
-        if (personNotes.getPerson() != null) {
-            if (personNotes.getPerson().getId() != null) {
-                personNotes.setPerson(
-                    personRepository.findById(personNotes.getPerson().getId()).orElseThrow(() -> new Error("unable to save"))
-                );
-            }
-        }
         return personNotesRepository.save(personNotes);
     }
 

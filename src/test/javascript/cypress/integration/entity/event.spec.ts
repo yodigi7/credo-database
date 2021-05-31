@@ -89,8 +89,6 @@ describe('Event e2e test', () => {
 
     cy.get(`[data-cy="date"]`).type('2021-05-14').should('have.value', '2021-05-14');
 
-    cy.setFieldSelectToLastOfEntity('tickets');
-
     cy.get(entityCreateSaveButtonSelector).click({ force: true });
     cy.scrollTo('top', { ensureScrollable: false });
     cy.get(entityCreateSaveButtonSelector).should('not.exist');

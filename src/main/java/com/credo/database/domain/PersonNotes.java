@@ -2,10 +2,8 @@ package com.credo.database.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,19 +38,18 @@ public class PersonNotes implements Serializable {
             "membershipLevel",
             "headOfHouse",
             "parish",
-            "relationship",
             "organizations",
             "houseDetails",
             "notes",
             "phones",
-            "payments",
+            "transactions",
             "emails",
             "personsInHouses",
             "tickets",
         },
         allowSetters = true
     )
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH }, fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(unique = true)
     private Person person;
 

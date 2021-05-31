@@ -15,7 +15,6 @@ import com.credo.database.IntegrationTest;
 import com.credo.database.domain.Person;
 import com.credo.database.domain.PersonNotes;
 import com.credo.database.repository.PersonNotesRepository;
-import com.credo.database.repository.PersonRepository;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -50,9 +49,6 @@ class PersonNotesResourceIT {
     private PersonNotesRepository personNotesRepository;
 
     @Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -85,27 +81,6 @@ class PersonNotesResourceIT {
     @BeforeEach
     public void initTest() {
         personNotes = createEntity(em);
-    }
-
-    @Test
-    @Transactional
-    void createPersonNotesAdvanced() throws Exception {
-        Person person = new Person().isDeceased(false).isHeadOfHouse(false);
-        int databaseSizeBeforeCreate = personNotesRepository.findAll().size();
-        int databaseSizeBeforeCreatePerson = personRepository.findAll().size();
-        restPersonNotesMockMvc
-            .perform(post("/api/person").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(person)))
-            .andExpect(status().isCreated());
-        // Create the PersonNotes
-        restPersonNotesMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(personNotes)))
-            .andExpect(status().isCreated());
-
-        // Validate the PersonNotes in the database
-        List<PersonNotes> personNotesList = personNotesRepository.findAll();
-        assertThat(personNotesList).hasSize(databaseSizeBeforeCreate + 1);
-        PersonNotes testPersonNotes = personNotesList.get(personNotesList.size() - 1);
-        assertThat(testPersonNotes.getNotes()).isEqualTo(DEFAULT_NOTES);
     }
 
     @Test

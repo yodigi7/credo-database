@@ -14,12 +14,10 @@ import { OrganizationPhoneModule } from '../entities/organization-phone/organiza
 import { ParishModule } from '../entities/parish/parish.module';
 import { ParishEmailModule } from '../entities/parish-email/parish-email.module';
 import { ParishPhoneModule } from '../entities/parish-phone/parish-phone.module';
-import { PaymentModule } from '../entities/payment/payment.module';
 import { PersonModule } from '../entities/person/person.module';
 import { PersonEmailModule } from '../entities/person-email/person-email.module';
 import { PersonNotesModule } from '../entities/person-notes/person-notes.module';
 import { PersonPhoneModule } from '../entities/person-phone/person-phone.module';
-import { RelationshipModule } from '../entities/relationship/relationship.module';
 import { TicketModule } from '../entities/ticket/ticket.module';
 
 @NgModule({
@@ -37,12 +35,10 @@ import { TicketModule } from '../entities/ticket/ticket.module';
     OrganizationPhoneModule,
     ParishEmailModule,
     ParishPhoneModule,
-    PaymentModule,
     PersonModule,
     PersonEmailModule,
     PersonNotesModule,
     PersonPhoneModule,
-    RelationshipModule,
     TicketModule,
   ],
   exports: [
@@ -59,12 +55,10 @@ import { TicketModule } from '../entities/ticket/ticket.module';
     OrganizationPhoneModule,
     ParishEmailModule,
     ParishPhoneModule,
-    PaymentModule,
     PersonModule,
     PersonEmailModule,
     PersonNotesModule,
     PersonPhoneModule,
-    RelationshipModule,
     TicketModule,
   ],
 })

@@ -42,10 +42,10 @@
             <column name="membership_expiration_date" type="date">
                 <constraints nullable="true" />
             </column>
-            <column name="is_head_of_house" defaultValue="false" type="boolean">
+            <column name="is_head_of_house" type="boolean">
                 <constraints nullable="false" />
             </column>
-            <column name="is_deceased" defaultValue="false" type="boolean">
+            <column name="is_deceased" type="boolean">
                 <constraints nullable="false" />
             </column>
             <column name="spouse_id" type="bigint">
@@ -58,9 +58,6 @@
                 <constraints nullable="true" />
             </column>
             <column name="parish_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-            <column name="relationship_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->

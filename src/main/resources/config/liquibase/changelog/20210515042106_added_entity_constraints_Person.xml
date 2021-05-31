@@ -32,12 +32,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="parish"/>
 
-        <addForeignKeyConstraint baseColumnNames="relationship_id"
-                                 baseTableName="person"
-                                 constraintName="fk_person__relationship_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="relationship"/>
-
         <addForeignKeyConstraint baseColumnNames="person_id"
                                  baseTableName="rel_person__organizations"
                                  constraintName="fk_rel_person__organizations__person_id"

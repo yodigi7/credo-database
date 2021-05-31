@@ -18,10 +18,20 @@
         <dd>
           <span>{{ ticket.count }}</span>
         </dd>
+        <dt><span>Cost Per Ticket</span></dt>
+        <dd>
+          <span>{{ ticket.costPerTicket }}</span>
+        </dd>
         <dt><span>Person</span></dt>
         <dd>
           <div *ngIf="ticket.person">
             <a [routerLink]="['/person', ticket.person?.id, 'view']">{{ ticket.person?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Event</span></dt>
+        <dd>
+          <div *ngIf="ticket.event">
+            <a [routerLink]="['/event', ticket.event?.id, 'view']">{{ ticket.event?.id }}</a>
           </div>
         </dd>
       </dl>

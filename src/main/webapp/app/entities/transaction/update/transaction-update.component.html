@@ -1,0 +1,220 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-transaction-heading" data-cy="TransactionCreateUpdateHeading">Create or edit a Transaction</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalAmount">Total Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalAmount"
+            id="field_totalAmount"
+            data-cy="totalAmount"
+            formControlName="totalAmount"
+          />
+          <div *ngIf="editForm.get('totalAmount')!.invalid && (editForm.get('totalAmount')!.dirty || editForm.get('totalAmount')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('totalAmount')?.errors?.min"> This field should be at least 0. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('totalAmount')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_date">Date</label>
+          <div class="input-group">
+            <input
+              id="field_date"
+              data-cy="date"
+              type="text"
+              class="form-control"
+              name="date"
+              ngbDatepicker
+              #dateDp="ngbDatepicker"
+              formControlName="date"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="dateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_genericSubItemsPurchased">Generic Sub Items Purchased</label>
+          <input
+            type="text"
+            class="form-control"
+            name="genericSubItemsPurchased"
+            id="field_genericSubItemsPurchased"
+            data-cy="genericSubItemsPurchased"
+            formControlName="genericSubItemsPurchased"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_costSubItemsPurchased">Cost Sub Items Purchased</label>
+          <input
+            type="number"
+            class="form-control"
+            name="costSubItemsPurchased"
+            id="field_costSubItemsPurchased"
+            data-cy="costSubItemsPurchased"
+            formControlName="costSubItemsPurchased"
+          />
+          <div
+            *ngIf="
+              editForm.get('costSubItemsPurchased')!.invalid &&
+              (editForm.get('costSubItemsPurchased')!.dirty || editForm.get('costSubItemsPurchased')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('costSubItemsPurchased')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('costSubItemsPurchased')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_numberOfMemberships">Number Of Memberships</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numberOfMemberships"
+            id="field_numberOfMemberships"
+            data-cy="numberOfMemberships"
+            formControlName="numberOfMemberships"
+          />
+          <div
+            *ngIf="
+              editForm.get('numberOfMemberships')!.invalid &&
+              (editForm.get('numberOfMemberships')!.dirty || editForm.get('numberOfMemberships')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('numberOfMemberships')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('numberOfMemberships')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_donation">Donation</label>
+          <input type="number" class="form-control" name="donation" id="field_donation" data-cy="donation" formControlName="donation" />
+          <div *ngIf="editForm.get('donation')!.invalid && (editForm.get('donation')!.dirty || editForm.get('donation')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('donation')?.errors?.min"> This field should be at least 0. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('donation')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_eventDonation">Event Donation</label>
+          <input
+            type="number"
+            class="form-control"
+            name="eventDonation"
+            id="field_eventDonation"
+            data-cy="eventDonation"
+            formControlName="eventDonation"
+          />
+          <div
+            *ngIf="
+              editForm.get('eventDonation')!.invalid && (editForm.get('eventDonation')!.dirty || editForm.get('eventDonation')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('eventDonation')?.errors?.min">
+              This field should be at least 0.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('eventDonation')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_notes">Notes</label>
+          <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_tickets">Tickets</label>
+          <select class="form-control" id="field_tickets" data-cy="tickets" name="tickets" formControlName="tickets">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="ticketOption.id === editForm.get('tickets')!.value?.id ? editForm.get('tickets')!.value : ticketOption"
+              *ngFor="let ticketOption of ticketsCollection; trackBy: trackTicketById"
+            >
+              {{ ticketOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_membershipLevel">Membership Level</label>
+          <select
+            class="form-control"
+            id="field_membershipLevel"
+            data-cy="membershipLevel"
+            name="membershipLevel"
+            formControlName="membershipLevel"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                membershipLevelOption.id === editForm.get('membershipLevel')!.value?.id
+                  ? editForm.get('membershipLevel')!.value
+                  : membershipLevelOption
+              "
+              *ngFor="let membershipLevelOption of membershipLevelsSharedCollection; trackBy: trackMembershipLevelById"
+            >
+              {{ membershipLevelOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_person">Person</label>
+          <select class="form-control" id="field_person" data-cy="person" name="person" formControlName="person">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="personOption.id === editForm.get('person')!.value?.id ? editForm.get('person')!.value : personOption"
+              *ngFor="let personOption of peopleSharedCollection; trackBy: trackPersonById"
+            >
+              {{ personOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,12 +1,11 @@
 import * as dayjs from 'dayjs';
 import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { IParish } from 'app/entities/parish/parish.model';
-import { IRelationship } from 'app/entities/relationship/relationship.model';
 import { IOrganization } from 'app/entities/organization/organization.model';
 import { IHouseDetails } from 'app/entities/house-details/house-details.model';
 import { IPersonNotes } from 'app/entities/person-notes/person-notes.model';
 import { IPersonPhone } from 'app/entities/person-phone/person-phone.model';
-import { IPayment } from 'app/entities/payment/payment.model';
+import { ITransaction } from 'app/entities/transaction/transaction.model';
 import { IPersonEmail } from 'app/entities/person-email/person-email.model';
 import { ITicket } from 'app/entities/ticket/ticket.model';
 
@@ -28,12 +27,11 @@ export interface IPerson {
   membershipLevel?: IMembershipLevel | null;
   headOfHouse?: IPerson | null;
   parish?: IParish | null;
-  relationship?: IRelationship | null;
   organizations?: IOrganization[] | null;
   houseDetails?: IHouseDetails | null;
   notes?: IPersonNotes | null;
   phones?: IPersonPhone[] | null;
-  payments?: IPayment[] | null;
+  transactions?: ITransaction[] | null;
   emails?: IPersonEmail[] | null;
   personsInHouses?: IPerson[] | null;
   tickets?: ITicket[] | null;
@@ -58,12 +56,11 @@ export class Person implements IPerson {
     public membershipLevel?: IMembershipLevel | null,
     public headOfHouse?: IPerson | null,
     public parish?: IParish | null,
-    public relationship?: IRelationship | null,
     public organizations?: IOrganization[] | null,
     public houseDetails?: IHouseDetails | null,
     public notes?: IPersonNotes | null,
     public phones?: IPersonPhone[] | null,
-    public payments?: IPayment[] | null,
+    public transactions?: ITransaction[] | null,
     public emails?: IPersonEmail[] | null,
     public personsInHouses?: IPerson[] | null,
     public tickets?: ITicket[] | null
@@ -71,8 +68,6 @@ export class Person implements IPerson {
     this.currentMember = this.currentMember ?? false;
     this.isHeadOfHouse = this.isHeadOfHouse ?? false;
     this.isDeceased = this.isDeceased ?? false;
-    this.phones = this.phones ?? [];
-    this.emails = this.emails ?? [];
   }
 }
 

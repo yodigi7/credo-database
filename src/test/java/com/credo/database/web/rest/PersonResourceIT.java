@@ -20,13 +20,12 @@ import com.credo.database.domain.HouseDetails;
 import com.credo.database.domain.MembershipLevel;
 import com.credo.database.domain.Organization;
 import com.credo.database.domain.Parish;
-import com.credo.database.domain.Payment;
 import com.credo.database.domain.Person;
 import com.credo.database.domain.PersonEmail;
 import com.credo.database.domain.PersonNotes;
 import com.credo.database.domain.PersonPhone;
-import com.credo.database.domain.Relationship;
 import com.credo.database.domain.Ticket;
+import com.credo.database.domain.Transaction;
 import com.credo.database.repository.PersonRepository;
 import com.credo.database.service.PersonService;
 import java.time.LocalDate;
@@ -195,37 +194,6 @@ class PersonResourceIT {
         assertThat(testPerson.getMembershipExpirationDate()).isEqualTo(DEFAULT_MEMBERSHIP_EXPIRATION_DATE);
         assertThat(testPerson.getIsHeadOfHouse()).isEqualTo(DEFAULT_IS_HEAD_OF_HOUSE);
         assertThat(testPerson.getIsDeceased()).isEqualTo(DEFAULT_IS_DECEASED);
-    }
-
-    @Test
-    @Transactional
-    void createPersonCascades() throws Exception {
-        int databaseSizeBeforeCreate = personRepository.findAll().size();
-        person.setNotes(new PersonNotes().notes("notes"));
-        // Create the Person
-        restPersonMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(person)))
-            .andExpect(status().isCreated());
-
-        // Validate the Person in the database
-        List<Person> personList = personRepository.findAll();
-        assertThat(personList).hasSize(databaseSizeBeforeCreate + 1);
-        Person testPerson = personList.get(personList.size() - 1);
-        assertThat(testPerson.getPrefix()).isEqualTo(DEFAULT_PREFIX);
-        assertThat(testPerson.getPreferredName()).isEqualTo(DEFAULT_PREFERRED_NAME);
-        assertThat(testPerson.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
-        assertThat(testPerson.getMiddleName()).isEqualTo(DEFAULT_MIDDLE_NAME);
-        assertThat(testPerson.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
-        assertThat(testPerson.getSuffix()).isEqualTo(DEFAULT_SUFFIX);
-        assertThat(testPerson.getNameTag()).isEqualTo(DEFAULT_NAME_TAG);
-        assertThat(testPerson.getCurrentMember()).isEqualTo(DEFAULT_CURRENT_MEMBER);
-        assertThat(testPerson.getMembershipStartDate()).isEqualTo(DEFAULT_MEMBERSHIP_START_DATE);
-        assertThat(testPerson.getMembershipExpirationDate()).isEqualTo(DEFAULT_MEMBERSHIP_EXPIRATION_DATE);
-        assertThat(testPerson.getIsHeadOfHouse()).isEqualTo(DEFAULT_IS_HEAD_OF_HOUSE);
-        assertThat(testPerson.getIsDeceased()).isEqualTo(DEFAULT_IS_DECEASED);
-        assertThat(testPerson.getIsDeceased()).isEqualTo(DEFAULT_IS_DECEASED);
-        assertThat(testPerson.getNotes()).isNotNull();
-        assertThat(testPerson.getNotes().getNotes()).isNotNull();
     }
 
     @Test
@@ -1358,25 +1326,6 @@ class PersonResourceIT {
 
     @Test
     @Transactional
-    void getAllPeopleByRelationshipIsEqualToSomething() throws Exception {
-        // Initialize the database
-        personRepository.saveAndFlush(person);
-        Relationship relationship = RelationshipResourceIT.createEntity(em);
-        em.persist(relationship);
-        em.flush();
-        person.setRelationship(relationship);
-        personRepository.saveAndFlush(person);
-        Long relationshipId = relationship.getId();
-
-        // Get all the personList where relationship equals to relationshipId
-        defaultPersonShouldBeFound("relationshipId.equals=" + relationshipId);
-
-        // Get all the personList where relationship equals to (relationshipId + 1)
-        defaultPersonShouldNotBeFound("relationshipId.equals=" + (relationshipId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllPeopleByOrganizationsIsEqualToSomething() throws Exception {
         // Initialize the database
         personRepository.saveAndFlush(person);
@@ -1455,21 +1404,21 @@ class PersonResourceIT {
 
     @Test
     @Transactional
-    void getAllPeopleByPaymentsIsEqualToSomething() throws Exception {
+    void getAllPeopleByTransactionsIsEqualToSomething() throws Exception {
         // Initialize the database
         personRepository.saveAndFlush(person);
-        Payment payments = PaymentResourceIT.createEntity(em);
-        em.persist(payments);
+        Transaction transactions = TransactionResourceIT.createEntity(em);
+        em.persist(transactions);
         em.flush();
-        person.addPayments(payments);
+        person.addTransactions(transactions);
         personRepository.saveAndFlush(person);
-        Long paymentsId = payments.getId();
+        Long transactionsId = transactions.getId();
 
-        // Get all the personList where payments equals to paymentsId
-        defaultPersonShouldBeFound("paymentsId.equals=" + paymentsId);
+        // Get all the personList where transactions equals to transactionsId
+        defaultPersonShouldBeFound("transactionsId.equals=" + transactionsId);
 
-        // Get all the personList where payments equals to (paymentsId + 1)
-        defaultPersonShouldNotBeFound("paymentsId.equals=" + (paymentsId + 1));
+        // Get all the personList where transactions equals to (transactionsId + 1)
+        defaultPersonShouldNotBeFound("transactionsId.equals=" + (transactionsId + 1));
     }
 
     @Test

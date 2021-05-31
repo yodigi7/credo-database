@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,17 +35,17 @@ public class Parish implements Serializable {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "parish", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parish")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "parish", "notes", "addresses", "phones", "emails", "persons" }, allowSetters = true)
     private Set<Organization> organizations = new HashSet<>();
 
-    @OneToMany(mappedBy = "parish", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parish")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "parish" }, allowSetters = true)
     private Set<ParishPhone> phones = new HashSet<>();
 
-    @OneToMany(mappedBy = "parish", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parish")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
@@ -54,12 +53,11 @@ public class Parish implements Serializable {
             "membershipLevel",
             "headOfHouse",
             "parish",
-            "relationship",
             "organizations",
             "houseDetails",
             "notes",
             "phones",
-            "payments",
+            "transactions",
             "emails",
             "personsInHouses",
             "tickets",
@@ -68,7 +66,7 @@ public class Parish implements Serializable {
     )
     private Set<Person> people = new HashSet<>();
 
-    @OneToMany(mappedBy = "parish", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parish")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "parish" }, allowSetters = true)
     private Set<ParishEmail> emails = new HashSet<>();

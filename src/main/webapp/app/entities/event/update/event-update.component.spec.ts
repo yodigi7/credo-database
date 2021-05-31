@@ -9,8 +9,6 @@ import { of, Subject } from 'rxjs';
 
 import { EventService } from '../service/event.service';
 import { IEvent, Event } from '../event.model';
-import { ITicket } from 'app/entities/ticket/ticket.model';
-import { TicketService } from 'app/entities/ticket/service/ticket.service';
 
 import { EventUpdateComponent } from './event-update.component';
 
@@ -20,7 +18,6 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<EventUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let eventService: EventService;
-    let ticketService: TicketService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -34,41 +31,18 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(EventUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       eventService = TestBed.inject(EventService);
-      ticketService = TestBed.inject(TicketService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
-      it('Should call Ticket query and add missing value', () => {
-        const event: IEvent = { id: 456 };
-        const tickets: ITicket = { id: 4384 };
-        event.tickets = tickets;
-
-        const ticketCollection: ITicket[] = [{ id: 8656 }];
-        spyOn(ticketService, 'query').and.returnValue(of(new HttpResponse({ body: ticketCollection })));
-        const additionalTickets = [tickets];
-        const expectedCollection: ITicket[] = [...additionalTickets, ...ticketCollection];
-        spyOn(ticketService, 'addTicketToCollectionIfMissing').and.returnValue(expectedCollection);
-
-        activatedRoute.data = of({ event });
-        comp.ngOnInit();
-
-        expect(ticketService.query).toHaveBeenCalled();
-        expect(ticketService.addTicketToCollectionIfMissing).toHaveBeenCalledWith(ticketCollection, ...additionalTickets);
-        expect(comp.ticketsSharedCollection).toEqual(expectedCollection);
-      });
-
       it('Should update editForm', () => {
         const event: IEvent = { id: 456 };
-        const tickets: ITicket = { id: 12415 };
-        event.tickets = tickets;
 
         activatedRoute.data = of({ event });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(event));
-        expect(comp.ticketsSharedCollection).toContain(tickets);
       });
     });
 
@@ -133,16 +107,6 @@ describe('Component Tests', () => {
         expect(eventService.update).toHaveBeenCalledWith(event);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('Tracking relationships identifiers', () => {
-      describe('trackTicketById', () => {
-        it('Should return tracked Ticket primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackTicketById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
       });
     });
   });

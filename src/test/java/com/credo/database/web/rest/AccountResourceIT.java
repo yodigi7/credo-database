@@ -17,7 +17,6 @@ import com.credo.database.service.UserService;
 import com.credo.database.service.dto.AdminUserDTO;
 import com.credo.database.service.dto.PasswordChangeDTO;
 import com.credo.database.web.rest.vm.ManagedUserVM;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -104,54 +103,6 @@ class AccountResourceIT {
         restAccountMockMvc
             .perform(get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser("save-account")
-    void testSaveAccount() throws Exception {
-        User user = new User();
-        user.setLogin("save-account");
-        user.setPassword(RandomStringUtils.random(60));
-        user.setActivated(true);
-        userRepository.saveAndFlush(user);
-
-        AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin("not-used");
-        userDTO.setActivated(false);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
-
-        restAccountMockMvc
-            .perform(post("/api/account").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(userDTO)))
-            .andExpect(status().isOk());
-
-        User updatedUser = userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
-        assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
-        assertThat(updatedUser.isActivated()).isTrue();
-        assertThat(updatedUser.getAuthorities()).isEmpty();
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser("save-existing-login")
-    void testSaveExistingLogin() throws Exception {
-        User user = new User();
-        user.setLogin("save-existing-login");
-        user.setPassword(RandomStringUtils.random(60));
-        user.setActivated(true);
-        userRepository.saveAndFlush(user);
-
-        AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin("not-used");
-        userDTO.setActivated(false);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
-
-        restAccountMockMvc
-            .perform(post("/api/account").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(userDTO)))
-            .andExpect(status().isOk());
-
-        User updatedUser = userRepository.findOneByLogin("save-existing-login").orElse(null);
-        assertThat(updatedUser.getLogin()).isEqualTo("save-existing-login");
     }
 
     @Test

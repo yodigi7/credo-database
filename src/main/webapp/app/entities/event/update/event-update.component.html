@@ -37,19 +37,6 @@
             </span>
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_tickets">Tickets</label>
-          <select class="form-control" id="field_tickets" data-cy="tickets" name="tickets" formControlName="tickets">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="ticketOption.id === editForm.get('tickets')!.value?.id ? editForm.get('tickets')!.value : ticketOption"
-              *ngFor="let ticketOption of ticketsSharedCollection; trackBy: trackTicketById"
-            >
-              {{ ticketOption.id }}
-            </option>
-          </select>
-        </div>
       </div>
 
       <div>

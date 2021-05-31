@@ -36,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class PersonPhoneResourceIT {
 
-    private static final String DEFAULT_PHONE_NUMBER = "8!/156-2924";
-    private static final String UPDATED_PHONE_NUMBER = "711-8747";
+    private static final String DEFAULT_PHONE_NUMBER = "(201) 156-2924";
+    private static final String UPDATED_PHONE_NUMBER = "(371) 587-7015";
 
     private static final String DEFAULT_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_TYPE = "BBBBBBBBBB";

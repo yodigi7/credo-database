@@ -15,7 +15,13 @@
             <column name="count" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="cost_per_ticket" type="double">
+                <constraints nullable="true" />
+            </column>
             <column name="person_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="event_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -39,6 +45,7 @@
                   tableName="ticket">
             <column name="id" type="numeric"/>
             <column name="count" type="numeric"/>
+            <column name="cost_per_ticket" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
