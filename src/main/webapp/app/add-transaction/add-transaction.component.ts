@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { IPerson, Person } from 'app/entities/person/person.model';
 
 @Component({
@@ -12,6 +13,7 @@ import { IPerson, Person } from 'app/entities/person/person.model';
 export class AddTransactionComponent implements OnInit {
   addTransaction: FormGroup;
   person: IPerson;
+  membershipList: IMembershipLevel;
 
   constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute, private location: Location) {}
 
@@ -43,7 +45,7 @@ export class AddTransactionComponent implements OnInit {
 
   loadFromPerson(person: IPerson): void {
     this.addTransaction.get('person')?.setValue(person);
-    // this.addTransaction.get('person')?.disable();
+    this.addTransaction.get('person')?.disable();
   }
 
   submit(): void {
