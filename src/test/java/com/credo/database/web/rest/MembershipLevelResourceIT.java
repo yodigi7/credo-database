@@ -179,13 +179,9 @@ class MembershipLevelResourceIT {
         Long id = membershipLevel.getId();
 
         defaultMembershipLevelShouldBeFound("id.equals=" + id);
-        defaultMembershipLevelShouldNotBeFound("id.notEquals=" + id);
 
         defaultMembershipLevelShouldBeFound("id.greaterThanOrEqual=" + id);
         defaultMembershipLevelShouldNotBeFound("id.greaterThan=" + id);
-
-        defaultMembershipLevelShouldBeFound("id.lessThanOrEqual=" + id);
-        defaultMembershipLevelShouldNotBeFound("id.lessThan=" + id);
     }
 
     @Test
@@ -203,19 +199,6 @@ class MembershipLevelResourceIT {
 
     @Test
     @Transactional
-    void getAllMembershipLevelsByLevelIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        membershipLevelRepository.saveAndFlush(membershipLevel);
-
-        // Get all the membershipLevelList where level not equals to DEFAULT_LEVEL
-        defaultMembershipLevelShouldNotBeFound("level.notEquals=" + DEFAULT_LEVEL);
-
-        // Get all the membershipLevelList where level not equals to UPDATED_LEVEL
-        defaultMembershipLevelShouldBeFound("level.notEquals=" + UPDATED_LEVEL);
-    }
-
-    @Test
-    @Transactional
     void getAllMembershipLevelsByLevelIsInShouldWork() throws Exception {
         // Initialize the database
         membershipLevelRepository.saveAndFlush(membershipLevel);
@@ -229,19 +212,6 @@ class MembershipLevelResourceIT {
 
     @Test
     @Transactional
-    void getAllMembershipLevelsByLevelIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        membershipLevelRepository.saveAndFlush(membershipLevel);
-
-        // Get all the membershipLevelList where level is not null
-        defaultMembershipLevelShouldBeFound("level.specified=true");
-
-        // Get all the membershipLevelList where level is null
-        defaultMembershipLevelShouldNotBeFound("level.specified=false");
-    }
-
-    @Test
-    @Transactional
     void getAllMembershipLevelsByLevelContainsSomething() throws Exception {
         // Initialize the database
         membershipLevelRepository.saveAndFlush(membershipLevel);
@@ -251,19 +221,6 @@ class MembershipLevelResourceIT {
 
         // Get all the membershipLevelList where level contains UPDATED_LEVEL
         defaultMembershipLevelShouldNotBeFound("level.contains=" + UPDATED_LEVEL);
-    }
-
-    @Test
-    @Transactional
-    void getAllMembershipLevelsByLevelNotContainsSomething() throws Exception {
-        // Initialize the database
-        membershipLevelRepository.saveAndFlush(membershipLevel);
-
-        // Get all the membershipLevelList where level does not contain DEFAULT_LEVEL
-        defaultMembershipLevelShouldNotBeFound("level.doesNotContain=" + DEFAULT_LEVEL);
-
-        // Get all the membershipLevelList where level does not contain UPDATED_LEVEL
-        defaultMembershipLevelShouldBeFound("level.doesNotContain=" + UPDATED_LEVEL);
     }
 
     @Test

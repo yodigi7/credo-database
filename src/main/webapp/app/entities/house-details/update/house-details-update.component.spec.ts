@@ -42,10 +42,10 @@ describe('Component Tests', () => {
     describe('ngOnInit', () => {
       it('Should call headOfHouse query and add missing value', () => {
         const houseDetails: IHouseDetails = { id: 456 };
-        const headOfHouse: IPerson = { id: 20012 };
+        const headOfHouse: IPerson = { id: 26668 };
         houseDetails.headOfHouse = headOfHouse;
 
-        const headOfHouseCollection: IPerson[] = [{ id: 92077 }];
+        const headOfHouseCollection: IPerson[] = [{ id: 16289 }];
         spyOn(personService, 'query').and.returnValue(of(new HttpResponse({ body: headOfHouseCollection })));
         const expectedCollection: IPerson[] = [headOfHouse, ...headOfHouseCollection];
         spyOn(personService, 'addPersonToCollectionIfMissing').and.returnValue(expectedCollection);
@@ -60,7 +60,7 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const houseDetails: IHouseDetails = { id: 456 };
-        const headOfHouse: IPerson = { id: 87853 };
+        const headOfHouse: IPerson = { id: 34447 };
         houseDetails.headOfHouse = headOfHouse;
 
         activatedRoute.data = of({ houseDetails });

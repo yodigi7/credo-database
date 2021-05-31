@@ -159,6 +159,24 @@ class TicketResourceIT {
 
     @Test
     @Transactional
+    void getTicketsByIdFiltering() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        Long id = ticket.getId();
+
+        defaultTicketShouldBeFound("id.equals=" + id);
+        defaultTicketShouldNotBeFound("id.notEquals=" + id);
+
+        defaultTicketShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultTicketShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultTicketShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultTicketShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
     void getAllTicketsByCountIsEqualToSomething() throws Exception {
         // Initialize the database
         ticketRepository.saveAndFlush(ticket);

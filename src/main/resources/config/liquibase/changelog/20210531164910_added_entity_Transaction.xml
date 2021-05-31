@@ -30,6 +30,9 @@
             <column name="donation" type="double">
                 <constraints nullable="true" />
             </column>
+            <column name="event_donation" type="double">
+                <constraints nullable="true" />
+            </column>
             <column name="notes" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -39,15 +42,11 @@
             <column name="membership_level_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="event_donations_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="person_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <addAutoIncrement tableName="transaction" columnName="id" columnDataType="bigint"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -72,6 +71,7 @@
             <column name="cost_sub_items_purchased" type="numeric"/>
             <column name="number_of_memberships" type="numeric"/>
             <column name="donation" type="numeric"/>
+            <column name="event_donation" type="numeric"/>
             <column name="notes" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

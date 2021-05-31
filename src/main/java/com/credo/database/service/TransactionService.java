@@ -67,6 +67,9 @@ public class TransactionService {
                     if (transaction.getDonation() != null) {
                         existingTransaction.setDonation(transaction.getDonation());
                     }
+                    if (transaction.getEventDonation() != null) {
+                        existingTransaction.setEventDonation(transaction.getEventDonation());
+                    }
                     if (transaction.getNotes() != null) {
                         existingTransaction.setNotes(transaction.getNotes());
                     }

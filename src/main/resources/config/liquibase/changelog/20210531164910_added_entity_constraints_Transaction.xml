@@ -20,12 +20,6 @@
                                  referencedColumnNames="id"
                                  referencedTableName="membership_level"/>
 
-        <addForeignKeyConstraint baseColumnNames="event_donations_id"
-                                 baseTableName="transaction"
-                                 constraintName="fk_transaction__event_donations_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="event_donation"/>
-
         <addForeignKeyConstraint baseColumnNames="person_id"
                                  baseTableName="transaction"
                                  constraintName="fk_transaction__person_id"

@@ -32,6 +32,7 @@ describe('Service Tests', () => {
         costSubItemsPurchased: 0,
         numberOfMemberships: 0,
         donation: 0,
+        eventDonation: 0,
         notes: 'AAAAAAA',
       };
     });
@@ -85,6 +86,7 @@ describe('Service Tests', () => {
             costSubItemsPurchased: 1,
             numberOfMemberships: 1,
             donation: 1,
+            eventDonation: 1,
             notes: 'BBBBBB',
           },
           elemDefault
@@ -108,6 +110,7 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             date: currentDate.format(DATE_FORMAT),
+            notes: 'BBBBBB',
           },
           new Transaction()
         );
@@ -138,6 +141,7 @@ describe('Service Tests', () => {
             costSubItemsPurchased: 1,
             numberOfMemberships: 1,
             donation: 1,
+            eventDonation: 1,
             notes: 'BBBBBB',
           },
           elemDefault
@@ -195,7 +199,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Transaction to an array', () => {
-          const transactionArray: ITransaction[] = [{ id: 123 }, { id: 456 }, { id: 61420 }];
+          const transactionArray: ITransaction[] = [{ id: 123 }, { id: 456 }, { id: 47193 }];
           const transactionCollection: ITransaction[] = [{ id: 123 }];
           expectedResult = service.addTransactionToCollectionIfMissing(transactionCollection, ...transactionArray);
           expect(expectedResult).toHaveLength(3);
