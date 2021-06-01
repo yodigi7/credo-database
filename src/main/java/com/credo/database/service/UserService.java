@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tech.jhipster.security.RandomUtil;
 
 /**
  * Service class for managing users.
@@ -94,9 +93,7 @@ public class UserService {
     public User createUser(AdminUserDTO userDTO) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
-        String randomPassword = RandomUtil.generatePassword();
-        String encryptedPassword = passwordEncoder.encode(randomPassword);
-        log.error(randomPassword);
+        String encryptedPassword = passwordEncoder.encode("password");
         user.setPassword(encryptedPassword);
         user.setActivated(true);
         if (userDTO.getAuthorities() != null) {
