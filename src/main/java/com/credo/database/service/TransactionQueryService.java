@@ -1,7 +1,11 @@
 package com.credo.database.service;
 
-import com.credo.database.domain.*; // for static metamodels
+import com.credo.database.domain.Event_;
+import com.credo.database.domain.MembershipLevel_;
+import com.credo.database.domain.Person_;
+import com.credo.database.domain.Ticket_;
 import com.credo.database.domain.Transaction;
+import com.credo.database.domain.Transaction_;
 import com.credo.database.repository.TransactionRepository;
 import com.credo.database.service.criteria.TransactionCriteria;
 import java.util.List;
@@ -129,6 +133,12 @@ public class TransactionQueryService extends QueryService<Transaction> {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getPersonId(), root -> root.join(Transaction_.person, JoinType.LEFT).get(Person_.id))
+                    );
+            }
+            if (criteria.getEventId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getEventId(), root -> root.join(Transaction_.event, JoinType.LEFT).get(Event_.id))
                     );
             }
         }

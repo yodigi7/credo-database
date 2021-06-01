@@ -25,5 +25,11 @@
                                  constraintName="fk_transaction__person_id"
                                  referencedColumnNames="id"
                                  referencedTableName="person"/>
+
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="transaction"
+                                 constraintName="fk_transaction__event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="event"/>
     </changeSet>
 </databaseChangeLog>

@@ -13,6 +13,8 @@ import { IMembershipLevel } from 'app/entities/membership-level/membership-level
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
 import { IPerson } from 'app/entities/person/person.model';
 import { PersonService } from 'app/entities/person/service/person.service';
+import { IEvent } from 'app/entities/event/event.model';
+import { EventService } from 'app/entities/event/service/event.service';
 
 @Component({
   selector: 'jhi-transaction-update',
@@ -24,6 +26,7 @@ export class TransactionUpdateComponent implements OnInit {
   ticketsCollection: ITicket[] = [];
   membershipLevelsSharedCollection: IMembershipLevel[] = [];
   peopleSharedCollection: IPerson[] = [];
+  eventsSharedCollection: IEvent[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -38,6 +41,7 @@ export class TransactionUpdateComponent implements OnInit {
     tickets: [],
     membershipLevel: [],
     person: [],
+    event: [],
   });
 
   constructor(
@@ -45,6 +49,7 @@ export class TransactionUpdateComponent implements OnInit {
     protected ticketService: TicketService,
     protected membershipLevelService: MembershipLevelService,
     protected personService: PersonService,
+    protected eventService: EventService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -83,6 +88,10 @@ export class TransactionUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackEventById(index: number, item: IEvent): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITransaction>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -116,6 +125,7 @@ export class TransactionUpdateComponent implements OnInit {
       tickets: transaction.tickets,
       membershipLevel: transaction.membershipLevel,
       person: transaction.person,
+      event: transaction.event,
     });
 
     this.ticketsCollection = this.ticketService.addTicketToCollectionIfMissing(this.ticketsCollection, transaction.tickets);
@@ -124,6 +134,7 @@ export class TransactionUpdateComponent implements OnInit {
       transaction.membershipLevel
     );
     this.peopleSharedCollection = this.personService.addPersonToCollectionIfMissing(this.peopleSharedCollection, transaction.person);
+    this.eventsSharedCollection = this.eventService.addEventToCollectionIfMissing(this.eventsSharedCollection, transaction.event);
   }
 
   protected loadRelationshipsOptions(): void {
@@ -148,6 +159,12 @@ export class TransactionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPerson[]>) => res.body ?? []))
       .pipe(map((people: IPerson[]) => this.personService.addPersonToCollectionIfMissing(people, this.editForm.get('person')!.value)))
       .subscribe((people: IPerson[]) => (this.peopleSharedCollection = people));
+
+    this.eventService
+      .query()
+      .pipe(map((res: HttpResponse<IEvent[]>) => res.body ?? []))
+      .pipe(map((events: IEvent[]) => this.eventService.addEventToCollectionIfMissing(events, this.editForm.get('event')!.value)))
+      .subscribe((events: IEvent[]) => (this.eventsSharedCollection = events));
   }
 
   protected createFromForm(): ITransaction {
@@ -165,6 +182,7 @@ export class TransactionUpdateComponent implements OnInit {
       tickets: this.editForm.get(['tickets'])!.value,
       membershipLevel: this.editForm.get(['membershipLevel'])!.value,
       person: this.editForm.get(['person'])!.value,
+      event: this.editForm.get(['event'])!.value,
     };
   }
 }

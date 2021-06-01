@@ -127,6 +127,7 @@ export class EditPersonComponent implements OnInit {
       await this.createPerson();
     }
     window.scroll(0, 0);
+    this.resetPage();
   }
 
   async updatePerson(): Promise<void> {
@@ -162,21 +163,21 @@ export class EditPersonComponent implements OnInit {
     const res = await personSvcFn(this.hoh).toPromise();
     this.hoh = res.body ?? new Person();
     if (
-      this.rootPersonForm.controls.addresses.value.length ||
-      this.rootPersonForm.controls.receiveMail.value ||
-      this.rootPersonForm.controls.mailingLabel.value
+      this.rootPersonForm.get('addresses')?.value.length ||
+      this.rootPersonForm.get('receiveMail')?.value ||
+      this.rootPersonForm.get('mailingLabel')?.value
     ) {
       const houseDetails = new HouseDetails();
-      houseDetails.id = this.rootPersonForm.controls.hoh.value.controls.houseDetails.value.id;
+      houseDetails.id = this.rootPersonForm.controls.hoh.value.get('houseDetails')?.value?.id;
       houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
       houseDetails.headOfHouse = { ...this.hoh };
       houseDetails.mailingLabel = this.rootPersonForm.controls.mailingLabel.value;
       houseDetails.headOfHouse.houseDetails = null;
       await houseDetailsSvcFn(houseDetails).toPromise();
     }
-    if (this.rootPersonForm.controls.notes.value) {
+    if (this.rootPersonForm.get('notes')?.value) {
       const notes = new PersonNotes();
-      notes.id = this.rootPersonForm.controls.hoh.value.controls?.notes?.value?.id;
+      notes.id = this.rootPersonForm.controls.hoh.value.get('notes')?.value?.id;
       notes.notes = this.rootPersonForm.controls.notes.value;
       notes.person = { ...this.hoh };
       notes.person.houseDetails = undefined;

@@ -63,6 +63,12 @@
       "otherEntityName": "person",
       "otherEntityRelationshipName": "transactions",
       "relationshipName": "person"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "event",
+      "otherEntityRelationshipName": "transactions",
+      "relationshipName": "event"
     }
   ],
   "entityTableName": "transaction",

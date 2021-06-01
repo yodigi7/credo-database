@@ -2,8 +2,17 @@ package com.credo.database.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -51,10 +60,10 @@ public class Ticket implements Serializable {
     private Person person;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "tickets" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transactions", "tickets" }, allowSetters = true)
     private Event event;
 
-    @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person", "event" }, allowSetters = true)
     @OneToOne(mappedBy = "tickets")
     private Transaction transaction;
 

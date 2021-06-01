@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -57,7 +58,7 @@ public class HouseDetails implements Serializable {
     @JoinColumn(unique = true)
     private Person headOfHouse;
 
-    @OneToMany(mappedBy = "houseDetails", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "houseDetails", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "houseDetails" }, allowSetters = true)
     private Set<HouseAddress> addresses = new HashSet<>();

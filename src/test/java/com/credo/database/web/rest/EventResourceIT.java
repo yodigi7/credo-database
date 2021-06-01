@@ -2,14 +2,20 @@ package com.credo.database.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.credo.database.IntegrationTest;
 import com.credo.database.domain.Event;
 import com.credo.database.domain.Ticket;
+import com.credo.database.domain.Transaction;
 import com.credo.database.repository.EventRepository;
-import com.credo.database.service.criteria.EventCriteria;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -366,6 +372,25 @@ class EventResourceIT {
 
         // Get all the eventList where date is greater than SMALLER_DATE
         defaultEventShouldBeFound("date.greaterThan=" + SMALLER_DATE);
+    }
+
+    @Test
+    @Transactional
+    void getAllEventsByTransactionsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        eventRepository.saveAndFlush(event);
+        Transaction transactions = TransactionResourceIT.createEntity(em);
+        em.persist(transactions);
+        em.flush();
+        event.addTransactions(transactions);
+        eventRepository.saveAndFlush(event);
+        Long transactionsId = transactions.getId();
+
+        // Get all the eventList where transactions equals to transactionsId
+        defaultEventShouldBeFound("transactionsId.equals=" + transactionsId);
+
+        // Get all the eventList where transactions equals to (transactionsId + 1)
+        defaultEventShouldNotBeFound("transactionsId.equals=" + (transactionsId + 1));
     }
 
     @Test

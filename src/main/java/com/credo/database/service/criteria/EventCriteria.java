@@ -3,11 +3,7 @@ package com.credo.database.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
-import tech.jhipster.service.filter.BooleanFilter;
-import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.FloatFilter;
-import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
@@ -31,6 +27,8 @@ public class EventCriteria implements Serializable, Criteria {
 
     private LocalDateFilter date;
 
+    private LongFilter transactionsId;
+
     private LongFilter ticketsId;
 
     public EventCriteria() {}
@@ -39,6 +37,7 @@ public class EventCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.date = other.date == null ? null : other.date.copy();
+        this.transactionsId = other.transactionsId == null ? null : other.transactionsId.copy();
         this.ticketsId = other.ticketsId == null ? null : other.ticketsId.copy();
     }
 
@@ -92,6 +91,21 @@ public class EventCriteria implements Serializable, Criteria {
         this.date = date;
     }
 
+    public LongFilter getTransactionsId() {
+        return transactionsId;
+    }
+
+    public LongFilter transactionsId() {
+        if (transactionsId == null) {
+            transactionsId = new LongFilter();
+        }
+        return transactionsId;
+    }
+
+    public void setTransactionsId(LongFilter transactionsId) {
+        this.transactionsId = transactionsId;
+    }
+
     public LongFilter getTicketsId() {
         return ticketsId;
     }
@@ -120,13 +134,14 @@ public class EventCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(date, that.date) &&
+            Objects.equals(transactionsId, that.transactionsId) &&
             Objects.equals(ticketsId, that.ticketsId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, date, ticketsId);
+        return Objects.hash(id, name, date, transactionsId, ticketsId);
     }
 
     // prettier-ignore
@@ -136,6 +151,7 @@ public class EventCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (date != null ? "date=" + date + ", " : "") +
+            (transactionsId != null ? "transactionsId=" + transactionsId + ", " : "") +
             (ticketsId != null ? "ticketsId=" + ticketsId + ", " : "") +
             "}";
     }

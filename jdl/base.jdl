@@ -128,6 +128,7 @@ relationship ManyToOne {
     PersonPhone{person} to Person{phones},
     ParishPhone{parish} to Parish{phones},
     Transaction{person} to Person{transactions},
+    Transaction{event} to Event{transactions},
     PersonEmail{person} to Person{emails},
     Person{headOfHouse} to Person{personsInHouse},
     Ticket{person} to Person{tickets},

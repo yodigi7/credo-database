@@ -3,10 +3,8 @@ package com.credo.database.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
-import tech.jhipster.service.filter.BooleanFilter;
 import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.FloatFilter;
 import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LocalDateFilter;
 import tech.jhipster.service.filter.LongFilter;
@@ -49,6 +47,8 @@ public class TransactionCriteria implements Serializable, Criteria {
 
     private LongFilter personId;
 
+    private LongFilter eventId;
+
     public TransactionCriteria() {}
 
     public TransactionCriteria(TransactionCriteria other) {
@@ -64,6 +64,7 @@ public class TransactionCriteria implements Serializable, Criteria {
         this.ticketsId = other.ticketsId == null ? null : other.ticketsId.copy();
         this.membershipLevelId = other.membershipLevelId == null ? null : other.membershipLevelId.copy();
         this.personId = other.personId == null ? null : other.personId.copy();
+        this.eventId = other.eventId == null ? null : other.eventId.copy();
     }
 
     @Override
@@ -251,6 +252,21 @@ public class TransactionCriteria implements Serializable, Criteria {
         this.personId = personId;
     }
 
+    public LongFilter getEventId() {
+        return eventId;
+    }
+
+    public LongFilter eventId() {
+        if (eventId == null) {
+            eventId = new LongFilter();
+        }
+        return eventId;
+    }
+
+    public void setEventId(LongFilter eventId) {
+        this.eventId = eventId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -272,7 +288,8 @@ public class TransactionCriteria implements Serializable, Criteria {
             Objects.equals(notes, that.notes) &&
             Objects.equals(ticketsId, that.ticketsId) &&
             Objects.equals(membershipLevelId, that.membershipLevelId) &&
-            Objects.equals(personId, that.personId)
+            Objects.equals(personId, that.personId) &&
+            Objects.equals(eventId, that.eventId)
         );
     }
 
@@ -290,7 +307,8 @@ public class TransactionCriteria implements Serializable, Criteria {
             notes,
             ticketsId,
             membershipLevelId,
-            personId
+            personId,
+            eventId
         );
     }
 
@@ -310,6 +328,7 @@ public class TransactionCriteria implements Serializable, Criteria {
             (ticketsId != null ? "ticketsId=" + ticketsId + ", " : "") +
             (membershipLevelId != null ? "membershipLevelId=" + membershipLevelId + ", " : "") +
             (personId != null ? "personId=" + personId + ", " : "") +
+            (eventId != null ? "eventId=" + eventId + ", " : "") +
             "}";
     }
 }

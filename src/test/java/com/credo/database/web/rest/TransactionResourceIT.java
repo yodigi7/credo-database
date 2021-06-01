@@ -2,16 +2,22 @@ package com.credo.database.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.credo.database.IntegrationTest;
+import com.credo.database.domain.Event;
 import com.credo.database.domain.MembershipLevel;
 import com.credo.database.domain.Person;
 import com.credo.database.domain.Ticket;
 import com.credo.database.domain.Transaction;
 import com.credo.database.repository.TransactionRepository;
-import com.credo.database.service.criteria.TransactionCriteria;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -1067,6 +1073,25 @@ class TransactionResourceIT {
 
         // Get all the transactionList where person equals to (personId + 1)
         defaultTransactionShouldNotBeFound("personId.equals=" + (personId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTransactionsByEventIsEqualToSomething() throws Exception {
+        // Initialize the database
+        transactionRepository.saveAndFlush(transaction);
+        Event event = EventResourceIT.createEntity(em);
+        em.persist(event);
+        em.flush();
+        transaction.setEvent(event);
+        transactionRepository.saveAndFlush(transaction);
+        Long eventId = event.getId();
+
+        // Get all the transactionList where event equals to eventId
+        defaultTransactionShouldBeFound("eventId.equals=" + eventId);
+
+        // Get all the transactionList where event equals to (eventId + 1)
+        defaultTransactionShouldNotBeFound("eventId.equals=" + (eventId + 1));
     }
 
     /**

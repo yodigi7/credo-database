@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { tick } from '@angular/core/testing';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DATE_FORMAT } from 'app/config/input.constants';
@@ -11,7 +10,7 @@ import { MembershipLevelService } from 'app/entities/membership-level/service/me
 import { IPerson, Person } from 'app/entities/person/person.model';
 import { EntityArrayResponseType } from 'app/entities/person/service/person.service';
 import { TicketService } from 'app/entities/ticket/service/ticket.service';
-import { Ticket } from 'app/entities/ticket/ticket.model';
+import { ITicket, Ticket } from 'app/entities/ticket/ticket.model';
 import { TransactionService } from 'app/entities/transaction/service/transaction.service';
 import { Transaction } from 'app/entities/transaction/transaction.model';
 import * as dayjs from 'dayjs';
@@ -94,15 +93,15 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
     transaction.person = this.person;
     transaction.donation = this.addTransaction.get('donationAmount')?.value;
     transaction.eventDonation = this.addTransaction.get('eventDonationAmount')?.value;
-    // TODO add event
+    transaction.event = this.addTransaction.get('event')?.value;
     if (this.anyValue(['costPerTicket', 'numberOfTickets'])) {
-      let ticket = new Ticket();
+      let ticket: ITicket | null = new Ticket();
       ticket.costPerTicket = this.addTransaction.get('costPerTicket')?.value;
       ticket.count = this.addTransaction.get('numberOfTickets')?.value;
       ticket.person = this.person;
       ticket.event = this.addTransaction.get('event')?.value;
       const res = await this.ticketService.create(ticket).toPromise();
-      ticket = res.body!;
+      ticket = res.body;
       transaction.tickets = ticket;
     }
     await this.transactionService.create(transaction).toPromise();

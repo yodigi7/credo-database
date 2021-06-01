@@ -110,6 +110,8 @@ describe('Transaction e2e test', () => {
 
     cy.setFieldSelectToLastOfEntity('person');
 
+    cy.setFieldSelectToLastOfEntity('event');
+
     cy.get(entityCreateSaveButtonSelector).click({ force: true });
     cy.scrollTo('top', { ensureScrollable: false });
     cy.get(entityCreateSaveButtonSelector).should('not.exist');

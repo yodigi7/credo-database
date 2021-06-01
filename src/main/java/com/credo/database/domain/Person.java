@@ -151,7 +151,7 @@ public class Person implements Serializable {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person", "event" }, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

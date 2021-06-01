@@ -5,8 +5,15 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -31,6 +38,11 @@ public class Event implements Serializable {
 
     @Column(name = "date")
     private LocalDate date;
+
+    @OneToMany(mappedBy = "event")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person", "event" }, allowSetters = true)
+    private Set<Transaction> transactions = new HashSet<>();
 
     @OneToMany(mappedBy = "event")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -75,6 +87,37 @@ public class Event implements Serializable {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Set<Transaction> getTransactions() {
+        return this.transactions;
+    }
+
+    public Event transactions(Set<Transaction> transactions) {
+        this.setTransactions(transactions);
+        return this;
+    }
+
+    public Event addTransactions(Transaction transaction) {
+        this.transactions.add(transaction);
+        transaction.setEvent(this);
+        return this;
+    }
+
+    public Event removeTransactions(Transaction transaction) {
+        this.transactions.remove(transaction);
+        transaction.setEvent(null);
+        return this;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        if (this.transactions != null) {
+            this.transactions.forEach(i -> i.setEvent(null));
+        }
+        if (transactions != null) {
+            transactions.forEach(i -> i.setEvent(this));
+        }
+        this.transactions = transactions;
     }
 
     public Set<Ticket> getTickets() {

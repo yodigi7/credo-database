@@ -2,6 +2,7 @@ import * as dayjs from 'dayjs';
 import { ITicket } from 'app/entities/ticket/ticket.model';
 import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { IPerson } from 'app/entities/person/person.model';
+import { IEvent } from 'app/entities/event/event.model';
 
 export interface ITransaction {
   id?: number;
@@ -16,6 +17,7 @@ export interface ITransaction {
   tickets?: ITicket | null;
   membershipLevel?: IMembershipLevel | null;
   person?: IPerson | null;
+  event?: IEvent | null;
 }
 
 export class Transaction implements ITransaction {
@@ -31,7 +33,8 @@ export class Transaction implements ITransaction {
     public notes?: string | null,
     public tickets?: ITicket | null,
     public membershipLevel?: IMembershipLevel | null,
-    public person?: IPerson | null
+    public person?: IPerson | null,
+    public event?: IEvent | null
   ) {}
 }
 

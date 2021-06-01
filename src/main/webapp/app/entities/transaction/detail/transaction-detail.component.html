@@ -64,6 +64,12 @@
             <a [routerLink]="['/person', transaction.person?.id, 'view']">{{ transaction.person?.id }}</a>
           </div>
         </dd>
+        <dt><span>Event</span></dt>
+        <dd>
+          <div *ngIf="transaction.event">
+            <a [routerLink]="['/event', transaction.event?.id, 'view']">{{ transaction.event?.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

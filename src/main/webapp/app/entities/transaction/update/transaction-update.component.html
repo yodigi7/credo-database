@@ -198,6 +198,19 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_event">Event</label>
+          <select class="form-control" id="field_event" data-cy="event" name="event" formControlName="event">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="eventOption.id === editForm.get('event')!.value?.id ? editForm.get('event')!.value : eventOption"
+              *ngFor="let eventOption of eventsSharedCollection; trackBy: trackEventById"
+            >
+              {{ eventOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>
