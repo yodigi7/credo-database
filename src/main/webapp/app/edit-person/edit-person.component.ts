@@ -118,8 +118,6 @@ export class EditPersonComponent implements OnInit {
       const spouse = await this.personService.find(this.hoh.spouse.id).toPromise();
       this.rootPersonForm.controls.spouse.setValue(spouse.body);
     }
-    console.log(this.hoh);
-    console.log(this.rootPersonForm);
   }
 
   async submit(): Promise<void> {
@@ -174,8 +172,6 @@ export class EditPersonComponent implements OnInit {
       houseDetails.headOfHouse = { ...this.hoh };
       houseDetails.mailingLabel = this.rootPersonForm.controls.mailingLabel.value;
       houseDetails.headOfHouse.houseDetails = null;
-      console.log(houseDetails);
-      console.log(this.rootPersonForm.controls.hoh.value.controls);
       await houseDetailsSvcFn(houseDetails).toPromise();
     }
     if (this.rootPersonForm.controls.notes.value) {

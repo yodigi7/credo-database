@@ -20,9 +20,9 @@
               <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col" jhiSortBy="preferredName"><span>Preferred Name</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col" jhiSortBy="firstName"><span>First Name</span> <fa-icon icon="sort"></fa-icon></th>
-              <th scope="col" jhiSortBy="middleName"><span>Middle Name</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col" jhiSortBy="lastName"><span>Last Name</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col" jhiSortBy="spouse.id"><span>Spouse Name</span> <fa-icon icon="sort"></fa-icon></th>
+              <th scope="col"><span>Add Transaction</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -33,14 +33,16 @@
               </td>
               <td>{{ person.preferredName }}</td>
               <td>{{ person.firstName }}</td>
-              <td>{{ person.middleName }}</td>
               <td>{{ person.lastName }}</td>
               <td>
                 <div *ngIf="person.spouse">
-                  <a [routerLink]="['/person', getHohId(person?.spouse), 'view']"
+                  <a [routerLink]="['/edit-person', getHohId(person?.spouse)]"
                     >{{ person.spouse?.firstName }} {{ person.spouse?.lastName }}</a
                   >
                 </div>
+              </td>
+              <td>
+                <a [routerLink]="['/person', person.id, 'add-transaction']">Add Transaction</a>
               </td>
             </tr>
           </tbody>

@@ -22,14 +22,16 @@
       </span>
     </div>
     <hr />
-    <h3>Tickets</h3>
+    <h4>Tickets</h4>
     <div class="d-flex justify-content-around mb-3" style="display: flex">
       <input type="number" class="form-control" placeholder="$ cost/ticket" formControlName="costPerTicket" />
       <input type="number" class="form-control" placeholder="# of tickets" formControlName="numberOfTickets" />
       <!-- TODO do ngFor for all events -->
-      <select class="form-control" formControlName="ticketEvent">
-        <option></option>
-        <option>TODO Event 1</option>
+      <select class="form-control" name="event" formControlName="event">
+        <option [ngValue]="null">(Event)</option>
+        <option [ngValue]="eventOption" *ngFor="let eventOption of eventList">
+          {{ eventOption.name }}
+        </option>
       </select>
       <label class="text-nowrap mx-3">Total cost:</label>
       <input
@@ -39,35 +41,41 @@
         [value]="addTransaction.get('costPerTicket')?.value * addTransaction.get('numberOfTickets')?.value"
       />
     </div>
+    <h4>Event Donation</h4>
     <div class="d-flex">
-      <input type="number" class="form-control mr-5" placeholder="$ donation" formControlName="eventDonationAmount" />
-      <span>for</span>
+      <input type="number" class="form-control" placeholder="$ donation" formControlName="eventDonationAmount" />
+      <span class="mx-5">for</span>
       <!-- TODO -->
-      <select class="form-control ml-5" formControlName="donationEvent">
-        <option></option>
-        <option>TODO Event 1</option>
+      <select class="form-control" name="event" formControlName="event">
+        <option [ngValue]="null">(Event)</option>
+        <option [ngValue]="eventOption" *ngFor="let eventOption of eventList">
+          {{ eventOption.name }}
+        </option>
       </select>
     </div>
     <hr />
+    <h4>Membership</h4>
     <div class="d-flex mb-3">
-      <input type="text" class="form-control" placeholder="Description of items purchased" formControlName="itemDescriptions" />
-      <input type="number" class="form-control" placeholder="$ for total items" formControlName="itemDollarAmount" />
-    </div>
-    <div class="d-flex mb-3">
-      <select class="form-control" formControlName="membershipLevel">
-        <!-- TODO -->
-        <option></option>
-        <option>Gold</option>
-        <option>Rose</option>
-        <option>Green</option>
+      <!-- TODO -->
+      <select class="form-control" data-cy="membershipLevel" name="membershipLevel" formControlName="membershipLevel">
+        <option [ngValue]="null">(Membership Level)</option>
+        <option [ngValue]="membershipLevelOption" *ngFor="let membershipLevelOption of membershipList">
+          {{ membershipLevelOption.level }}
+        </option>
       </select>
       <input type="number" class="form-control" placeholder="# of memberships" formControlName="numberOfMemberships" />
       <!-- TODO -->
       <input type="number" class="form-control" placeholder="$ membership paid" disabled value="" />
     </div>
+    <h4>Donation</h4>
     <div class="d-flex mb-3">
       <input type="number" class="form-control" placeholder="Donation to Credo" formControlName="donationAmount" />
       <input type="number" class="form-control" disabled />
+    </div>
+    <h4>Miscellaneous items</h4>
+    <div class="d-flex mb-3">
+      <input type="text" class="form-control" placeholder="Description of items purchased" formControlName="itemDescriptions" />
+      <input type="number" class="form-control" placeholder="$ for total items" formControlName="itemDollarAmount" />
     </div>
     <div class="d-flex">
       <span class="text-nowrap mr-3">Total amount for this transaction:</span>
