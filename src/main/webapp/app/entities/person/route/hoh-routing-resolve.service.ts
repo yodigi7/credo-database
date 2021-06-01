@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Observable, of, EMPTY, merge } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { Observable, of, EMPTY, merge, from, pipe } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 
 import { IPerson, Person } from '../person.model';
 import { PersonService } from '../service/person.service';
 
 @Injectable({ providedIn: 'root' })
-export class PersonRoutingResolveService implements Resolve<IPerson> {
+export class HohRoutingResolveService implements Resolve<IPerson> {
   constructor(protected service: PersonService, protected router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IPerson> | Observable<never> {
@@ -17,13 +17,10 @@ export class PersonRoutingResolveService implements Resolve<IPerson> {
       return this.service.find(id).pipe(
         mergeMap((person: HttpResponse<Person>) => {
           // TODO finish this and test it
-          // if (person.body?.headOfHouse?.id) {
-          //   this.service.find(person.body.headOfHouse.id).pipe(
-          //     mergeMap((innerPerson: HttpResponse<Person>) => {
-          //       return of(innerPerson.body);
-          //     })
-          //   )
-          // }
+          console.error(person.body);
+          if (person.body?.headOfHouse?.id) {
+            return this.service.find(person.body.headOfHouse.id).pipe(map(res => res.body as IPerson));
+          }
           if (person.body) {
             return of(person.body);
           } else {

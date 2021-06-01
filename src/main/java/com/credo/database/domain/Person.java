@@ -94,7 +94,7 @@ public class Person implements Serializable {
         },
         allowSetters = true
     )
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST }, fetch = FetchType.EAGER)
     @JoinColumn(unique = true)
     private Person spouse;
 
@@ -102,7 +102,7 @@ public class Person implements Serializable {
     @JsonIgnoreProperties(value = { "people" }, allowSetters = true)
     private MembershipLevel membershipLevel;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(
         value = {
             "spouse",

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { PersonRoutingResolveService } from 'app/entities/person/route/person-routing-resolve.service';
+import { HohRoutingResolveService } from 'app/entities/person/route/hoh-routing-resolve.service';
 import { EditPersonComponent } from './edit-person.component';
 
 export const editPersonRoutes: Routes = [
@@ -18,7 +18,7 @@ export const editPersonRoutes: Routes = [
     path: 'edit-person/:id',
     component: EditPersonComponent,
     resolve: {
-      person: PersonRoutingResolveService,
+      person: HohRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },

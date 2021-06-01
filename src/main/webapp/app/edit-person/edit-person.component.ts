@@ -157,11 +157,13 @@ export class EditPersonComponent implements OnInit {
 
   async sendPerson(personSvcFn: any, houseDetailsSvcFn: any, personNotesSvcFn: any): Promise<void> {
     this.hoh = this.rootPersonForm.controls.hoh.value.value;
-    this.hoh.spouse = this.hasSpouse ? this.rootPersonForm.controls.spouse.value.value : null;
+    let spouse = this.hasSpouse ? this.rootPersonForm.controls.spouse.value.value : null;
+    this.hoh.spouse = spouse;
     this.hoh.isHeadOfHouse = true;
     this.hoh.personsInHouses = [];
     const res = await personSvcFn(this.hoh).toPromise();
     this.hoh = res.body ?? new Person();
+    spouse = this.deepCopy(this.hoh.spouse);
     if (
       this.rootPersonForm.get('addresses')?.value.length ||
       this.rootPersonForm.get('receiveMail')?.value ||
@@ -183,6 +185,13 @@ export class EditPersonComponent implements OnInit {
       notes.person.houseDetails = undefined;
       await personNotesSvcFn(notes).toPromise();
     }
+    if (spouse) {
+      const tempHoh = this.deepCopy(this.hoh);
+      tempHoh.spouse = null;
+      spouse.headOfHouse = tempHoh;
+      console.error(spouse);
+      await this.personService.update(spouse).toPromise();
+    }
     this.resetPage();
   }
 
@@ -191,7 +200,7 @@ export class EditPersonComponent implements OnInit {
   }
 
   /* eslint-disable */
-  deepCopy(object: object): any {
+  deepCopy(object: any): any {
     return JSON.parse(JSON.stringify(object));
   }
   /* eslint-enable */
