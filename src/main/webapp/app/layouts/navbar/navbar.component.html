@@ -38,6 +38,12 @@
           <span>Create Person</span>
         </a>
       </li>
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="ticket-view" (click)="collapseNavbar()">
+          <fa-icon icon="hand-spock" [fixedWidth]="true"></fa-icon>
+          <span>Ticket Lookup</span>
+        </a>
+      </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       <li
         ngbDropdown
