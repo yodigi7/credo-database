@@ -22,7 +22,6 @@
               <th scope="col" jhiSortBy="firstName"><span>First Name</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col" jhiSortBy="lastName"><span>Last Name</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col" jhiSortBy="spouse.id"><span>Spouse Name</span> <fa-icon icon="sort"></fa-icon></th>
-              <th scope="col"><span>Add Transaction</span> <fa-icon icon="sort"></fa-icon></th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -36,13 +35,8 @@
               <td>{{ person.lastName }}</td>
               <td>
                 <div *ngIf="person.spouse">
-                  <a [routerLink]="['/edit-person', getHohId(person?.spouse)]"
-                    >{{ person.spouse?.firstName }} {{ person.spouse?.lastName }}</a
-                  >
+                  <a [routerLink]="['/edit-person', person?.spouse?.id]">{{ person.spouse?.firstName }} {{ person.spouse?.lastName }}</a>
                 </div>
-              </td>
-              <td>
-                <a [routerLink]="['/person', person.id, 'add-transaction']">Add Transaction</a>
               </td>
             </tr>
           </tbody>

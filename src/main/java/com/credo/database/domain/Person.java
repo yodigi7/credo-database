@@ -66,7 +66,6 @@ public class Person implements Serializable {
     @JsonIgnoreProperties(
         value = {
             "spouse",
-            "membershipLevel",
             "headOfHouse",
             "parish",
             "organizations",
