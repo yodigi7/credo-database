@@ -89,6 +89,8 @@ describe('Ticket e2e test', () => {
 
     cy.get(`[data-cy="costPerTicket"]`).type('73476').should('have.value', '73476');
 
+    cy.get(`[data-cy="pickedUp"]`).should('not.be.checked');
+    cy.get(`[data-cy="pickedUp"]`).click().should('be.checked');
     cy.setFieldSelectToLastOfEntity('person');
 
     cy.setFieldSelectToLastOfEntity('event');

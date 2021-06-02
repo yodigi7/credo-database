@@ -58,6 +58,9 @@ public class TicketService {
                     if (ticket.getCostPerTicket() != null) {
                         existingTicket.setCostPerTicket(ticket.getCostPerTicket());
                     }
+                    if (ticket.getPickedUp() != null) {
+                        existingTicket.setPickedUp(ticket.getPickedUp());
+                    }
 
                     return existingTicket;
                 }

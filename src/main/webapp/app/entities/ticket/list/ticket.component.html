@@ -35,6 +35,7 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="count"><span>Count</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="costPerTicket"><span>Cost Per Ticket</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="pickedUp"><span>Picked Up</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="person.id"><span>Person</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="event.id"><span>Event</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -47,6 +48,7 @@
           </td>
           <td>{{ ticket.count }}</td>
           <td>{{ ticket.costPerTicket }}</td>
+          <td>{{ ticket.pickedUp }}</td>
           <td>
             <div *ngIf="ticket.person">
               <a [routerLink]="['/person', ticket.person?.id, 'view']">{{ ticket.person?.id }}</a>

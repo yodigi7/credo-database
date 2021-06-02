@@ -1,13 +1,6 @@
 package com.credo.database.service;
 
-import com.credo.database.domain.Organization;
-import com.credo.database.domain.OrganizationAddress_;
-import com.credo.database.domain.OrganizationEmail_;
-import com.credo.database.domain.OrganizationNotes_;
-import com.credo.database.domain.OrganizationPhone_;
-import com.credo.database.domain.Organization_;
-import com.credo.database.domain.Parish_;
-import com.credo.database.domain.Person_;
+import com.credo.database.domain.*;
 import com.credo.database.repository.OrganizationRepository;
 import com.credo.database.service.criteria.OrganizationCriteria;
 import java.util.List;

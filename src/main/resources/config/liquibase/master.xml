@@ -33,6 +33,7 @@
     <include file="config/liquibase/changelog/20210515042123_added_entity_OrganizationAddress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042124_added_entity_MembershipLevel.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210531164910_added_entity_Transaction.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210602032608_added_entity_NameTag.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20210515042106_added_entity_constraints_Person.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210515042108_added_entity_constraints_PersonNotes.xml" relativeToChangelogFile="false"/>
@@ -50,6 +51,7 @@
     <include file="config/liquibase/changelog/20210515042123_added_entity_constraints_OrganizationAddress.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210528013700_add_auto_increment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210531164910_added_entity_constraints_Transaction.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210602032608_added_entity_constraints_NameTag.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

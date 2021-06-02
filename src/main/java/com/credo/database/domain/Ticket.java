@@ -2,15 +2,9 @@ package com.credo.database.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import org.hibernate.annotations.Cache;
@@ -39,6 +33,9 @@ public class Ticket implements Serializable {
     @Column(name = "cost_per_ticket")
     private Double costPerTicket;
 
+    @Column(name = "picked_up")
+    private Boolean pickedUp;
+
     @ManyToOne
     @JsonIgnoreProperties(
         value = {
@@ -66,6 +63,11 @@ public class Ticket implements Serializable {
     @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person", "event" }, allowSetters = true)
     @OneToOne(mappedBy = "tickets")
     private Transaction transaction;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "ticket" }, allowSetters = true)
+    private Set<NameTag> nameTags = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -105,6 +107,19 @@ public class Ticket implements Serializable {
 
     public void setCostPerTicket(Double costPerTicket) {
         this.costPerTicket = costPerTicket;
+    }
+
+    public Boolean getPickedUp() {
+        return this.pickedUp;
+    }
+
+    public Ticket pickedUp(Boolean pickedUp) {
+        this.pickedUp = pickedUp;
+        return this;
+    }
+
+    public void setPickedUp(Boolean pickedUp) {
+        this.pickedUp = pickedUp;
     }
 
     public Person getPerson() {
@@ -152,6 +167,37 @@ public class Ticket implements Serializable {
         this.transaction = transaction;
     }
 
+    public Set<NameTag> getNameTags() {
+        return this.nameTags;
+    }
+
+    public Ticket nameTags(Set<NameTag> nameTags) {
+        this.setNameTags(nameTags);
+        return this;
+    }
+
+    public Ticket addNameTags(NameTag nameTag) {
+        this.nameTags.add(nameTag);
+        nameTag.setTicket(this);
+        return this;
+    }
+
+    public Ticket removeNameTags(NameTag nameTag) {
+        this.nameTags.remove(nameTag);
+        nameTag.setTicket(null);
+        return this;
+    }
+
+    public void setNameTags(Set<NameTag> nameTags) {
+        if (this.nameTags != null) {
+            this.nameTags.forEach(i -> i.setTicket(null));
+        }
+        if (nameTags != null) {
+            nameTags.forEach(i -> i.setTicket(this));
+        }
+        this.nameTags = nameTags;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -178,6 +224,7 @@ public class Ticket implements Serializable {
             "id=" + getId() +
             ", count=" + getCount() +
             ", costPerTicket=" + getCostPerTicket() +
+            ", pickedUp='" + getPickedUp() + "'" +
             "}";
     }
 }

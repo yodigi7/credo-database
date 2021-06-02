@@ -60,8 +60,9 @@
       "HouseAddress",
       "OrganizationAddress",
       "MembershipLevel",
-      "Transaction"
+      "Transaction",
+      "NameTag"
     ],
-    "lastLiquibaseTimestamp": 1622479751000
+    "lastLiquibaseTimestamp": 1622604368000
   }
 }

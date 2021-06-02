@@ -113,6 +113,11 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
         data: { pageTitle: 'Transactions' },
         loadChildren: () => import('./transaction/transaction.module').then(m => m.TransactionModule),
       },
+      {
+        path: 'name-tag',
+        data: { pageTitle: 'NameTags' },
+        loadChildren: () => import('./name-tag/name-tag.module').then(m => m.NameTagModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

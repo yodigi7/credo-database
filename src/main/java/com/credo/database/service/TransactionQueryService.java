@@ -1,11 +1,6 @@
 package com.credo.database.service;
 
-import com.credo.database.domain.Event_;
-import com.credo.database.domain.MembershipLevel_;
-import com.credo.database.domain.Person_;
-import com.credo.database.domain.Ticket_;
-import com.credo.database.domain.Transaction;
-import com.credo.database.domain.Transaction_;
+import com.credo.database.domain.*;
 import com.credo.database.repository.TransactionRepository;
 import com.credo.database.service.criteria.TransactionCriteria;
 import java.util.List;

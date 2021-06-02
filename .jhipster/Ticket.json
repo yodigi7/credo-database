@@ -12,6 +12,10 @@
       "fieldType": "Double",
       "fieldValidateRules": ["min"],
       "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "pickedUp",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
@@ -33,6 +37,12 @@
       "otherEntityRelationshipName": "tickets",
       "relationshipName": "transaction",
       "ownerSide": false
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "nameTag",
+      "otherEntityRelationshipName": "ticket",
+      "relationshipName": "nameTags"
     }
   ],
   "entityTableName": "ticket",

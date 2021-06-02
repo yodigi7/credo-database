@@ -3,16 +3,7 @@ package com.credo.database.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import org.hibernate.annotations.Cache;
@@ -62,7 +53,7 @@ public class Transaction implements Serializable {
     @Column(name = "notes")
     private String notes;
 
-    @JsonIgnoreProperties(value = { "person", "event", "transaction" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "person", "event", "transaction", "nameTags" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
     private Ticket tickets;

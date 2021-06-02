@@ -3,10 +3,7 @@ package com.credo.database.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
-import tech.jhipster.service.filter.DoubleFilter;
-import tech.jhipster.service.filter.Filter;
-import tech.jhipster.service.filter.IntegerFilter;
-import tech.jhipster.service.filter.LongFilter;
+import tech.jhipster.service.filter.*;
 
 /**
  * Criteria class for the {@link com.credo.database.domain.Ticket} entity. This class is used
@@ -27,11 +24,15 @@ public class TicketCriteria implements Serializable, Criteria {
 
     private DoubleFilter costPerTicket;
 
+    private BooleanFilter pickedUp;
+
     private LongFilter personId;
 
     private LongFilter eventId;
 
     private LongFilter transactionId;
+
+    private LongFilter nameTagsId;
 
     public TicketCriteria() {}
 
@@ -39,9 +40,11 @@ public class TicketCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.count = other.count == null ? null : other.count.copy();
         this.costPerTicket = other.costPerTicket == null ? null : other.costPerTicket.copy();
+        this.pickedUp = other.pickedUp == null ? null : other.pickedUp.copy();
         this.personId = other.personId == null ? null : other.personId.copy();
         this.eventId = other.eventId == null ? null : other.eventId.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
+        this.nameTagsId = other.nameTagsId == null ? null : other.nameTagsId.copy();
     }
 
     @Override
@@ -94,6 +97,21 @@ public class TicketCriteria implements Serializable, Criteria {
         this.costPerTicket = costPerTicket;
     }
 
+    public BooleanFilter getPickedUp() {
+        return pickedUp;
+    }
+
+    public BooleanFilter pickedUp() {
+        if (pickedUp == null) {
+            pickedUp = new BooleanFilter();
+        }
+        return pickedUp;
+    }
+
+    public void setPickedUp(BooleanFilter pickedUp) {
+        this.pickedUp = pickedUp;
+    }
+
     public LongFilter getPersonId() {
         return personId;
     }
@@ -139,6 +157,21 @@ public class TicketCriteria implements Serializable, Criteria {
         this.transactionId = transactionId;
     }
 
+    public LongFilter getNameTagsId() {
+        return nameTagsId;
+    }
+
+    public LongFilter nameTagsId() {
+        if (nameTagsId == null) {
+            nameTagsId = new LongFilter();
+        }
+        return nameTagsId;
+    }
+
+    public void setNameTagsId(LongFilter nameTagsId) {
+        this.nameTagsId = nameTagsId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -152,15 +185,17 @@ public class TicketCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(count, that.count) &&
             Objects.equals(costPerTicket, that.costPerTicket) &&
+            Objects.equals(pickedUp, that.pickedUp) &&
             Objects.equals(personId, that.personId) &&
             Objects.equals(eventId, that.eventId) &&
-            Objects.equals(transactionId, that.transactionId)
+            Objects.equals(transactionId, that.transactionId) &&
+            Objects.equals(nameTagsId, that.nameTagsId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, count, costPerTicket, personId, eventId, transactionId);
+        return Objects.hash(id, count, costPerTicket, pickedUp, personId, eventId, transactionId, nameTagsId);
     }
 
     // prettier-ignore
@@ -170,9 +205,11 @@ public class TicketCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (count != null ? "count=" + count + ", " : "") +
             (costPerTicket != null ? "costPerTicket=" + costPerTicket + ", " : "") +
+            (pickedUp != null ? "pickedUp=" + pickedUp + ", " : "") +
             (personId != null ? "personId=" + personId + ", " : "") +
             (eventId != null ? "eventId=" + eventId + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
+            (nameTagsId != null ? "nameTagsId=" + nameTagsId + ", " : "") +
             "}";
     }
 }

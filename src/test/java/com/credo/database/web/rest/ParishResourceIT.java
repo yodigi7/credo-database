@@ -12,11 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.credo.database.IntegrationTest;
-import com.credo.database.domain.Organization;
-import com.credo.database.domain.Parish;
-import com.credo.database.domain.ParishEmail;
-import com.credo.database.domain.ParishPhone;
-import com.credo.database.domain.Person;
+import com.credo.database.domain.*;
 import com.credo.database.repository.ParishRepository;
 import java.util.List;
 import java.util.Random;

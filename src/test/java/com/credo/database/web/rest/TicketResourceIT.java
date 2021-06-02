@@ -12,10 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.credo.database.IntegrationTest;
-import com.credo.database.domain.Event;
-import com.credo.database.domain.Person;
-import com.credo.database.domain.Ticket;
-import com.credo.database.domain.Transaction;
+import com.credo.database.domain.*;
 import com.credo.database.repository.TicketRepository;
 import java.util.List;
 import java.util.Random;
@@ -46,6 +43,9 @@ class TicketResourceIT {
     private static final Double UPDATED_COST_PER_TICKET = 1D;
     private static final Double SMALLER_COST_PER_TICKET = 0D - 1D;
 
+    private static final Boolean DEFAULT_PICKED_UP = false;
+    private static final Boolean UPDATED_PICKED_UP = true;
+
     private static final String ENTITY_API_URL = "/api/tickets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -70,7 +70,7 @@ class TicketResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Ticket createEntity(EntityManager em) {
-        Ticket ticket = new Ticket().count(DEFAULT_COUNT).costPerTicket(DEFAULT_COST_PER_TICKET);
+        Ticket ticket = new Ticket().count(DEFAULT_COUNT).costPerTicket(DEFAULT_COST_PER_TICKET).pickedUp(DEFAULT_PICKED_UP);
         return ticket;
     }
 
@@ -81,7 +81,7 @@ class TicketResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Ticket createUpdatedEntity(EntityManager em) {
-        Ticket ticket = new Ticket().count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET);
+        Ticket ticket = new Ticket().count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET).pickedUp(UPDATED_PICKED_UP);
         return ticket;
     }
 
@@ -105,6 +105,7 @@ class TicketResourceIT {
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(DEFAULT_COUNT);
         assertThat(testTicket.getCostPerTicket()).isEqualTo(DEFAULT_COST_PER_TICKET);
+        assertThat(testTicket.getPickedUp()).isEqualTo(DEFAULT_PICKED_UP);
     }
 
     @Test
@@ -138,7 +139,8 @@ class TicketResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ticket.getId().intValue())))
             .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)))
-            .andExpect(jsonPath("$.[*].costPerTicket").value(hasItem(DEFAULT_COST_PER_TICKET.doubleValue())));
+            .andExpect(jsonPath("$.[*].costPerTicket").value(hasItem(DEFAULT_COST_PER_TICKET.doubleValue())))
+            .andExpect(jsonPath("$.[*].pickedUp").value(hasItem(DEFAULT_PICKED_UP.booleanValue())));
     }
 
     @Test
@@ -154,7 +156,8 @@ class TicketResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(ticket.getId().intValue()))
             .andExpect(jsonPath("$.count").value(DEFAULT_COUNT))
-            .andExpect(jsonPath("$.costPerTicket").value(DEFAULT_COST_PER_TICKET.doubleValue()));
+            .andExpect(jsonPath("$.costPerTicket").value(DEFAULT_COST_PER_TICKET.doubleValue()))
+            .andExpect(jsonPath("$.pickedUp").value(DEFAULT_PICKED_UP.booleanValue()));
     }
 
     @Test
@@ -385,6 +388,58 @@ class TicketResourceIT {
 
     @Test
     @Transactional
+    void getAllTicketsByPickedUpIsEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where pickedUp equals to DEFAULT_PICKED_UP
+        defaultTicketShouldBeFound("pickedUp.equals=" + DEFAULT_PICKED_UP);
+
+        // Get all the ticketList where pickedUp equals to UPDATED_PICKED_UP
+        defaultTicketShouldNotBeFound("pickedUp.equals=" + UPDATED_PICKED_UP);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByPickedUpIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where pickedUp not equals to DEFAULT_PICKED_UP
+        defaultTicketShouldNotBeFound("pickedUp.notEquals=" + DEFAULT_PICKED_UP);
+
+        // Get all the ticketList where pickedUp not equals to UPDATED_PICKED_UP
+        defaultTicketShouldBeFound("pickedUp.notEquals=" + UPDATED_PICKED_UP);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByPickedUpIsInShouldWork() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where pickedUp in DEFAULT_PICKED_UP or UPDATED_PICKED_UP
+        defaultTicketShouldBeFound("pickedUp.in=" + DEFAULT_PICKED_UP + "," + UPDATED_PICKED_UP);
+
+        // Get all the ticketList where pickedUp equals to UPDATED_PICKED_UP
+        defaultTicketShouldNotBeFound("pickedUp.in=" + UPDATED_PICKED_UP);
+    }
+
+    @Test
+    @Transactional
+    void getAllTicketsByPickedUpIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+
+        // Get all the ticketList where pickedUp is not null
+        defaultTicketShouldBeFound("pickedUp.specified=true");
+
+        // Get all the ticketList where pickedUp is null
+        defaultTicketShouldNotBeFound("pickedUp.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllTicketsByPersonIsEqualToSomething() throws Exception {
         // Initialize the database
         ticketRepository.saveAndFlush(ticket);
@@ -441,6 +496,25 @@ class TicketResourceIT {
         defaultTicketShouldNotBeFound("transactionId.equals=" + (transactionId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllTicketsByNameTagsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        ticketRepository.saveAndFlush(ticket);
+        NameTag nameTags = NameTagResourceIT.createEntity(em);
+        em.persist(nameTags);
+        em.flush();
+        ticket.addNameTags(nameTags);
+        ticketRepository.saveAndFlush(ticket);
+        Long nameTagsId = nameTags.getId();
+
+        // Get all the ticketList where nameTags equals to nameTagsId
+        defaultTicketShouldBeFound("nameTagsId.equals=" + nameTagsId);
+
+        // Get all the ticketList where nameTags equals to (nameTagsId + 1)
+        defaultTicketShouldNotBeFound("nameTagsId.equals=" + (nameTagsId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -451,7 +525,8 @@ class TicketResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(ticket.getId().intValue())))
             .andExpect(jsonPath("$.[*].count").value(hasItem(DEFAULT_COUNT)))
-            .andExpect(jsonPath("$.[*].costPerTicket").value(hasItem(DEFAULT_COST_PER_TICKET.doubleValue())));
+            .andExpect(jsonPath("$.[*].costPerTicket").value(hasItem(DEFAULT_COST_PER_TICKET.doubleValue())))
+            .andExpect(jsonPath("$.[*].pickedUp").value(hasItem(DEFAULT_PICKED_UP.booleanValue())));
 
         // Check, that the count call also returns 1
         restTicketMockMvc
@@ -499,7 +574,7 @@ class TicketResourceIT {
         Ticket updatedTicket = ticketRepository.findById(ticket.getId()).get();
         // Disconnect from session so that the updates on updatedTicket are not directly saved in db
         em.detach(updatedTicket);
-        updatedTicket.count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET);
+        updatedTicket.count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET).pickedUp(UPDATED_PICKED_UP);
 
         restTicketMockMvc
             .perform(
@@ -515,6 +590,7 @@ class TicketResourceIT {
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(UPDATED_COUNT);
         assertThat(testTicket.getCostPerTicket()).isEqualTo(UPDATED_COST_PER_TICKET);
+        assertThat(testTicket.getPickedUp()).isEqualTo(UPDATED_PICKED_UP);
     }
 
     @Test
@@ -585,7 +661,7 @@ class TicketResourceIT {
         Ticket partialUpdatedTicket = new Ticket();
         partialUpdatedTicket.setId(ticket.getId());
 
-        partialUpdatedTicket.count(UPDATED_COUNT);
+        partialUpdatedTicket.count(UPDATED_COUNT).pickedUp(UPDATED_PICKED_UP);
 
         restTicketMockMvc
             .perform(
@@ -601,6 +677,7 @@ class TicketResourceIT {
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(UPDATED_COUNT);
         assertThat(testTicket.getCostPerTicket()).isEqualTo(DEFAULT_COST_PER_TICKET);
+        assertThat(testTicket.getPickedUp()).isEqualTo(UPDATED_PICKED_UP);
     }
 
     @Test
@@ -615,7 +692,7 @@ class TicketResourceIT {
         Ticket partialUpdatedTicket = new Ticket();
         partialUpdatedTicket.setId(ticket.getId());
 
-        partialUpdatedTicket.count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET);
+        partialUpdatedTicket.count(UPDATED_COUNT).costPerTicket(UPDATED_COST_PER_TICKET).pickedUp(UPDATED_PICKED_UP);
 
         restTicketMockMvc
             .perform(
@@ -631,6 +708,7 @@ class TicketResourceIT {
         Ticket testTicket = ticketList.get(ticketList.size() - 1);
         assertThat(testTicket.getCount()).isEqualTo(UPDATED_COUNT);
         assertThat(testTicket.getCostPerTicket()).isEqualTo(UPDATED_COST_PER_TICKET);
+        assertThat(testTicket.getPickedUp()).isEqualTo(UPDATED_PICKED_UP);
     }
 
     @Test

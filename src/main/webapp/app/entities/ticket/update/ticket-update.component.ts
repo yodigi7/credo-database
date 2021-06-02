@@ -26,6 +26,7 @@ export class TicketUpdateComponent implements OnInit {
     id: [],
     count: [null, [Validators.min(0)]],
     costPerTicket: [null, [Validators.min(0)]],
+    pickedUp: [],
     person: [],
     event: [],
   });
@@ -92,6 +93,7 @@ export class TicketUpdateComponent implements OnInit {
       id: ticket.id,
       count: ticket.count,
       costPerTicket: ticket.costPerTicket,
+      pickedUp: ticket.pickedUp,
       person: ticket.person,
       event: ticket.event,
     });
@@ -120,6 +122,7 @@ export class TicketUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       count: this.editForm.get(['count'])!.value,
       costPerTicket: this.editForm.get(['costPerTicket'])!.value,
+      pickedUp: this.editForm.get(['pickedUp'])!.value,
       person: this.editForm.get(['person'])!.value,
       event: this.editForm.get(['event'])!.value,
     };

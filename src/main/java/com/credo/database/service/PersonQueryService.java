@@ -1,16 +1,6 @@
 package com.credo.database.service;
 
-import com.credo.database.domain.HouseDetails_;
-import com.credo.database.domain.MembershipLevel_;
-import com.credo.database.domain.Organization_;
-import com.credo.database.domain.Parish_;
-import com.credo.database.domain.Person;
-import com.credo.database.domain.PersonEmail_;
-import com.credo.database.domain.PersonNotes_;
-import com.credo.database.domain.PersonPhone_;
-import com.credo.database.domain.Person_;
-import com.credo.database.domain.Ticket_;
-import com.credo.database.domain.Transaction_;
+import com.credo.database.domain.*;
 import com.credo.database.repository.PersonRepository;
 import com.credo.database.service.criteria.PersonCriteria;
 import java.util.List;

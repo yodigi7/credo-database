@@ -64,6 +64,11 @@ entity Event {
 entity Ticket {
     count Integer min(0),
     costPerTicket Double min(0),
+    pickedUp Boolean,
+}
+
+entity NameTag {
+    nameTag String,
 }
 
 entity PersonEmail {
@@ -133,6 +138,7 @@ relationship ManyToOne {
     Person{headOfHouse} to Person{personsInHouse},
     Ticket{person} to Person{tickets},
     Ticket{event} to Event{tickets},
+    NameTag{ticket} to Ticket{nameTags},
     Person{parish} to Parish{people},
     ParishEmail{parish} to Parish{emails},
     HouseAddress{houseDetails} to HouseDetails{addresses}

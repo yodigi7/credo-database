@@ -54,10 +54,10 @@ describe('Component Tests', () => {
     describe('ngOnInit', () => {
       it('Should call tickets query and add missing value', () => {
         const transaction: ITransaction = { id: 456 };
-        const tickets: ITicket = { id: 58122 };
+        const tickets: ITicket = { id: 33758 };
         transaction.tickets = tickets;
 
-        const ticketsCollection: ITicket[] = [{ id: 33758 }];
+        const ticketsCollection: ITicket[] = [{ id: 81732 }];
         spyOn(ticketService, 'query').and.returnValue(of(new HttpResponse({ body: ticketsCollection })));
         const expectedCollection: ITicket[] = [tickets, ...ticketsCollection];
         spyOn(ticketService, 'addTicketToCollectionIfMissing').and.returnValue(expectedCollection);
@@ -132,7 +132,7 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const transaction: ITransaction = { id: 456 };
-        const tickets: ITicket = { id: 81732 };
+        const tickets: ITicket = { id: 17482 };
         transaction.tickets = tickets;
         const membershipLevel: IMembershipLevel = { id: 9270 };
         transaction.membershipLevel = membershipLevel;

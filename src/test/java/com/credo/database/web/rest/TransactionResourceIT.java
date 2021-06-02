@@ -12,11 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.credo.database.IntegrationTest;
-import com.credo.database.domain.Event;
-import com.credo.database.domain.MembershipLevel;
-import com.credo.database.domain.Person;
-import com.credo.database.domain.Ticket;
-import com.credo.database.domain.Transaction;
+import com.credo.database.domain.*;
 import com.credo.database.repository.TransactionRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;

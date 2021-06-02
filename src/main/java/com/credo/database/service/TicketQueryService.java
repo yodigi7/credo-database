@@ -1,10 +1,6 @@
 package com.credo.database.service;
 
-import com.credo.database.domain.Event_;
-import com.credo.database.domain.Person_;
-import com.credo.database.domain.Ticket;
-import com.credo.database.domain.Ticket_;
-import com.credo.database.domain.Transaction_;
+import com.credo.database.domain.*;
 import com.credo.database.repository.TicketRepository;
 import com.credo.database.service.criteria.TicketCriteria;
 import java.util.List;
@@ -90,6 +86,9 @@ public class TicketQueryService extends QueryService<Ticket> {
             if (criteria.getCostPerTicket() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCostPerTicket(), Ticket_.costPerTicket));
             }
+            if (criteria.getPickedUp() != null) {
+                specification = specification.and(buildSpecification(criteria.getPickedUp(), Ticket_.pickedUp));
+            }
             if (criteria.getPersonId() != null) {
                 specification =
                     specification.and(
@@ -109,6 +108,12 @@ public class TicketQueryService extends QueryService<Ticket> {
                             criteria.getTransactionId(),
                             root -> root.join(Ticket_.transaction, JoinType.LEFT).get(Transaction_.id)
                         )
+                    );
+            }
+            if (criteria.getNameTagsId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getNameTagsId(), root -> root.join(Ticket_.nameTags, JoinType.LEFT).get(NameTag_.id))
                     );
             }
         }
