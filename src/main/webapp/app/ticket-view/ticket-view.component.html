@@ -3,7 +3,19 @@
   <div class="d-flex justify-content-center">
     ID: {{ person.id }} First Name: {{ person.firstName }} Middle Name: {{ person.middleName }} Last Name: {{ person.lastName }}
   </div>
-  <div class="d-flex justify-content-center"># of Tickets: Event: Event Date: Purchase Date: $ Amount</div>
-  <div class="d-flex justify-content-center">Name tags:</div>
-  <div class="d-flex justify-content-center">Collected: <input type="checkbox" class="form-control" /></div>
+  <form [formGroup]="form" (ngSubmit)="update()">
+    <div formArrayName="tickets" *ngFor="let ticket of (form.get('tickets') | formArray).controls; let i = index">
+      <div [formGroupName]="i">
+        <div class="d-flex justify-content-center">
+          # of Tickets: {{ ticket.value.count }} Event: {{ ticket.value.event?.name }} Event Date: {{ ticket.value.event?.date }} Purchase
+          Date: {{ ticket.value.transaction?.date }} $ Amount: {{ (ticket.value.costPerTicket || 0) * (ticket.value.count || 0) }}
+        </div>
+        <div class="d-flex justify-content-center">Name tags:</div>
+        <div class="d-flex justify-content-center">
+          Collected: <input type="checkbox" class="form-control" formControlName="pickedUp" />
+        </div>
+      </div>
+    </div>
+    <button type="submit" onsubmit="update()">Update</button>
+  </form>
 </div>

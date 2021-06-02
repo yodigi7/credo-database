@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { IPerson } from 'app/entities/person/person.model';
 import { PersonService } from 'app/entities/person/service/person.service';
+import { TicketService } from 'app/entities/ticket/service/ticket.service';
+import { ITicket, Ticket } from 'app/entities/ticket/ticket.model';
 
 @Component({
   selector: 'jhi-ticket-view',
@@ -9,11 +13,36 @@ import { PersonService } from 'app/entities/person/service/person.service';
 })
 export class ticketViewComponent implements OnInit {
   person: IPerson;
+  form = this.fb.group({
+    tickets: this.fb.array([]),
+  });
 
-  constructor(private personService: PersonService) {}
+  constructor(
+    private personService: PersonService,
+    private fb: FormBuilder,
+    private ticketService: TicketService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
-  async ngOnInit(): Promise<void> {
-    const res = await this.personService.find(1).toPromise();
-    this.person = res.body!;
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ person }) => {
+      this.person = person;
+      this.person.tickets?.forEach(ticket => {
+        (this.form.get('tickets') as FormArray).push(this.fb.group(ticket));
+      });
+    });
+  }
+
+  async update(): Promise<void> {
+    console.log(this.form.controls);
+    const tickets = (this.form.get('tickets') as FormArray).controls
+      .filter((ticket): boolean => ticket.dirty)
+      .map((ticket): ITicket => ticket.value as Ticket);
+    for (const ticket of tickets) {
+      this.person.tickets = [];
+      ticket.person = this.person;
+      await this.ticketService.update(ticket).toPromise();
+      console.log(ticket);
+    }
   }
 }

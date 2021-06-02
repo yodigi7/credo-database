@@ -21,9 +21,7 @@ import com.credo.database.repository.PersonRepository;
 import com.credo.database.service.PersonService;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -306,6 +304,48 @@ class PersonResourceIT {
             .andExpect(jsonPath("$.membershipStartDate").value(DEFAULT_MEMBERSHIP_START_DATE.toString()))
             .andExpect(jsonPath("$.membershipExpirationDate").value(DEFAULT_MEMBERSHIP_EXPIRATION_DATE.toString()))
             .andExpect(jsonPath("$.isHeadOfHouse").value(DEFAULT_IS_HEAD_OF_HOUSE.booleanValue()))
+            .andExpect(jsonPath("$.isDeceased").value(DEFAULT_IS_DECEASED.booleanValue()));
+    }
+
+    @Test
+    @Transactional
+    void getPersonGetsTickets() throws Exception {
+        // Initialize the database
+        Person person = new Person()
+            .prefix(DEFAULT_PREFIX)
+            .preferredName(DEFAULT_PREFERRED_NAME)
+            .firstName(DEFAULT_FIRST_NAME)
+            .middleName(DEFAULT_MIDDLE_NAME)
+            .lastName(DEFAULT_LAST_NAME)
+            .suffix(DEFAULT_SUFFIX)
+            .nameTag(DEFAULT_NAME_TAG)
+            .currentMember(DEFAULT_CURRENT_MEMBER)
+            .membershipStartDate(DEFAULT_MEMBERSHIP_START_DATE)
+            .membershipExpirationDate(DEFAULT_MEMBERSHIP_EXPIRATION_DATE)
+            .isHeadOfHouse(DEFAULT_IS_HEAD_OF_HOUSE)
+            .tickets(new HashSet<>(Arrays.asList(new Ticket().costPerTicket(1.0).count(1))))
+            .isDeceased(DEFAULT_IS_DECEASED);
+        personRepository.saveAndFlush(person);
+
+        // Get the person
+        restPersonMockMvc
+            .perform(get(ENTITY_API_URL_ID, person.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(person.getId().intValue()))
+            .andExpect(jsonPath("$.prefix").value(DEFAULT_PREFIX))
+            .andExpect(jsonPath("$.preferredName").value(DEFAULT_PREFERRED_NAME))
+            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
+            .andExpect(jsonPath("$.middleName").value(DEFAULT_MIDDLE_NAME))
+            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
+            .andExpect(jsonPath("$.suffix").value(DEFAULT_SUFFIX))
+            .andExpect(jsonPath("$.nameTag").value(DEFAULT_NAME_TAG))
+            .andExpect(jsonPath("$.currentMember").value(DEFAULT_CURRENT_MEMBER.booleanValue()))
+            .andExpect(jsonPath("$.membershipStartDate").value(DEFAULT_MEMBERSHIP_START_DATE.toString()))
+            .andExpect(jsonPath("$.membershipExpirationDate").value(DEFAULT_MEMBERSHIP_EXPIRATION_DATE.toString()))
+            .andExpect(jsonPath("$.isHeadOfHouse").value(DEFAULT_IS_HEAD_OF_HOUSE.booleanValue()))
+            .andExpect(jsonPath("$.tickets").isNotEmpty())
+            .andExpect(jsonPath("$.tickets[0].count").value(1))
             .andExpect(jsonPath("$.isDeceased").value(DEFAULT_IS_DECEASED.booleanValue()));
     }
 
