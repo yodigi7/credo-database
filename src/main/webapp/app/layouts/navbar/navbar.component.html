@@ -26,22 +26,26 @@
           </span>
         </a>
       </li>
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_AMBASSADOR', 'ROLE_SUPERVISOR']"
+      >
         <a class="nav-link" routerLink="search" (click)="collapseNavbar()">
-          <fa-icon icon="hand-spock" [fixedWidth]="true"></fa-icon>
+          <fa-icon icon="search" [fixedWidth]="true"></fa-icon>
           <span>Search</span>
         </a>
       </li>
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_AMBASSADOR', 'ROLE_SUPERVISOR']"
+      >
         <a class="nav-link" routerLink="edit-person" (click)="collapseNavbar()">
-          <fa-icon icon="hand-spock" [fixedWidth]="true"></fa-icon>
+          <fa-icon icon="pen" [fixedWidth]="true"></fa-icon>
           <span>Create Person</span>
-        </a>
-      </li>
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="nav-link" routerLink="ticket-view" (click)="collapseNavbar()">
-          <fa-icon icon="hand-spock" [fixedWidth]="true"></fa-icon>
-          <span>Ticket Lookup</span>
         </a>
       </li>
       <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
@@ -414,12 +418,6 @@
             <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
               <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
               <span>Sign in</span>
-            </a>
-          </li>
-          <li *ngSwitchCase="false">
-            <a class="dropdown-item" routerLink="account/register" routerLinkActive="active" (click)="collapseNavbar()" data-cy="register">
-              <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
-              <span>Register</span>
             </a>
           </li>
         </ul>
