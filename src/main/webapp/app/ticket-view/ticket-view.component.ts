@@ -34,7 +34,6 @@ export class ticketViewComponent implements OnInit {
   }
 
   async update(): Promise<void> {
-    console.log(this.form.controls);
     const tickets = (this.form.get('tickets') as FormArray).controls
       .filter((ticket): boolean => ticket.dirty)
       .map((ticket): ITicket => ticket.value as Ticket);
@@ -42,7 +41,6 @@ export class ticketViewComponent implements OnInit {
       this.person.tickets = [];
       ticket.person = this.person;
       await this.ticketService.update(ticket).toPromise();
-      console.log(ticket);
     }
   }
 }
