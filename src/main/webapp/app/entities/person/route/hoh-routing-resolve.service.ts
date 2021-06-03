@@ -17,7 +17,6 @@ export class HohRoutingResolveService implements Resolve<IPerson> {
       return this.service.find(id).pipe(
         mergeMap((person: HttpResponse<Person>) => {
           // TODO finish this and test it
-          console.error(person.body);
           if (person.body?.headOfHouse?.id) {
             return this.service.find(person.body.headOfHouse.id).pipe(map(res => res.body as IPerson));
           }

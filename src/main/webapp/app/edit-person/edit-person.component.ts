@@ -104,6 +104,7 @@ export class EditPersonComponent implements OnInit {
       this.hoh = new Person();
       this.hasSpouse = false;
       this.rootPersonForm.reset();
+      this.rootPersonForm.enable();
     }
   }
 
@@ -121,6 +122,7 @@ export class EditPersonComponent implements OnInit {
   }
 
   async submit(): Promise<void> {
+    this.rootPersonForm.disable();
     if (this.hoh.id) {
       await this.updatePerson();
     } else {
@@ -189,7 +191,6 @@ export class EditPersonComponent implements OnInit {
       const tempHoh = this.deepCopy(this.hoh);
       tempHoh.spouse = null;
       spouse.headOfHouse = tempHoh;
-      console.error(spouse);
       await this.personService.update(spouse).toPromise();
     }
     this.resetPage();

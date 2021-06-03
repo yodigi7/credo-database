@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { tick } from '@angular/core/testing';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DATE_FORMAT } from 'app/config/input.constants';
@@ -15,7 +14,7 @@ import { ITicket, Ticket } from 'app/entities/ticket/ticket.model';
 import { TransactionService } from 'app/entities/transaction/service/transaction.service';
 import { Transaction } from 'app/entities/transaction/transaction.model';
 import * as dayjs from 'dayjs';
-import { of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jhi-add-transaction',
@@ -91,6 +90,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
   }
 
   async submit(): Promise<void> {
+    this.addTransaction.disable();
     const transaction = new Transaction();
     transaction.date = dayjs(this.addTransaction.get('date')?.value, DATE_FORMAT);
     transaction.membershipLevel = this.addTransaction.get('membershipLevel')?.value;
@@ -112,10 +112,8 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       ticket = res.body;
       transaction.tickets = ticket;
     }
-    console.log(this.addTransaction);
-    console.log(transaction);
-    // await this.transactionService.create(transaction).toPromise();
-    // this.location.back();
+    await this.transactionService.create(transaction).toPromise();
+    this.location.back();
   }
 
   anyValue(keys: string[]): boolean {
