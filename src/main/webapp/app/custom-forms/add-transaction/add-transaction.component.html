@@ -85,15 +85,19 @@
         <input type="text" class="form-control" placeholder="Description of items purchased" formControlName="itemDescriptions" />
         <input type="number" class="form-control" placeholder="$ for total items" formControlName="itemDollarAmount" />
       </div>
-      <div class="d-flex">
+      <div class="row">
         <span class="text-nowrap mr-3">Total amount for this transaction:</span>
         <input
           type="text"
-          class="form-control"
+          class="form-control col"
           formControlName="totalAmount"
           (onChange)="addTransaction.get('totalAmount')?.setValue(calculateTotalAmount())"
           [value]="calculateTotalAmount() | currency"
         />
+        <div class="col d-flex justify-content-end">
+          <label class="text-nowrap">Picked Up:</label>
+          <input type="checkbox" class="form-control col-1 ml-2" formControlName="pickedUp" />
+        </div>
       </div>
       <button class="btn btn-primary">Submit</button>
     </form>

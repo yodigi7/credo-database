@@ -51,6 +51,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       membershipLevel: [],
       numberOfMemberships: [],
       donationAmount: [],
+      pickedUp: [false],
       totalAmount: [],
       person: this.fb.group(new Person()),
     });
@@ -108,6 +109,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       ticket.count = this.addTransaction.get('numberOfTickets')?.value;
       ticket.person = this.person;
       ticket.event = this.addTransaction.get('event')?.value;
+      ticket.pickedUp = this.addTransaction.get('pickedUp')?.value;
       const res = await this.ticketService.create(ticket).toPromise();
       ticket = res.body;
       transaction.tickets = ticket;
