@@ -23,6 +23,7 @@ describe('Service Tests', () => {
       elemDefault = {
         id: 0,
         level: 'AAAAAAA',
+        cost: 0,
       };
     });
 
@@ -59,6 +60,7 @@ describe('Service Tests', () => {
           {
             id: 1,
             level: 'BBBBBB',
+            cost: 1,
           },
           elemDefault
         );
@@ -76,6 +78,7 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             level: 'BBBBBB',
+            cost: 1,
           },
           new MembershipLevel()
         );
@@ -96,6 +99,7 @@ describe('Service Tests', () => {
           {
             id: 1,
             level: 'BBBBBB',
+            cost: 1,
           },
           elemDefault
         );
@@ -147,7 +151,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique MembershipLevel to an array', () => {
-          const membershipLevelArray: IMembershipLevel[] = [{ id: 123 }, { id: 456 }, { id: 56156 }];
+          const membershipLevelArray: IMembershipLevel[] = [{ id: 123 }, { id: 456 }, { id: 88547 }];
           const membershipLevelCollection: IMembershipLevel[] = [{ id: 123 }];
           expectedResult = service.addMembershipLevelToCollectionIfMissing(membershipLevelCollection, ...membershipLevelArray);
           expect(expectedResult).toHaveLength(3);

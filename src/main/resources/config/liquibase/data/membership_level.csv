@@ -1,4 +1,4 @@
-id;level
-1;Gold
-2;Rose
-3;Green
+id;level;cost
+1;Gold;50.0
+2;Rose;30.0
+3;Green;15.0

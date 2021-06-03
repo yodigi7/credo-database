@@ -87,6 +87,8 @@ describe('MembershipLevel e2e test', () => {
 
     cy.get(`[data-cy="level"]`).type('technologies', { force: true }).invoke('val').should('match', new RegExp('technologies'));
 
+    cy.get(`[data-cy="cost"]`).type('88767').should('have.value', '88767');
+
     cy.get(entityCreateSaveButtonSelector).click({ force: true });
     cy.scrollTo('top', { ensureScrollable: false });
     cy.get(entityCreateSaveButtonSelector).should('not.exist');

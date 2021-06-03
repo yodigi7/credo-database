@@ -125,6 +125,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       (this.addTransaction.get('costPerTicket')?.value as number) * this.addTransaction.get('numberOfTickets')?.value +
       (this.addTransaction.get('eventDonationAmount')?.value as number) +
       (this.addTransaction.get('itemDollarAmount')?.value as number) +
+      ((this.addTransaction.get('membershipLevel')?.value?.cost ?? 0) as number) +
       (this.addTransaction.get('donationAmount')?.value as number)
     );
   }

@@ -18,6 +18,7 @@ export class MembershipLevelUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     level: [null, [Validators.required]],
+    cost: [null, [Validators.required]],
   });
 
   constructor(
@@ -69,6 +70,7 @@ export class MembershipLevelUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: membershipLevel.id,
       level: membershipLevel.level,
+      cost: membershipLevel.cost,
     });
   }
 
@@ -77,6 +79,7 @@ export class MembershipLevelUpdateComponent implements OnInit {
       ...new MembershipLevel(),
       id: this.editForm.get(['id'])!.value,
       level: this.editForm.get(['level'])!.value,
+      cost: this.editForm.get(['cost'])!.value,
     };
   }
 }

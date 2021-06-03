@@ -3,7 +3,11 @@ package com.credo.database.service.criteria;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
+import tech.jhipster.service.filter.BooleanFilter;
+import tech.jhipster.service.filter.DoubleFilter;
 import tech.jhipster.service.filter.Filter;
+import tech.jhipster.service.filter.FloatFilter;
+import tech.jhipster.service.filter.IntegerFilter;
 import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.service.filter.StringFilter;
 
@@ -24,6 +28,8 @@ public class MembershipLevelCriteria implements Serializable, Criteria {
 
     private StringFilter level;
 
+    private DoubleFilter cost;
+
     private LongFilter peopleId;
 
     public MembershipLevelCriteria() {}
@@ -31,6 +37,7 @@ public class MembershipLevelCriteria implements Serializable, Criteria {
     public MembershipLevelCriteria(MembershipLevelCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.level = other.level == null ? null : other.level.copy();
+        this.cost = other.cost == null ? null : other.cost.copy();
         this.peopleId = other.peopleId == null ? null : other.peopleId.copy();
     }
 
@@ -69,6 +76,21 @@ public class MembershipLevelCriteria implements Serializable, Criteria {
         this.level = level;
     }
 
+    public DoubleFilter getCost() {
+        return cost;
+    }
+
+    public DoubleFilter cost() {
+        if (cost == null) {
+            cost = new DoubleFilter();
+        }
+        return cost;
+    }
+
+    public void setCost(DoubleFilter cost) {
+        this.cost = cost;
+    }
+
     public LongFilter getPeopleId() {
         return peopleId;
     }
@@ -93,12 +115,17 @@ public class MembershipLevelCriteria implements Serializable, Criteria {
             return false;
         }
         final MembershipLevelCriteria that = (MembershipLevelCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(level, that.level) && Objects.equals(peopleId, that.peopleId);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(level, that.level) &&
+            Objects.equals(cost, that.cost) &&
+            Objects.equals(peopleId, that.peopleId)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, level, peopleId);
+        return Objects.hash(id, level, cost, peopleId);
     }
 
     // prettier-ignore
@@ -107,6 +134,7 @@ public class MembershipLevelCriteria implements Serializable, Criteria {
         return "MembershipLevelCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (level != null ? "level=" + level + ", " : "") +
+            (cost != null ? "cost=" + cost + ", " : "") +
             (peopleId != null ? "peopleId=" + peopleId + ", " : "") +
             "}";
     }

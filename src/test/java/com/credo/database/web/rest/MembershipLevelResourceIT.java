@@ -2,19 +2,14 @@ package com.credo.database.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.credo.database.IntegrationTest;
 import com.credo.database.domain.MembershipLevel;
 import com.credo.database.domain.Person;
 import com.credo.database.repository.MembershipLevelRepository;
+import com.credo.database.service.criteria.MembershipLevelCriteria;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -38,6 +33,10 @@ class MembershipLevelResourceIT {
 
     private static final String DEFAULT_LEVEL = "AAAAAAAAAA";
     private static final String UPDATED_LEVEL = "BBBBBBBBBB";
+
+    private static final Double DEFAULT_COST = 1D;
+    private static final Double UPDATED_COST = 2D;
+    private static final Double SMALLER_COST = 1D - 1D;
 
     private static final String ENTITY_API_URL = "/api/membership-levels";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -63,7 +62,7 @@ class MembershipLevelResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static MembershipLevel createEntity(EntityManager em) {
-        MembershipLevel membershipLevel = new MembershipLevel().level(DEFAULT_LEVEL);
+        MembershipLevel membershipLevel = new MembershipLevel().level(DEFAULT_LEVEL).cost(DEFAULT_COST);
         return membershipLevel;
     }
 
@@ -74,7 +73,7 @@ class MembershipLevelResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static MembershipLevel createUpdatedEntity(EntityManager em) {
-        MembershipLevel membershipLevel = new MembershipLevel().level(UPDATED_LEVEL);
+        MembershipLevel membershipLevel = new MembershipLevel().level(UPDATED_LEVEL).cost(UPDATED_COST);
         return membershipLevel;
     }
 
@@ -99,6 +98,7 @@ class MembershipLevelResourceIT {
         assertThat(membershipLevelList).hasSize(databaseSizeBeforeCreate + 1);
         MembershipLevel testMembershipLevel = membershipLevelList.get(membershipLevelList.size() - 1);
         assertThat(testMembershipLevel.getLevel()).isEqualTo(DEFAULT_LEVEL);
+        assertThat(testMembershipLevel.getCost()).isEqualTo(DEFAULT_COST);
     }
 
     @Test
@@ -142,6 +142,25 @@ class MembershipLevelResourceIT {
 
     @Test
     @Transactional
+    void checkCostIsRequired() throws Exception {
+        int databaseSizeBeforeTest = membershipLevelRepository.findAll().size();
+        // set the field null
+        membershipLevel.setCost(null);
+
+        // Create the MembershipLevel, which fails.
+
+        restMembershipLevelMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(membershipLevel))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<MembershipLevel> membershipLevelList = membershipLevelRepository.findAll();
+        assertThat(membershipLevelList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllMembershipLevels() throws Exception {
         // Initialize the database
         membershipLevelRepository.saveAndFlush(membershipLevel);
@@ -152,7 +171,8 @@ class MembershipLevelResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(membershipLevel.getId().intValue())))
-            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)));
+            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
+            .andExpect(jsonPath("$.[*].cost").value(hasItem(DEFAULT_COST.doubleValue())));
     }
 
     @Test
@@ -167,7 +187,26 @@ class MembershipLevelResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(membershipLevel.getId().intValue()))
-            .andExpect(jsonPath("$.level").value(DEFAULT_LEVEL));
+            .andExpect(jsonPath("$.level").value(DEFAULT_LEVEL))
+            .andExpect(jsonPath("$.cost").value(DEFAULT_COST.doubleValue()));
+    }
+
+    @Test
+    @Transactional
+    void getMembershipLevelsByIdFiltering() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        Long id = membershipLevel.getId();
+
+        defaultMembershipLevelShouldBeFound("id.equals=" + id);
+        defaultMembershipLevelShouldNotBeFound("id.notEquals=" + id);
+
+        defaultMembershipLevelShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultMembershipLevelShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultMembershipLevelShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultMembershipLevelShouldNotBeFound("id.lessThan=" + id);
     }
 
     @Test
@@ -185,6 +224,19 @@ class MembershipLevelResourceIT {
 
     @Test
     @Transactional
+    void getAllMembershipLevelsByLevelIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where level not equals to DEFAULT_LEVEL
+        defaultMembershipLevelShouldNotBeFound("level.notEquals=" + DEFAULT_LEVEL);
+
+        // Get all the membershipLevelList where level not equals to UPDATED_LEVEL
+        defaultMembershipLevelShouldBeFound("level.notEquals=" + UPDATED_LEVEL);
+    }
+
+    @Test
+    @Transactional
     void getAllMembershipLevelsByLevelIsInShouldWork() throws Exception {
         // Initialize the database
         membershipLevelRepository.saveAndFlush(membershipLevel);
@@ -198,6 +250,19 @@ class MembershipLevelResourceIT {
 
     @Test
     @Transactional
+    void getAllMembershipLevelsByLevelIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where level is not null
+        defaultMembershipLevelShouldBeFound("level.specified=true");
+
+        // Get all the membershipLevelList where level is null
+        defaultMembershipLevelShouldNotBeFound("level.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllMembershipLevelsByLevelContainsSomething() throws Exception {
         // Initialize the database
         membershipLevelRepository.saveAndFlush(membershipLevel);
@@ -207,6 +272,123 @@ class MembershipLevelResourceIT {
 
         // Get all the membershipLevelList where level contains UPDATED_LEVEL
         defaultMembershipLevelShouldNotBeFound("level.contains=" + UPDATED_LEVEL);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByLevelNotContainsSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where level does not contain DEFAULT_LEVEL
+        defaultMembershipLevelShouldNotBeFound("level.doesNotContain=" + DEFAULT_LEVEL);
+
+        // Get all the membershipLevelList where level does not contain UPDATED_LEVEL
+        defaultMembershipLevelShouldBeFound("level.doesNotContain=" + UPDATED_LEVEL);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsEqualToSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost equals to DEFAULT_COST
+        defaultMembershipLevelShouldBeFound("cost.equals=" + DEFAULT_COST);
+
+        // Get all the membershipLevelList where cost equals to UPDATED_COST
+        defaultMembershipLevelShouldNotBeFound("cost.equals=" + UPDATED_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost not equals to DEFAULT_COST
+        defaultMembershipLevelShouldNotBeFound("cost.notEquals=" + DEFAULT_COST);
+
+        // Get all the membershipLevelList where cost not equals to UPDATED_COST
+        defaultMembershipLevelShouldBeFound("cost.notEquals=" + UPDATED_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsInShouldWork() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost in DEFAULT_COST or UPDATED_COST
+        defaultMembershipLevelShouldBeFound("cost.in=" + DEFAULT_COST + "," + UPDATED_COST);
+
+        // Get all the membershipLevelList where cost equals to UPDATED_COST
+        defaultMembershipLevelShouldNotBeFound("cost.in=" + UPDATED_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost is not null
+        defaultMembershipLevelShouldBeFound("cost.specified=true");
+
+        // Get all the membershipLevelList where cost is null
+        defaultMembershipLevelShouldNotBeFound("cost.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost is greater than or equal to DEFAULT_COST
+        defaultMembershipLevelShouldBeFound("cost.greaterThanOrEqual=" + DEFAULT_COST);
+
+        // Get all the membershipLevelList where cost is greater than or equal to UPDATED_COST
+        defaultMembershipLevelShouldNotBeFound("cost.greaterThanOrEqual=" + UPDATED_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost is less than or equal to DEFAULT_COST
+        defaultMembershipLevelShouldBeFound("cost.lessThanOrEqual=" + DEFAULT_COST);
+
+        // Get all the membershipLevelList where cost is less than or equal to SMALLER_COST
+        defaultMembershipLevelShouldNotBeFound("cost.lessThanOrEqual=" + SMALLER_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsLessThanSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost is less than DEFAULT_COST
+        defaultMembershipLevelShouldNotBeFound("cost.lessThan=" + DEFAULT_COST);
+
+        // Get all the membershipLevelList where cost is less than UPDATED_COST
+        defaultMembershipLevelShouldBeFound("cost.lessThan=" + UPDATED_COST);
+    }
+
+    @Test
+    @Transactional
+    void getAllMembershipLevelsByCostIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        membershipLevelRepository.saveAndFlush(membershipLevel);
+
+        // Get all the membershipLevelList where cost is greater than DEFAULT_COST
+        defaultMembershipLevelShouldNotBeFound("cost.greaterThan=" + DEFAULT_COST);
+
+        // Get all the membershipLevelList where cost is greater than SMALLER_COST
+        defaultMembershipLevelShouldBeFound("cost.greaterThan=" + SMALLER_COST);
     }
 
     @Test
@@ -237,7 +419,8 @@ class MembershipLevelResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(membershipLevel.getId().intValue())))
-            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)));
+            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
+            .andExpect(jsonPath("$.[*].cost").value(hasItem(DEFAULT_COST.doubleValue())));
 
         // Check, that the count call also returns 1
         restMembershipLevelMockMvc
@@ -285,7 +468,7 @@ class MembershipLevelResourceIT {
         MembershipLevel updatedMembershipLevel = membershipLevelRepository.findById(membershipLevel.getId()).get();
         // Disconnect from session so that the updates on updatedMembershipLevel are not directly saved in db
         em.detach(updatedMembershipLevel);
-        updatedMembershipLevel.level(UPDATED_LEVEL);
+        updatedMembershipLevel.level(UPDATED_LEVEL).cost(UPDATED_COST);
 
         restMembershipLevelMockMvc
             .perform(
@@ -300,6 +483,7 @@ class MembershipLevelResourceIT {
         assertThat(membershipLevelList).hasSize(databaseSizeBeforeUpdate);
         MembershipLevel testMembershipLevel = membershipLevelList.get(membershipLevelList.size() - 1);
         assertThat(testMembershipLevel.getLevel()).isEqualTo(UPDATED_LEVEL);
+        assertThat(testMembershipLevel.getCost()).isEqualTo(UPDATED_COST);
     }
 
     @Test
@@ -372,7 +556,7 @@ class MembershipLevelResourceIT {
         MembershipLevel partialUpdatedMembershipLevel = new MembershipLevel();
         partialUpdatedMembershipLevel.setId(membershipLevel.getId());
 
-        partialUpdatedMembershipLevel.level(UPDATED_LEVEL);
+        partialUpdatedMembershipLevel.level(UPDATED_LEVEL).cost(UPDATED_COST);
 
         restMembershipLevelMockMvc
             .perform(
@@ -387,6 +571,7 @@ class MembershipLevelResourceIT {
         assertThat(membershipLevelList).hasSize(databaseSizeBeforeUpdate);
         MembershipLevel testMembershipLevel = membershipLevelList.get(membershipLevelList.size() - 1);
         assertThat(testMembershipLevel.getLevel()).isEqualTo(UPDATED_LEVEL);
+        assertThat(testMembershipLevel.getCost()).isEqualTo(UPDATED_COST);
     }
 
     @Test
@@ -401,7 +586,7 @@ class MembershipLevelResourceIT {
         MembershipLevel partialUpdatedMembershipLevel = new MembershipLevel();
         partialUpdatedMembershipLevel.setId(membershipLevel.getId());
 
-        partialUpdatedMembershipLevel.level(UPDATED_LEVEL);
+        partialUpdatedMembershipLevel.level(UPDATED_LEVEL).cost(UPDATED_COST);
 
         restMembershipLevelMockMvc
             .perform(
@@ -416,6 +601,7 @@ class MembershipLevelResourceIT {
         assertThat(membershipLevelList).hasSize(databaseSizeBeforeUpdate);
         MembershipLevel testMembershipLevel = membershipLevelList.get(membershipLevelList.size() - 1);
         assertThat(testMembershipLevel.getLevel()).isEqualTo(UPDATED_LEVEL);
+        assertThat(testMembershipLevel.getCost()).isEqualTo(UPDATED_COST);
     }
 
     @Test

@@ -52,6 +52,9 @@ public class MembershipLevelService {
                     if (membershipLevel.getLevel() != null) {
                         existingMembershipLevel.setLevel(membershipLevel.getLevel());
                     }
+                    if (membershipLevel.getCost() != null) {
+                        existingMembershipLevel.setCost(membershipLevel.getCost());
+                    }
 
                     return existingMembershipLevel;
                 }

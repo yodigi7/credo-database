@@ -18,6 +18,15 @@
             <small class="form-text text-danger" *ngIf="editForm.get('level')?.errors?.required"> This field is required. </small>
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_cost">Cost</label>
+          <input type="number" class="form-control" name="cost" id="field_cost" data-cy="cost" formControlName="cost" />
+          <div *ngIf="editForm.get('cost')!.invalid && (editForm.get('cost')!.dirty || editForm.get('cost')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('cost')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('cost')?.errors?.number"> This field should be a number. </small>
+          </div>
+        </div>
       </div>
 
       <div>

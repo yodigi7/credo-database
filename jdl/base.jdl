@@ -115,6 +115,7 @@ entity OrganizationAddress {
 
 entity MembershipLevel {
     level String required unique,
+    cost Double required,
 }
 
 enum YesNoEmpty {

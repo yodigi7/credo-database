@@ -1,8 +1,7 @@
 package com.credo.database.service;
 
+import com.credo.database.domain.*; // for static metamodels
 import com.credo.database.domain.MembershipLevel;
-import com.credo.database.domain.MembershipLevel_;
-import com.credo.database.domain.Person_;
 import com.credo.database.repository.MembershipLevelRepository;
 import com.credo.database.service.criteria.MembershipLevelCriteria;
 import java.util.List;
@@ -84,6 +83,9 @@ public class MembershipLevelQueryService extends QueryService<MembershipLevel> {
             }
             if (criteria.getLevel() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getLevel(), MembershipLevel_.level));
+            }
+            if (criteria.getCost() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getCost(), MembershipLevel_.cost));
             }
             if (criteria.getPeopleId() != null) {
                 specification =

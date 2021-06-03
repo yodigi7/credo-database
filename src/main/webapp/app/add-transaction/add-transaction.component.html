@@ -68,7 +68,13 @@
           </select>
           <input type="number" class="form-control" placeholder="# of memberships" formControlName="numberOfMemberships" />
           <!-- TODO -->
-          <input type="number" class="form-control" placeholder="$ membership paid" disabled value="" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="$ membership paid"
+            disabled
+            [value]="addTransaction.get('membershipLevel')?.value?.cost * addTransaction.get('numberOfMemberships')?.value | currency"
+          />
         </div>
         <div class="d-flex mb-3 col">
           <input type="number" class="form-control" placeholder="Donation to Credo" formControlName="donationAmount" />

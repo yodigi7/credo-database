@@ -1,9 +1,7 @@
 package com.credo.database.service;
 
+import com.credo.database.domain.*; // for static metamodels
 import com.credo.database.domain.Event;
-import com.credo.database.domain.Event_;
-import com.credo.database.domain.Ticket_;
-import com.credo.database.domain.Transaction_;
 import com.credo.database.repository.EventRepository;
 import com.credo.database.service.criteria.EventCriteria;
 import java.util.List;

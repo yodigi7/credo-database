@@ -1,9 +1,7 @@
 package com.credo.database.service;
 
-import com.credo.database.domain.HouseAddress_;
+import com.credo.database.domain.*; // for static metamodels
 import com.credo.database.domain.HouseDetails;
-import com.credo.database.domain.HouseDetails_;
-import com.credo.database.domain.Person_;
 import com.credo.database.repository.HouseDetailsRepository;
 import com.credo.database.service.criteria.HouseDetailsCriteria;
 import java.util.List;

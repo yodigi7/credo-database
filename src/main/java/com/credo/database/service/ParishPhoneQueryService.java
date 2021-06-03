@@ -1,8 +1,7 @@
 package com.credo.database.service;
 
+import com.credo.database.domain.*; // for static metamodels
 import com.credo.database.domain.ParishPhone;
-import com.credo.database.domain.ParishPhone_;
-import com.credo.database.domain.Parish_;
 import com.credo.database.repository.ParishPhoneRepository;
 import com.credo.database.service.criteria.ParishPhoneCriteria;
 import java.util.List;

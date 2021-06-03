@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -27,6 +27,10 @@ public class MembershipLevel implements Serializable {
     @NotNull
     @Column(name = "level", nullable = false, unique = true)
     private String level;
+
+    @NotNull
+    @Column(name = "cost", nullable = false)
+    private Double cost;
 
     @OneToMany(mappedBy = "membershipLevel")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -74,6 +78,19 @@ public class MembershipLevel implements Serializable {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public Double getCost() {
+        return this.cost;
+    }
+
+    public MembershipLevel cost(Double cost) {
+        this.cost = cost;
+        return this;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     public Set<Person> getPeople() {
@@ -132,6 +149,7 @@ public class MembershipLevel implements Serializable {
         return "MembershipLevel{" +
             "id=" + getId() +
             ", level='" + getLevel() + "'" +
+            ", cost=" + getCost() +
             "}";
     }
 }

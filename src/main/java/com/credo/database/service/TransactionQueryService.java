@@ -1,6 +1,7 @@
 package com.credo.database.service;
 
-import com.credo.database.domain.*;
+import com.credo.database.domain.*; // for static metamodels
+import com.credo.database.domain.Transaction;
 import com.credo.database.repository.TransactionRepository;
 import com.credo.database.service.criteria.TransactionCriteria;
 import java.util.List;

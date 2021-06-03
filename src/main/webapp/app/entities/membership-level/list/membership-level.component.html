@@ -34,6 +34,7 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="level"><span>Level</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="cost"><span>Cost</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -43,6 +44,7 @@
             <a [routerLink]="['/membership-level', membershipLevel.id, 'view']">{{ membershipLevel.id }}</a>
           </td>
           <td>{{ membershipLevel.level }}</td>
+          <td>{{ membershipLevel.cost }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
