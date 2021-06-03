@@ -1,5 +1,8 @@
 <div class="row">
-  <div class="col-md-1"></div>
+  <div class="col-2 d-flex flex-column pr-4 pt-5">
+    <button *ngIf="hoh.id" [routerLink]="['/person', hoh.id, 'add-transaction']" class="btn btn-secondary mb-2">Add Transaction</button>
+    <button *ngIf="hoh.id" [routerLink]="['/person', hoh.id, 'ticket-view']" class="btn btn-secondary">View Tickets</button>
+  </div>
   <div class="col-md-10">
     <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
@@ -88,8 +91,6 @@
       </div>
       <button [disabled]="this.rootPersonForm.invalid" type="submit" class="btn btn-primary" data-cy="submit">Submit</button>
     </form>
-    <button *ngIf="hoh.id" [routerLink]="['/person', hoh.id, 'add-transaction']" class="btn btn-secondary">Add Transaction</button>
-    <button *ngIf="hoh.id" [routerLink]="['/person', hoh.id, 'ticket-view']" class="btn btn-secondary">View Tickets</button>
   </div>
   <div class="col-md-1"></div>
 </div>

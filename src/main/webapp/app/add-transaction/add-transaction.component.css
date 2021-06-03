@@ -1,1 +1,9 @@
 /* add-transaction.component.css */
+div {
+  margin: 0;
+  padding: 0;
+}
+
+h4 {
+  padding: 0;
+}

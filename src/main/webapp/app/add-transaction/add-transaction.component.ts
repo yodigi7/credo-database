@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { tick } from '@angular/core/testing';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { IEvent } from 'app/entities/event/event.model';
@@ -14,7 +15,7 @@ import { ITicket, Ticket } from 'app/entities/ticket/ticket.model';
 import { TransactionService } from 'app/entities/transaction/service/transaction.service';
 import { Transaction } from 'app/entities/transaction/transaction.model';
 import * as dayjs from 'dayjs';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'jhi-add-transaction',
@@ -45,6 +46,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       numberOfTickets: [],
       eventDonationAmount: [],
       event: [],
+      ticketEvent: [],
       itemDescriptions: [],
       itemDollarAmount: [],
       membershipLevel: [],
@@ -70,6 +72,12 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       this.eventService.query({ size: 100 }).subscribe((res: EntityArrayResponseType) => {
         this.eventList = res.body ?? [];
       })
+    );
+    (this.addTransaction.get('ticketEvent') as FormControl).valueChanges.subscribe(val =>
+      this.addTransaction.get('event')?.setValue(val, { emitEvent: false })
+    );
+    (this.addTransaction.get('event') as FormControl).valueChanges.subscribe(val =>
+      this.addTransaction.get('ticketEvent')?.setValue(val, { emitEvent: false })
     );
   }
 
@@ -104,8 +112,10 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
       ticket = res.body;
       transaction.tickets = ticket;
     }
-    await this.transactionService.create(transaction).toPromise();
-    this.location.back();
+    console.log(this.addTransaction);
+    console.log(transaction);
+    // await this.transactionService.create(transaction).toPromise();
+    // this.location.back();
   }
 
   anyValue(keys: string[]): boolean {
