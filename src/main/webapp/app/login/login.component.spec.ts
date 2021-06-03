@@ -82,7 +82,7 @@ describe('Component Tests', () => {
       comp.ngOnInit();
 
       // THEN
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['search']);
     });
 
     it('should authenticate the user and navigate to home page', inject(
@@ -108,7 +108,7 @@ describe('Component Tests', () => {
         // THEN
         expect(comp.authenticationError).toEqual(false);
         expect(mockLoginService.login).toHaveBeenCalledWith(credentials);
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['']);
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['search']);
       })
     ));
   });
