@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { SharedModule } from 'app/shared/shared.module';
 
-import { EditPersonComponent } from '../edit-person/edit-person.component';
+import { EditPersonComponent } from './edit-person.component';
 import { CoreEntitiesModule } from 'app/entities/core-entities.module';
 import { CustomFormsModule } from 'app/custom-forms/custom-forms.module';
 import { editPersonRoutes } from './edit-person.route';
