@@ -1,7 +1,7 @@
 export enum YesNoEmpty {
-  YES = 'Y',
+  YES = 'YES',
 
-  NO = 'N',
+  NO = 'NO',
 
   EMPTY = 'EMPTY',
 }

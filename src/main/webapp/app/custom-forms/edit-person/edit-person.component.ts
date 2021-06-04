@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PersonNotes } from 'app/entities/person-notes/person-notes.model';
 import { PersonNotesService } from 'app/entities/person-notes/service/person-notes.service';
 import { HouseDetailsService } from 'app/entities/house-details/service/house-details.service';
+import { HouseAddress } from 'app/entities/house-address/house-address.model';
+import { YesNoEmpty } from 'app/entities/enumerations/yes-no-empty.model';
 
 @Component({
   selector: 'jhi-edit-person',
@@ -115,6 +117,31 @@ export class EditPersonComponent implements OnInit {
     this.rootPersonForm.setControl('addresses', this.fb.array(this.hoh.houseDetails?.addresses?.map(addr => this.fb.group(addr)) ?? []));
     this.rootPersonForm.controls.mailingLabel.setValue(this.hoh.houseDetails?.mailingLabel);
     this.rootPersonForm.controls.notes.setValue(this.hoh.notes?.notes);
+
+    const addresses = this.rootPersonForm.get('addresses')?.value;
+    if (
+      addresses.filter(
+        (addr: HouseAddress) =>
+          addr.mailEventNotificationSubscription === YesNoEmpty.YES || addr.mailNewsletterSubscription === YesNoEmpty.YES
+      ).length > 0
+    ) {
+      this.rootPersonForm.get('receiveMail')?.setValue(YesNoEmpty.YES);
+    } else if (
+      addresses.filter(
+        (addr: HouseAddress) =>
+          addr.mailEventNotificationSubscription === YesNoEmpty.NO || addr.mailNewsletterSubscription === YesNoEmpty.NO
+      ).length > 0
+    ) {
+      this.rootPersonForm.get('receiveMail')?.setValue(YesNoEmpty.NO);
+    } else if (
+      addresses.filter(
+        (addr: HouseAddress) =>
+          addr.mailEventNotificationSubscription === YesNoEmpty.EMPTY || addr.mailNewsletterSubscription === YesNoEmpty.EMPTY
+      ).length > 0
+    ) {
+      this.rootPersonForm.get('receiveMail')?.setValue(YesNoEmpty.EMPTY);
+    }
+
     if (this.hoh.spouse?.id) {
       const spouse = await this.personService.find(this.hoh.spouse.id).toPromise();
       this.rootPersonForm.controls.spouse.setValue(spouse.body);
@@ -173,7 +200,20 @@ export class EditPersonComponent implements OnInit {
     ) {
       const houseDetails = new HouseDetails();
       houseDetails.id = this.rootPersonForm.controls.hoh.value.get('houseDetails')?.value?.id;
-      houseDetails.addresses = this.rootPersonForm.controls.addresses.value;
+      this.rootPersonForm.get('addresses')?.value.map((address: HouseAddress) => {
+        const receiveMail = this.rootPersonForm.get('receiveMail')?.value;
+        if (receiveMail === YesNoEmpty.YES) {
+          address.mailEventNotificationSubscription = YesNoEmpty.YES;
+          address.mailEventNotificationSubscription = YesNoEmpty.YES;
+        } else if (receiveMail === YesNoEmpty.NO) {
+          address.mailEventNotificationSubscription = YesNoEmpty.NO;
+          address.mailEventNotificationSubscription = YesNoEmpty.NO;
+        } else if (receiveMail === YesNoEmpty.EMPTY) {
+          address.mailEventNotificationSubscription = YesNoEmpty.EMPTY;
+          address.mailEventNotificationSubscription = YesNoEmpty.EMPTY;
+        }
+      });
+      houseDetails.addresses = this.rootPersonForm.get('addresses')?.value;
       houseDetails.headOfHouse = { ...this.hoh };
       houseDetails.mailingLabel = this.rootPersonForm.controls.mailingLabel.value;
       houseDetails.headOfHouse.houseDetails = null;
