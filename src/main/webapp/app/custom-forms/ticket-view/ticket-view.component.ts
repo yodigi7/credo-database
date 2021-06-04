@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +22,8 @@ export class ticketViewComponent implements OnInit {
     private personService: PersonService,
     private fb: FormBuilder,
     private ticketService: TicketService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -42,5 +44,6 @@ export class ticketViewComponent implements OnInit {
       ticket.person = this.person;
       await this.ticketService.update(ticket).toPromise();
     }
+    this.location.back();
   }
 }
