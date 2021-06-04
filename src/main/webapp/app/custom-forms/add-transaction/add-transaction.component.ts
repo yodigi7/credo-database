@@ -60,7 +60,7 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
     this.subscribers.push(
       this.activatedRoute.data.subscribe(({ person }) => {
         this.person = person;
-        this.loadFromPerson(person);
+        this.addTransaction.get('person')?.setValue(person);
       })
     );
     this.subscribers.push(
@@ -73,21 +73,16 @@ export class AddTransactionComponent implements OnInit, OnDestroy {
         this.eventList = res.body ?? [];
       })
     );
-    (this.addTransaction.get('ticketEvent') as FormControl).valueChanges.subscribe(val =>
-      this.addTransaction.get('event')?.setValue(val, { emitEvent: false })
+    this.subscribers.push(
+      (this.addTransaction.get('ticketEvent') as FormControl).valueChanges.subscribe(val =>
+        this.addTransaction.get('event')?.setValue(val, { emitEvent: false })
+      )
     );
-    (this.addTransaction.get('event') as FormControl).valueChanges.subscribe(val =>
-      this.addTransaction.get('ticketEvent')?.setValue(val, { emitEvent: false })
+    this.subscribers.push(
+      (this.addTransaction.get('event') as FormControl).valueChanges.subscribe(val =>
+        this.addTransaction.get('ticketEvent')?.setValue(val, { emitEvent: false })
+      )
     );
-  }
-
-  resetForm(): void {
-    this.addTransaction.reset();
-    this.loadFromPerson(this.person);
-  }
-
-  loadFromPerson(person: IPerson): void {
-    this.addTransaction.get('person')?.setValue(person);
   }
 
   async submit(): Promise<void> {
