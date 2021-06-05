@@ -16,7 +16,7 @@ import { TransactionService } from 'app/entities/transaction/service/transaction
 export class ticketViewComponent implements OnInit {
   person: IPerson;
   form = this.fb.group({
-    tickets: this.fb.array([]),
+    transactions: this.fb.array([]),
   });
 
   constructor(
@@ -33,16 +33,19 @@ export class ticketViewComponent implements OnInit {
       this.person = person;
       // TODO: don't make calls just use return from person when fixed
       this.person.transactions
-        ?.filter(ticket => ticket.id)
-        .forEach(ticket => this.transactionService.find(ticket.id!).subscribe(console.log));
-      this.person.tickets?.forEach(ticket => {
-        (this.form.get('tickets') as FormArray).push(this.fb.group(ticket));
-      });
+        ?.filter(transaction => transaction.id)
+        .forEach(transaction =>
+          this.transactionService.find(transaction.id!).subscribe(res => {
+            const transactionRes = res.body!;
+            (this.form.get('transactions') as FormArray).push(this.fb.group(transactionRes));
+            console.log(this.form.controls);
+          })
+        );
     });
   }
 
   async update(): Promise<void> {
-    const tickets = (this.form.get('tickets') as FormArray).controls
+    const tickets = (this.form.get('transactions') as FormArray).controls
       .filter((ticket): boolean => ticket.dirty)
       .map((ticket): ITicket => ticket.value as Ticket);
     for (const ticket of tickets) {

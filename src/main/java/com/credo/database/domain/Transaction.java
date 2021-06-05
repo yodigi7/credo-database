@@ -54,7 +54,7 @@ public class Transaction implements Serializable {
     private String notes;
 
     @JsonIgnoreProperties(value = { "person", "event", "transaction", "nameTags" }, allowSetters = true)
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST })
+    @OneToOne
     @JoinColumn(unique = true)
     private Ticket tickets;
 

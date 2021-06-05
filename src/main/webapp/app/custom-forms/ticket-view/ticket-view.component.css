@@ -1,1 +1,11 @@
-/* ticket-view.component.css */
+div {
+  font-size: 30px;
+}
+
+strong {
+  margin-right: 0.9rem;
+}
+
+h1 {
+  font-weight: bold;
+}
