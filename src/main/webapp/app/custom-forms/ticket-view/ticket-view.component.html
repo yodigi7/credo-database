@@ -6,13 +6,14 @@
   <form *ngIf="(form.get('tickets') | formArray).value.length > 0; else noTickets" [formGroup]="form" (ngSubmit)="update()">
     <div formArrayName="tickets" *ngFor="let ticket of (form.get('tickets') | formArray).controls; let i = index">
       <div [formGroupName]="i">
+        <hr />
         <div class="d-flex justify-content-center">
           # of Tickets: {{ ticket.value.count }} Event: {{ ticket.value.event?.name }} Event Date: {{ ticket.value.event?.date }} Purchase
           Date: {{ ticket.value.transaction?.date }} $ Amount: {{ (ticket.value.costPerTicket || 0) * (ticket.value.count || 0) }}
         </div>
         <div class="d-flex justify-content-center">Name tags:</div>
         <div class="d-flex justify-content-center">
-          Collected: <input type="checkbox" class="form-control" formControlName="pickedUp" />
+          Collected: <input type="checkbox" class="form-control col-1" formControlName="pickedUp" />
         </div>
       </div>
     </div>

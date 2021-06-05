@@ -6,6 +6,7 @@ import { IPerson } from 'app/entities/person/person.model';
 import { PersonService } from 'app/entities/person/service/person.service';
 import { TicketService } from 'app/entities/ticket/service/ticket.service';
 import { ITicket, Ticket } from 'app/entities/ticket/ticket.model';
+import { TransactionService } from 'app/entities/transaction/service/transaction.service';
 
 @Component({
   selector: 'jhi-ticket-view',
@@ -22,6 +23,7 @@ export class ticketViewComponent implements OnInit {
     private personService: PersonService,
     private fb: FormBuilder,
     private ticketService: TicketService,
+    private transactionService: TransactionService,
     private activatedRoute: ActivatedRoute,
     private location: Location
   ) {}
@@ -29,6 +31,10 @@ export class ticketViewComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ person }) => {
       this.person = person;
+      // TODO: don't make calls just use return from person when fixed
+      this.person.transactions
+        ?.filter(ticket => ticket.id)
+        .forEach(ticket => this.transactionService.find(ticket.id!).subscribe(console.log));
       this.person.tickets?.forEach(ticket => {
         (this.form.get('tickets') as FormArray).push(this.fb.group(ticket));
       });
