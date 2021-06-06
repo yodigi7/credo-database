@@ -167,7 +167,7 @@ public class Person implements Serializable {
     private Set<Person> personsInHouses = new HashSet<>();
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "person" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transaction", "event", "person" }, allowSetters = true)
     private Set<Ticket> tickets = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

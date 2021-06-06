@@ -16,7 +16,7 @@ import { TransactionService } from 'app/entities/transaction/service/transaction
 export class ticketViewComponent implements OnInit {
   person: IPerson;
   form = this.fb.group({
-    transactions: this.fb.array([]),
+    tickets: this.fb.array([]),
   });
 
   constructor(
@@ -31,13 +31,13 @@ export class ticketViewComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ person }) => {
       this.person = person;
-      // TODO: don't make calls just use return from person when fixed
-      this.person.transactions
-        ?.filter(transaction => transaction.id)
-        .forEach(transaction =>
-          this.transactionService.find(transaction.id!).subscribe(res => {
-            const transactionRes = res.body!;
-            (this.form.get('transactions') as FormArray).push(this.fb.group(transactionRes));
+      this.person.tickets
+        ?.filter(ticket => ticket.id)
+        .forEach(ticket =>
+          this.ticketService.find(ticket.id!).subscribe(res => {
+            const ticketRes = res.body!;
+            (this.form.get('tickets') as FormArray).push(this.fb.group(ticketRes));
+            console.log(ticketRes);
             console.log(this.form.controls);
           })
         );
@@ -45,7 +45,7 @@ export class ticketViewComponent implements OnInit {
   }
 
   async update(): Promise<void> {
-    const tickets = (this.form.get('transactions') as FormArray).controls
+    const tickets = (this.form.get('tickets') as FormArray).controls
       .filter((ticket): boolean => ticket.dirty)
       .map((ticket): ITicket => ticket.value as Ticket);
     for (const ticket of tickets) {

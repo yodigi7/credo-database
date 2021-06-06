@@ -19,6 +19,13 @@ logging:
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
     com.credo.database: DEBUG
+    #    TEMP
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
 
 spring:
   devtools:

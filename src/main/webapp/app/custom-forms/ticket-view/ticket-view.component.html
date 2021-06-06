@@ -6,32 +6,32 @@
       <strong>ID:</strong> {{ person.id }} <strong class="ml-5">First Name:</strong> {{ person.firstName }}
       <strong class="ml-5">Last Name:</strong> {{ person.lastName }}
     </div>
-    <form *ngIf="(form.get('transactions') | formArray).value.length > 0; else noTickets" [formGroup]="form" (ngSubmit)="update()">
-      <div formArrayName="transactions" *ngFor="let transaction of (form.get('transactions') | formArray).controls; let i = index">
+    <form *ngIf="(form.get('tickets') | formArray).value.length > 0; else noTickets" [formGroup]="form" (ngSubmit)="update()">
+      <div formArrayName="tickets" *ngFor="let ticket of (form.get('tickets') | formArray).controls; let i = index">
         <hr />
         <div [formGroupName]="i" class="row">
           <div class="col-1"></div>
           <div class="col-11 d-flex mb-3">
-            <strong># of Tickets:</strong> {{ transaction.value.tickets.count }} <strong class="ml-5">Event:</strong>
-            {{ transaction.value.event?.name }}
+            <strong># of Tickets:</strong> {{ ticket.value.count }} <strong class="ml-5">Event:</strong>
+            {{ ticket.value.event?.name }}
           </div>
           <div class="col-1"></div>
           <div class="col-11 d-flex mb-3">
-            <strong>Event Date:</strong> {{ transaction.value.event?.date | date }} <strong class="ml-5">Purchase Date:</strong>
-            {{ transaction.value.date | date }} <strong class="ml-5">Cost:</strong>
-            {{ (transaction.value.tickets.costPerTicket || 0) * (transaction.value.tickets.count || 0) | currency }}
+            <strong>Event Date:</strong> {{ ticket.value.event?.date | date }} <strong class="ml-5">Purchase Date:</strong>
+            {{ ticket.value.transaction.date | date }} <strong class="ml-5">Cost:</strong>
+            {{ (ticket.value.costPerTicket || 0) * (ticket.value.count || 0) | currency }}
           </div>
           <!-- TODO -->
           <hr class="col-12" />
-          <div class="col-12 d-flex mb-4">
+          <div class="col-12 d-flex mb-5">
             <strong>Name tags:</strong>
           </div>
-          <div class="col-12 d-flex align-items-center">
-            Collected: <input type="checkbox" class="form-control col-1" formControlName="pickedUp" />
+          <div class="col-12 mb-4 d-flex align-items-center">
+            <strong>Collected:</strong> <input type="checkbox" class="form-control col-1" formControlName="pickedUp" />
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary" onsubmit="update()">Update</button>
+      <button type="submit" class="btn btn-primary btn-lg" onsubmit="update()">Update</button>
     </form>
     <ng-template #noTickets>No tickets found.</ng-template>
   </div>
