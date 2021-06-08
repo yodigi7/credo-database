@@ -41,6 +41,7 @@ public class Ticket implements Serializable {
             "spouse",
             "membershipLevel",
             "headOfHouse",
+            "ribbon",
             "parish",
             "organizations",
             "houseDetails",
@@ -50,13 +51,14 @@ public class Ticket implements Serializable {
             "emails",
             "personsInHouses",
             "tickets",
+            "perks",
         },
         allowSetters = true
     )
     private Person person;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "transactions", "tickets" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transactions", "tickets", "perks" }, allowSetters = true)
     private Event event;
 
     @JsonIgnoreProperties(value = { "tickets", "membershipLevel", "person", "event" }, allowSetters = true)

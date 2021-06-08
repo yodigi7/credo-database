@@ -59,6 +59,9 @@
             <column name="head_of_house_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="ribbon_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="parish_id" type="bigint">
                 <constraints nullable="true" />
             </column>

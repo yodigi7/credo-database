@@ -80,6 +80,12 @@
             <a [routerLink]="['/person', person.headOfHouse?.id, 'view']">{{ person.headOfHouse?.id }}</a>
           </div>
         </dd>
+        <dt><span>Ribbon</span></dt>
+        <dd>
+          <div *ngIf="person.ribbon">
+            <a [routerLink]="['/ribbon', person.ribbon?.id, 'view']">{{ person.ribbon?.id }}</a>
+          </div>
+        </dd>
         <dt><span>Parish</span></dt>
         <dd>
           <div *ngIf="person.parish">

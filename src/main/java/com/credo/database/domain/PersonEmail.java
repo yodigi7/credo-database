@@ -44,6 +44,7 @@ public class PersonEmail implements Serializable {
             "spouse",
             "membershipLevel",
             "headOfHouse",
+            "ribbon",
             "parish",
             "organizations",
             "houseDetails",
@@ -53,6 +54,7 @@ public class PersonEmail implements Serializable {
             "emails",
             "personsInHouses",
             "tickets",
+            "perks",
         },
         allowSetters = true
     )

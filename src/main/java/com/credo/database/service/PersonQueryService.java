@@ -142,6 +142,12 @@ public class PersonQueryService extends QueryService<Person> {
                         )
                     );
             }
+            if (criteria.getRibbonId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getRibbonId(), root -> root.join(Person_.ribbon, JoinType.LEFT).get(Ribbon_.id))
+                    );
+            }
             if (criteria.getParishId() != null) {
                 specification =
                     specification.and(
@@ -206,6 +212,12 @@ public class PersonQueryService extends QueryService<Person> {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getTicketsId(), root -> root.join(Person_.tickets, JoinType.LEFT).get(Ticket_.id))
+                    );
+            }
+            if (criteria.getPerksId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getPerksId(), root -> root.join(Person_.perks, JoinType.LEFT).get(EventPerk_.id))
                     );
             }
         }

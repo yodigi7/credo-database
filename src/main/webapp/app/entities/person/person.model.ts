@@ -1,5 +1,6 @@
 import * as dayjs from 'dayjs';
 import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
+import { IRibbon } from 'app/entities/ribbon/ribbon.model';
 import { IParish } from 'app/entities/parish/parish.model';
 import { IOrganization } from 'app/entities/organization/organization.model';
 import { IHouseDetails } from 'app/entities/house-details/house-details.model';
@@ -8,6 +9,7 @@ import { IPersonPhone } from 'app/entities/person-phone/person-phone.model';
 import { ITransaction } from 'app/entities/transaction/transaction.model';
 import { IPersonEmail } from 'app/entities/person-email/person-email.model';
 import { ITicket } from 'app/entities/ticket/ticket.model';
+import { IEventPerk } from 'app/entities/event-perk/event-perk.model';
 
 export interface IPerson {
   id?: number;
@@ -26,6 +28,7 @@ export interface IPerson {
   spouse?: IPerson | null;
   membershipLevel?: IMembershipLevel | null;
   headOfHouse?: IPerson | null;
+  ribbon?: IRibbon | null;
   parish?: IParish | null;
   organizations?: IOrganization[] | null;
   houseDetails?: IHouseDetails | null;
@@ -35,6 +38,7 @@ export interface IPerson {
   emails?: IPersonEmail[] | null;
   personsInHouses?: IPerson[] | null;
   tickets?: ITicket[] | null;
+  perks?: IEventPerk[] | null;
 }
 
 export class Person implements IPerson {
@@ -55,6 +59,7 @@ export class Person implements IPerson {
     public spouse?: IPerson | null,
     public membershipLevel?: IMembershipLevel | null,
     public headOfHouse?: IPerson | null,
+    public ribbon?: IRibbon | null,
     public parish?: IParish | null,
     public organizations?: IOrganization[] | null,
     public houseDetails?: IHouseDetails | null,
@@ -63,7 +68,8 @@ export class Person implements IPerson {
     public transactions?: ITransaction[] | null,
     public emails?: IPersonEmail[] | null,
     public personsInHouses?: IPerson[] | null,
-    public tickets?: ITicket[] | null
+    public tickets?: ITicket[] | null,
+    public perks?: IEventPerk[] | null
   ) {
     this.currentMember = this.currentMember ?? false;
     this.isHeadOfHouse = this.isHeadOfHouse ?? false;

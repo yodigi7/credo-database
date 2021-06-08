@@ -124,6 +124,15 @@ enum YesNoEmpty {
     EMPTY ("")
 }
 
+entity Ribbon {
+    name String,
+}
+
+entity EventPerk {
+    name String,
+    minimumPrice Double,
+}
+
 relationship ManyToOne {
     Transaction{membershipLevel} to MembershipLevel,
     OrganizationAddress{organization} to Organization{addresses},
@@ -137,12 +146,15 @@ relationship ManyToOne {
     Transaction{event} to Event{transactions},
     PersonEmail{person} to Person{emails},
     Person{headOfHouse} to Person{personsInHouse},
+    Person{ribbon} to Ribbon{people},
     Ticket{person} to Person{tickets},
     Ticket{event} to Event{tickets},
     NameTag{ticket} to Ticket{nameTags},
     Person{parish} to Parish{people},
     ParishEmail{parish} to Parish{emails},
-    HouseAddress{houseDetails} to HouseDetails{addresses}
+    HouseAddress{houseDetails} to HouseDetails{addresses},
+    EventPerk{event} to Event{perks},
+    EventPerk{person} to Person{perks},
 }
 
 relationship OneToOne {

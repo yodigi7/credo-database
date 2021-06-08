@@ -11,6 +11,8 @@ import { PersonService } from '../service/person.service';
 import { IPerson, Person } from '../person.model';
 import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
+import { IRibbon } from 'app/entities/ribbon/ribbon.model';
+import { RibbonService } from 'app/entities/ribbon/service/ribbon.service';
 import { IParish } from 'app/entities/parish/parish.model';
 import { ParishService } from 'app/entities/parish/service/parish.service';
 import { IOrganization } from 'app/entities/organization/organization.model';
@@ -25,6 +27,7 @@ describe('Component Tests', () => {
     let activatedRoute: ActivatedRoute;
     let personService: PersonService;
     let membershipLevelService: MembershipLevelService;
+    let ribbonService: RibbonService;
     let parishService: ParishService;
     let organizationService: OrganizationService;
 
@@ -41,6 +44,7 @@ describe('Component Tests', () => {
       activatedRoute = TestBed.inject(ActivatedRoute);
       personService = TestBed.inject(PersonService);
       membershipLevelService = TestBed.inject(MembershipLevelService);
+      ribbonService = TestBed.inject(RibbonService);
       parishService = TestBed.inject(ParishService);
       organizationService = TestBed.inject(OrganizationService);
 
@@ -107,6 +111,25 @@ describe('Component Tests', () => {
         expect(comp.membershipLevelsSharedCollection).toEqual(expectedCollection);
       });
 
+      it('Should call Ribbon query and add missing value', () => {
+        const person: IPerson = { id: 456 };
+        const ribbon: IRibbon = { id: 92439 };
+        person.ribbon = ribbon;
+
+        const ribbonCollection: IRibbon[] = [{ id: 2791 }];
+        spyOn(ribbonService, 'query').and.returnValue(of(new HttpResponse({ body: ribbonCollection })));
+        const additionalRibbons = [ribbon];
+        const expectedCollection: IRibbon[] = [...additionalRibbons, ...ribbonCollection];
+        spyOn(ribbonService, 'addRibbonToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ person });
+        comp.ngOnInit();
+
+        expect(ribbonService.query).toHaveBeenCalled();
+        expect(ribbonService.addRibbonToCollectionIfMissing).toHaveBeenCalledWith(ribbonCollection, ...additionalRibbons);
+        expect(comp.ribbonsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should call Parish query and add missing value', () => {
         const person: IPerson = { id: 456 };
         const parish: IParish = { id: 92785 };
@@ -156,6 +179,8 @@ describe('Component Tests', () => {
         person.headOfHouse = headOfHouse;
         const membershipLevel: IMembershipLevel = { id: 21970 };
         person.membershipLevel = membershipLevel;
+        const ribbon: IRibbon = { id: 32707 };
+        person.ribbon = ribbon;
         const parish: IParish = { id: 82163 };
         person.parish = parish;
         const organizations: IOrganization = { id: 87375 };
@@ -168,6 +193,7 @@ describe('Component Tests', () => {
         expect(comp.spousesCollection).toContain(spouse);
         expect(comp.peopleSharedCollection).toContain(headOfHouse);
         expect(comp.membershipLevelsSharedCollection).toContain(membershipLevel);
+        expect(comp.ribbonsSharedCollection).toContain(ribbon);
         expect(comp.parishesSharedCollection).toContain(parish);
         expect(comp.organizationsSharedCollection).toContain(organizations);
       });
@@ -250,6 +276,14 @@ describe('Component Tests', () => {
         it('Should return tracked MembershipLevel primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackMembershipLevelById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackRibbonById', () => {
+        it('Should return tracked Ribbon primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackRibbonById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

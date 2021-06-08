@@ -23,6 +23,12 @@
       "otherEntityName": "ticket",
       "otherEntityRelationshipName": "event",
       "relationshipName": "tickets"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "eventPerk",
+      "otherEntityRelationshipName": "event",
+      "relationshipName": "perks"
     }
   ],
   "entityTableName": "event",

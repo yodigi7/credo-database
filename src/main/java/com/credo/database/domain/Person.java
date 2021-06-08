@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -68,6 +68,7 @@ public class Person implements Serializable {
             "spouse",
             "membershipLevel",
             "headOfHouse",
+            "ribbon",
             "parish",
             "organizations",
             "houseDetails",
@@ -77,6 +78,7 @@ public class Person implements Serializable {
             "emails",
             "personsInHouses",
             "tickets",
+            "perks",
         },
         allowSetters = true
     )
@@ -94,6 +96,7 @@ public class Person implements Serializable {
             "spouse",
             "membershipLevel",
             "headOfHouse",
+            "ribbon",
             "parish",
             "organizations",
             "houseDetails",
@@ -103,10 +106,15 @@ public class Person implements Serializable {
             "emails",
             "personsInHouses",
             "tickets",
+            "perks",
         },
         allowSetters = true
     )
     private Person headOfHouse;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "people" }, allowSetters = true)
+    private Ribbon ribbon;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "organizations", "phones", "people", "emails" }, allowSetters = true)
@@ -152,6 +160,7 @@ public class Person implements Serializable {
             "spouse",
             "membershipLevel",
             "headOfHouse",
+            "ribbon",
             "parish",
             "organizations",
             "houseDetails",
@@ -161,6 +170,7 @@ public class Person implements Serializable {
             "emails",
             "personsInHouses",
             "tickets",
+            "perks",
         },
         allowSetters = true
     )
@@ -169,6 +179,11 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "transaction", "event", "person" }, allowSetters = true)
     private Set<Ticket> tickets = new HashSet<>();
+
+    @OneToMany(mappedBy = "person")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "event", "person" }, allowSetters = true)
+    private Set<EventPerk> perks = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -377,6 +392,19 @@ public class Person implements Serializable {
 
     public void setHeadOfHouse(Person person) {
         this.headOfHouse = person;
+    }
+
+    public Ribbon getRibbon() {
+        return this.ribbon;
+    }
+
+    public Person ribbon(Ribbon ribbon) {
+        this.setRibbon(ribbon);
+        return this;
+    }
+
+    public void setRibbon(Ribbon ribbon) {
+        this.ribbon = ribbon;
     }
 
     public Parish getParish() {
@@ -608,6 +636,37 @@ public class Person implements Serializable {
             tickets.forEach(i -> i.setPerson(this));
         }
         this.tickets = tickets;
+    }
+
+    public Set<EventPerk> getPerks() {
+        return this.perks;
+    }
+
+    public Person perks(Set<EventPerk> eventPerks) {
+        this.setPerks(eventPerks);
+        return this;
+    }
+
+    public Person addPerks(EventPerk eventPerk) {
+        this.perks.add(eventPerk);
+        eventPerk.setPerson(this);
+        return this;
+    }
+
+    public Person removePerks(EventPerk eventPerk) {
+        this.perks.remove(eventPerk);
+        eventPerk.setPerson(null);
+        return this;
+    }
+
+    public void setPerks(Set<EventPerk> eventPerks) {
+        if (this.perks != null) {
+            this.perks.forEach(i -> i.setPerson(null));
+        }
+        if (eventPerks != null) {
+            eventPerks.forEach(i -> i.setPerson(this));
+        }
+        this.perks = eventPerks;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -39,6 +39,7 @@ public class MembershipLevel implements Serializable {
             "spouse",
             "membershipLevel",
             "headOfHouse",
+            "ribbon",
             "parish",
             "organizations",
             "houseDetails",
@@ -48,6 +49,7 @@ public class MembershipLevel implements Serializable {
             "emails",
             "personsInHouses",
             "tickets",
+            "perks",
         },
         allowSetters = true
     )

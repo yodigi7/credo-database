@@ -57,6 +57,8 @@ public class PersonCriteria implements Serializable, Criteria {
 
     private LongFilter headOfHouseId;
 
+    private LongFilter ribbonId;
+
     private LongFilter parishId;
 
     private LongFilter organizationsId;
@@ -74,6 +76,8 @@ public class PersonCriteria implements Serializable, Criteria {
     private LongFilter personsInHouseId;
 
     private LongFilter ticketsId;
+
+    private LongFilter perksId;
 
     public PersonCriteria() {}
 
@@ -94,6 +98,7 @@ public class PersonCriteria implements Serializable, Criteria {
         this.spouseId = other.spouseId == null ? null : other.spouseId.copy();
         this.membershipLevelId = other.membershipLevelId == null ? null : other.membershipLevelId.copy();
         this.headOfHouseId = other.headOfHouseId == null ? null : other.headOfHouseId.copy();
+        this.ribbonId = other.ribbonId == null ? null : other.ribbonId.copy();
         this.parishId = other.parishId == null ? null : other.parishId.copy();
         this.organizationsId = other.organizationsId == null ? null : other.organizationsId.copy();
         this.houseDetailsId = other.houseDetailsId == null ? null : other.houseDetailsId.copy();
@@ -103,6 +108,7 @@ public class PersonCriteria implements Serializable, Criteria {
         this.emailsId = other.emailsId == null ? null : other.emailsId.copy();
         this.personsInHouseId = other.personsInHouseId == null ? null : other.personsInHouseId.copy();
         this.ticketsId = other.ticketsId == null ? null : other.ticketsId.copy();
+        this.perksId = other.perksId == null ? null : other.perksId.copy();
     }
 
     @Override
@@ -350,6 +356,21 @@ public class PersonCriteria implements Serializable, Criteria {
         this.headOfHouseId = headOfHouseId;
     }
 
+    public LongFilter getRibbonId() {
+        return ribbonId;
+    }
+
+    public LongFilter ribbonId() {
+        if (ribbonId == null) {
+            ribbonId = new LongFilter();
+        }
+        return ribbonId;
+    }
+
+    public void setRibbonId(LongFilter ribbonId) {
+        this.ribbonId = ribbonId;
+    }
+
     public LongFilter getParishId() {
         return parishId;
     }
@@ -485,6 +506,21 @@ public class PersonCriteria implements Serializable, Criteria {
         this.ticketsId = ticketsId;
     }
 
+    public LongFilter getPerksId() {
+        return perksId;
+    }
+
+    public LongFilter perksId() {
+        if (perksId == null) {
+            perksId = new LongFilter();
+        }
+        return perksId;
+    }
+
+    public void setPerksId(LongFilter perksId) {
+        this.perksId = perksId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -511,6 +547,7 @@ public class PersonCriteria implements Serializable, Criteria {
             Objects.equals(spouseId, that.spouseId) &&
             Objects.equals(membershipLevelId, that.membershipLevelId) &&
             Objects.equals(headOfHouseId, that.headOfHouseId) &&
+            Objects.equals(ribbonId, that.ribbonId) &&
             Objects.equals(parishId, that.parishId) &&
             Objects.equals(organizationsId, that.organizationsId) &&
             Objects.equals(houseDetailsId, that.houseDetailsId) &&
@@ -519,7 +556,8 @@ public class PersonCriteria implements Serializable, Criteria {
             Objects.equals(transactionsId, that.transactionsId) &&
             Objects.equals(emailsId, that.emailsId) &&
             Objects.equals(personsInHouseId, that.personsInHouseId) &&
-            Objects.equals(ticketsId, that.ticketsId)
+            Objects.equals(ticketsId, that.ticketsId) &&
+            Objects.equals(perksId, that.perksId)
         );
     }
 
@@ -542,6 +580,7 @@ public class PersonCriteria implements Serializable, Criteria {
             spouseId,
             membershipLevelId,
             headOfHouseId,
+            ribbonId,
             parishId,
             organizationsId,
             houseDetailsId,
@@ -550,7 +589,8 @@ public class PersonCriteria implements Serializable, Criteria {
             transactionsId,
             emailsId,
             personsInHouseId,
-            ticketsId
+            ticketsId,
+            perksId
         );
     }
 
@@ -574,6 +614,7 @@ public class PersonCriteria implements Serializable, Criteria {
             (spouseId != null ? "spouseId=" + spouseId + ", " : "") +
             (membershipLevelId != null ? "membershipLevelId=" + membershipLevelId + ", " : "") +
             (headOfHouseId != null ? "headOfHouseId=" + headOfHouseId + ", " : "") +
+            (ribbonId != null ? "ribbonId=" + ribbonId + ", " : "") +
             (parishId != null ? "parishId=" + parishId + ", " : "") +
             (organizationsId != null ? "organizationsId=" + organizationsId + ", " : "") +
             (houseDetailsId != null ? "houseDetailsId=" + houseDetailsId + ", " : "") +
@@ -583,6 +624,7 @@ public class PersonCriteria implements Serializable, Criteria {
             (emailsId != null ? "emailsId=" + emailsId + ", " : "") +
             (personsInHouseId != null ? "personsInHouseId=" + personsInHouseId + ", " : "") +
             (ticketsId != null ? "ticketsId=" + ticketsId + ", " : "") +
+            (perksId != null ? "perksId=" + perksId + ", " : "") +
             "}";
     }
 }

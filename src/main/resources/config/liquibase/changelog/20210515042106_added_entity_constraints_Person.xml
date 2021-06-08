@@ -26,6 +26,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="person"/>
 
+        <addForeignKeyConstraint baseColumnNames="ribbon_id"
+                                 baseTableName="person"
+                                 constraintName="fk_person__ribbon_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ribbon"/>
+
         <addForeignKeyConstraint baseColumnNames="parish_id"
                                  baseTableName="person"
                                  constraintName="fk_person__parish_id"

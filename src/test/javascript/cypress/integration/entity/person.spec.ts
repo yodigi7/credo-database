@@ -120,6 +120,8 @@ describe('Person e2e test', () => {
 
     cy.setFieldSelectToLastOfEntity('headOfHouse');
 
+    cy.setFieldSelectToLastOfEntity('ribbon');
+
     cy.setFieldSelectToLastOfEntity('parish');
 
     cy.setFieldSelectToLastOfEntity('organizations');

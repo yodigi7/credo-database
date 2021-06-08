@@ -48,6 +48,7 @@
           <th scope="col" jhiSortBy="spouse.id"><span>Spouse</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="membershipLevel.id"><span>Membership Level</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="headOfHouse.id"><span>Head Of House</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="ribbon.id"><span>Ribbon</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="parish.id"><span>Parish</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -82,6 +83,11 @@
           <td>
             <div *ngIf="person.headOfHouse">
               <a [routerLink]="['/person', person.headOfHouse?.id, 'view']">{{ person.headOfHouse?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="person.ribbon">
+              <a [routerLink]="['/ribbon', person.ribbon?.id, 'view']">{{ person.ribbon?.id }}</a>
             </div>
           </td>
           <td>

@@ -9,6 +9,8 @@ import { IPerson, Person } from '../person.model';
 import { PersonService } from '../service/person.service';
 import { IMembershipLevel } from 'app/entities/membership-level/membership-level.model';
 import { MembershipLevelService } from 'app/entities/membership-level/service/membership-level.service';
+import { IRibbon } from 'app/entities/ribbon/ribbon.model';
+import { RibbonService } from 'app/entities/ribbon/service/ribbon.service';
 import { IParish } from 'app/entities/parish/parish.model';
 import { ParishService } from 'app/entities/parish/service/parish.service';
 import { IOrganization } from 'app/entities/organization/organization.model';
@@ -24,6 +26,7 @@ export class PersonUpdateComponent implements OnInit {
   peopleSharedCollection: IPerson[] = [];
   spousesCollection: IPerson[] = [];
   membershipLevelsSharedCollection: IMembershipLevel[] = [];
+  ribbonsSharedCollection: IRibbon[] = [];
   parishesSharedCollection: IParish[] = [];
   organizationsSharedCollection: IOrganization[] = [];
 
@@ -44,6 +47,7 @@ export class PersonUpdateComponent implements OnInit {
     spouse: [],
     membershipLevel: [],
     headOfHouse: [],
+    ribbon: [],
     parish: [],
     organizations: [],
   });
@@ -51,6 +55,7 @@ export class PersonUpdateComponent implements OnInit {
   constructor(
     protected personService: PersonService,
     protected membershipLevelService: MembershipLevelService,
+    protected ribbonService: RibbonService,
     protected parishService: ParishService,
     protected organizationService: OrganizationService,
     protected activatedRoute: ActivatedRoute,
@@ -84,6 +89,10 @@ export class PersonUpdateComponent implements OnInit {
   }
 
   trackMembershipLevelById(index: number, item: IMembershipLevel): number {
+    return item.id!;
+  }
+
+  trackRibbonById(index: number, item: IRibbon): number {
     return item.id!;
   }
 
@@ -143,6 +152,7 @@ export class PersonUpdateComponent implements OnInit {
       spouse: person.spouse,
       membershipLevel: person.membershipLevel,
       headOfHouse: person.headOfHouse,
+      ribbon: person.ribbon,
       parish: person.parish,
       organizations: person.organizations,
     });
@@ -153,6 +163,7 @@ export class PersonUpdateComponent implements OnInit {
       this.membershipLevelsSharedCollection,
       person.membershipLevel
     );
+    this.ribbonsSharedCollection = this.ribbonService.addRibbonToCollectionIfMissing(this.ribbonsSharedCollection, person.ribbon);
     this.parishesSharedCollection = this.parishService.addParishToCollectionIfMissing(this.parishesSharedCollection, person.parish);
     this.organizationsSharedCollection = this.organizationService.addOrganizationToCollectionIfMissing(
       this.organizationsSharedCollection,
@@ -182,6 +193,12 @@ export class PersonUpdateComponent implements OnInit {
         )
       )
       .subscribe((membershipLevels: IMembershipLevel[]) => (this.membershipLevelsSharedCollection = membershipLevels));
+
+    this.ribbonService
+      .query()
+      .pipe(map((res: HttpResponse<IRibbon[]>) => res.body ?? []))
+      .pipe(map((ribbons: IRibbon[]) => this.ribbonService.addRibbonToCollectionIfMissing(ribbons, this.editForm.get('ribbon')!.value)))
+      .subscribe((ribbons: IRibbon[]) => (this.ribbonsSharedCollection = ribbons));
 
     this.parishService
       .query()
@@ -219,6 +236,7 @@ export class PersonUpdateComponent implements OnInit {
       spouse: this.editForm.get(['spouse'])!.value,
       membershipLevel: this.editForm.get(['membershipLevel'])!.value,
       headOfHouse: this.editForm.get(['headOfHouse'])!.value,
+      ribbon: this.editForm.get(['ribbon'])!.value,
       parish: this.editForm.get(['parish'])!.value,
       organizations: this.editForm.get(['organizations'])!.value,
     };

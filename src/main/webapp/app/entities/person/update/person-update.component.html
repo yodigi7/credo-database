@@ -198,6 +198,19 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_ribbon">Ribbon</label>
+          <select class="form-control" id="field_ribbon" data-cy="ribbon" name="ribbon" formControlName="ribbon">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="ribbonOption.id === editForm.get('ribbon')!.value?.id ? editForm.get('ribbon')!.value : ribbonOption"
+              *ngFor="let ribbonOption of ribbonsSharedCollection; trackBy: trackRibbonById"
+            >
+              {{ ribbonOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_parish">Parish</label>
           <select class="form-control" id="field_parish" data-cy="parish" name="parish" formControlName="parish">
             <option [ngValue]="null"></option>

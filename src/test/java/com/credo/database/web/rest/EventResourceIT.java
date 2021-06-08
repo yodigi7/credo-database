@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.credo.database.IntegrationTest;
 import com.credo.database.domain.Event;
+import com.credo.database.domain.EventPerk;
 import com.credo.database.domain.Ticket;
 import com.credo.database.domain.Transaction;
 import com.credo.database.repository.EventRepository;
@@ -405,6 +406,25 @@ class EventResourceIT {
 
         // Get all the eventList where tickets equals to (ticketsId + 1)
         defaultEventShouldNotBeFound("ticketsId.equals=" + (ticketsId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllEventsByPerksIsEqualToSomething() throws Exception {
+        // Initialize the database
+        eventRepository.saveAndFlush(event);
+        EventPerk perks = EventPerkResourceIT.createEntity(em);
+        em.persist(perks);
+        em.flush();
+        event.addPerks(perks);
+        eventRepository.saveAndFlush(event);
+        Long perksId = perks.getId();
+
+        // Get all the eventList where perks equals to perksId
+        defaultEventShouldBeFound("perksId.equals=" + perksId);
+
+        // Get all the eventList where perks equals to (perksId + 1)
+        defaultEventShouldNotBeFound("perksId.equals=" + (perksId + 1));
     }
 
     /**

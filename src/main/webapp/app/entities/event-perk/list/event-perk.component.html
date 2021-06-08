@@ -1,0 +1,110 @@
+<div>
+  <h2 id="page-heading" data-cy="EventPerkHeading">
+    <span>Event Perks</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-event-perk"
+        [routerLink]="['/event-perk/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Event Perk </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="eventPerks?.length === 0">
+    <span>No eventPerks found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="eventPerks && eventPerks.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="name"><span>Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="minimumPrice"><span>Minimum Price</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="event.id"><span>Event</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="person.id"><span>Person</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eventPerk of eventPerks; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/event-perk', eventPerk.id, 'view']">{{ eventPerk.id }}</a>
+          </td>
+          <td>{{ eventPerk.name }}</td>
+          <td>{{ eventPerk.minimumPrice }}</td>
+          <td>
+            <div *ngIf="eventPerk.event">
+              <a [routerLink]="['/event', eventPerk.event?.id, 'view']">{{ eventPerk.event?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="eventPerk.person">
+              <a [routerLink]="['/person', eventPerk.person?.id, 'view']">{{ eventPerk.person?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/event-perk', eventPerk.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/event-perk', eventPerk.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(eventPerk)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="eventPerks && eventPerks.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

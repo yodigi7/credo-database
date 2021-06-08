@@ -35,6 +35,8 @@ public class EventCriteria implements Serializable, Criteria {
 
     private LongFilter ticketsId;
 
+    private LongFilter perksId;
+
     public EventCriteria() {}
 
     public EventCriteria(EventCriteria other) {
@@ -43,6 +45,7 @@ public class EventCriteria implements Serializable, Criteria {
         this.date = other.date == null ? null : other.date.copy();
         this.transactionsId = other.transactionsId == null ? null : other.transactionsId.copy();
         this.ticketsId = other.ticketsId == null ? null : other.ticketsId.copy();
+        this.perksId = other.perksId == null ? null : other.perksId.copy();
     }
 
     @Override
@@ -125,6 +128,21 @@ public class EventCriteria implements Serializable, Criteria {
         this.ticketsId = ticketsId;
     }
 
+    public LongFilter getPerksId() {
+        return perksId;
+    }
+
+    public LongFilter perksId() {
+        if (perksId == null) {
+            perksId = new LongFilter();
+        }
+        return perksId;
+    }
+
+    public void setPerksId(LongFilter perksId) {
+        this.perksId = perksId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -139,13 +157,14 @@ public class EventCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(date, that.date) &&
             Objects.equals(transactionsId, that.transactionsId) &&
-            Objects.equals(ticketsId, that.ticketsId)
+            Objects.equals(ticketsId, that.ticketsId) &&
+            Objects.equals(perksId, that.perksId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, date, transactionsId, ticketsId);
+        return Objects.hash(id, name, date, transactionsId, ticketsId, perksId);
     }
 
     // prettier-ignore
@@ -157,6 +176,7 @@ public class EventCriteria implements Serializable, Criteria {
             (date != null ? "date=" + date + ", " : "") +
             (transactionsId != null ? "transactionsId=" + transactionsId + ", " : "") +
             (ticketsId != null ? "ticketsId=" + ticketsId + ", " : "") +
+            (perksId != null ? "perksId=" + perksId + ", " : "") +
             "}";
     }
 }

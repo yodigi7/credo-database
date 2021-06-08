@@ -89,6 +89,11 @@ public class CacheConfiguration {
             createCache(cm, com.credo.database.domain.Event.class.getName() + ".transactions");
             createCache(cm, com.credo.database.domain.Ticket.class.getName() + ".nameTags");
             createCache(cm, com.credo.database.domain.NameTag.class.getName());
+            createCache(cm, com.credo.database.domain.Person.class.getName() + ".perks");
+            createCache(cm, com.credo.database.domain.Event.class.getName() + ".perks");
+            createCache(cm, com.credo.database.domain.Ribbon.class.getName());
+            createCache(cm, com.credo.database.domain.Ribbon.class.getName() + ".people");
+            createCache(cm, com.credo.database.domain.EventPerk.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

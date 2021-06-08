@@ -42,6 +42,11 @@ public class Event implements Serializable {
     @JsonIgnoreProperties(value = { "person", "event", "transaction", "nameTags" }, allowSetters = true)
     private Set<Ticket> tickets = new HashSet<>();
 
+    @OneToMany(mappedBy = "event")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "event", "person" }, allowSetters = true)
+    private Set<EventPerk> perks = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -142,6 +147,37 @@ public class Event implements Serializable {
             tickets.forEach(i -> i.setEvent(this));
         }
         this.tickets = tickets;
+    }
+
+    public Set<EventPerk> getPerks() {
+        return this.perks;
+    }
+
+    public Event perks(Set<EventPerk> eventPerks) {
+        this.setPerks(eventPerks);
+        return this;
+    }
+
+    public Event addPerks(EventPerk eventPerk) {
+        this.perks.add(eventPerk);
+        eventPerk.setEvent(this);
+        return this;
+    }
+
+    public Event removePerks(EventPerk eventPerk) {
+        this.perks.remove(eventPerk);
+        eventPerk.setEvent(null);
+        return this;
+    }
+
+    public void setPerks(Set<EventPerk> eventPerks) {
+        if (this.perks != null) {
+            this.perks.forEach(i -> i.setEvent(null));
+        }
+        if (eventPerks != null) {
+            eventPerks.forEach(i -> i.setEvent(this));
+        }
+        this.perks = eventPerks;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="eventPerk">
+      <h2 data-cy="eventPerkDetailsHeading"><span>Event Perk</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ eventPerk.id }}</span>
+        </dd>
+        <dt><span>Name</span></dt>
+        <dd>
+          <span>{{ eventPerk.name }}</span>
+        </dd>
+        <dt><span>Minimum Price</span></dt>
+        <dd>
+          <span>{{ eventPerk.minimumPrice }}</span>
+        </dd>
+        <dt><span>Event</span></dt>
+        <dd>
+          <div *ngIf="eventPerk.event">
+            <a [routerLink]="['/event', eventPerk.event?.id, 'view']">{{ eventPerk.event?.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Person</span></dt>
+        <dd>
+          <div *ngIf="eventPerk.person">
+            <a [routerLink]="['/person', eventPerk.person?.id, 'view']">{{ eventPerk.person?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/event-perk', eventPerk.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

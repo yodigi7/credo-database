@@ -61,8 +61,10 @@
       "OrganizationAddress",
       "MembershipLevel",
       "Transaction",
-      "NameTag"
+      "NameTag",
+      "Ribbon",
+      "EventPerk"
     ],
-    "lastLiquibaseTimestamp": 1622604368000
+    "lastLiquibaseTimestamp": 1623130594000
   }
 }

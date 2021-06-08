@@ -102,6 +102,12 @@ public class EventQueryService extends QueryService<Event> {
                         buildSpecification(criteria.getTicketsId(), root -> root.join(Event_.tickets, JoinType.LEFT).get(Ticket_.id))
                     );
             }
+            if (criteria.getPerksId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getPerksId(), root -> root.join(Event_.perks, JoinType.LEFT).get(EventPerk_.id))
+                    );
+            }
         }
         return specification;
     }

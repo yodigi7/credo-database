@@ -74,6 +74,12 @@
     },
     {
       "relationshipType": "many-to-one",
+      "otherEntityName": "ribbon",
+      "otherEntityRelationshipName": "people",
+      "relationshipName": "ribbon"
+    },
+    {
+      "relationshipType": "many-to-one",
       "otherEntityName": "parish",
       "otherEntityRelationshipName": "people",
       "relationshipName": "parish"
@@ -128,6 +134,12 @@
       "otherEntityName": "ticket",
       "otherEntityRelationshipName": "person",
       "relationshipName": "tickets"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "eventPerk",
+      "otherEntityRelationshipName": "person",
+      "relationshipName": "perks"
     }
   ],
   "entityTableName": "person",

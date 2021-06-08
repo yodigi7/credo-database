@@ -118,6 +118,16 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
         data: { pageTitle: 'NameTags' },
         loadChildren: () => import('./name-tag/name-tag.module').then(m => m.NameTagModule),
       },
+      {
+        path: 'ribbon',
+        data: { pageTitle: 'Ribbons' },
+        loadChildren: () => import('./ribbon/ribbon.module').then(m => m.RibbonModule),
+      },
+      {
+        path: 'event-perk',
+        data: { pageTitle: 'EventPerks' },
+        loadChildren: () => import('./event-perk/event-perk.module').then(m => m.EventPerkModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

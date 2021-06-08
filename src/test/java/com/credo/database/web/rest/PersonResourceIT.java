@@ -1338,6 +1338,25 @@ class PersonResourceIT {
 
     @Test
     @Transactional
+    void getAllPeopleByRibbonIsEqualToSomething() throws Exception {
+        // Initialize the database
+        personRepository.saveAndFlush(person);
+        Ribbon ribbon = RibbonResourceIT.createEntity(em);
+        em.persist(ribbon);
+        em.flush();
+        person.setRibbon(ribbon);
+        personRepository.saveAndFlush(person);
+        Long ribbonId = ribbon.getId();
+
+        // Get all the personList where ribbon equals to ribbonId
+        defaultPersonShouldBeFound("ribbonId.equals=" + ribbonId);
+
+        // Get all the personList where ribbon equals to (ribbonId + 1)
+        defaultPersonShouldNotBeFound("ribbonId.equals=" + (ribbonId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllPeopleByParishIsEqualToSomething() throws Exception {
         // Initialize the database
         personRepository.saveAndFlush(person);
@@ -1507,6 +1526,25 @@ class PersonResourceIT {
 
         // Get all the personList where tickets equals to (ticketsId + 1)
         defaultPersonShouldNotBeFound("ticketsId.equals=" + (ticketsId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPeopleByPerksIsEqualToSomething() throws Exception {
+        // Initialize the database
+        personRepository.saveAndFlush(person);
+        EventPerk perks = EventPerkResourceIT.createEntity(em);
+        em.persist(perks);
+        em.flush();
+        person.addPerks(perks);
+        personRepository.saveAndFlush(person);
+        Long perksId = perks.getId();
+
+        // Get all the personList where perks equals to perksId
+        defaultPersonShouldBeFound("perksId.equals=" + perksId);
+
+        // Get all the personList where perks equals to (perksId + 1)
+        defaultPersonShouldNotBeFound("perksId.equals=" + (perksId + 1));
     }
 
     /**

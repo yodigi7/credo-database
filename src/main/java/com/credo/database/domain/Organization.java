@@ -61,6 +61,7 @@ public class Organization implements Serializable {
             "spouse",
             "membershipLevel",
             "headOfHouse",
+            "ribbon",
             "parish",
             "organizations",
             "houseDetails",
@@ -70,6 +71,7 @@ public class Organization implements Serializable {
             "emails",
             "personsInHouses",
             "tickets",
+            "perks",
         },
         allowSetters = true
     )
